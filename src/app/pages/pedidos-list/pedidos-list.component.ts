@@ -23,6 +23,8 @@ export class PedidosListComponent implements OnInit {
 
   pedidos: IPedido[] = [];
   pedidoExpandido: number | null = null;
+  proveedorSeleccionado: number | null = null;
+  pedidosFiltrados: IPedido[] = []
 
   constructor(private _pedidosService: PedidosResource) {}
 
@@ -34,6 +36,7 @@ export class PedidosListComponent implements OnInit {
     this._pedidosService.getAll().subscribe({
       next: (pedidos: IPedido[]) => {
         this.pedidos = pedidos;
+        this.pedidosFiltrados = pedidos;
         console.log('Pedidos cargados:', pedidos);
         console.log('Total de pedidos:', pedidos.length);
         pedidos.forEach((pedido, index) => {
@@ -85,6 +88,25 @@ export class PedidosListComponent implements OnInit {
           alert('Error al cancelar el pedido. Por favor, intenta nuevamente.');
         }
       });
+    }
+  }
+
+ getProveedores(): { id: number, nombre: string }[] {
+    const proveedoresMap = new Map<number, string>();
+    this.pedidos.forEach(pedido => {
+      if (pedido.proveedorId && pedido.proveedorNombre) {
+        proveedoresMap.set(pedido.proveedorId, pedido.proveedorNombre);
+      }
+    });
+    return Array.from(proveedoresMap, ([id, nombre]) => ({ id, nombre }));
+  }
+
+  filtrarPorProveedor(): void {
+    if (this.proveedorSeleccionado === null) {
+      this.pedidosFiltrados = this.pedidos;
+    } else {
+      this.pedidosFiltrados = this.pedidos.filter(p => p.proveedorId ===
+      this.proveedorSeleccionado);
     }
   }
 }

@@ -9,6 +9,7 @@ import { PedidosResource } from '../api/resources/pedidos-resource.service';
 import { MainComponent } from './main.component';
 import { ProveedoresCardsComponent } from '../pages/proveedores-cards/proveedores-cards.component';
 import { PedidosListComponent } from '../pages/pedidos-list/pedidos-list.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { PedidosListComponent } from '../pages/pedidos-list/pedidos-list.compone
   ],
   imports: [
     CommonModule,
-    MainRoutingModule
+    MainRoutingModule,
+    FormsModule
   ]
 })
 export class MainModule { }

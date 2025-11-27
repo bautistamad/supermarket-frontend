@@ -1,101 +1,118 @@
-<div class="container mt-4">
-  <h2 class="mb-4">Pedidos</h2>
+  <div class="container mt-4">
+    <h2 class="mb-4">Pedidos</h2>
 
-  <!-- Mensaje si no hay pedidos -->
-  <div *ngIf="pedidos.length === 0" class="alert alert-info">
-    No hay pedidos registrado
-  </div>
+    <!-- Filtro de proveedores -->
+    <div class="mb-3">
+      <label for="proveedorFilter" class="form-label">Filtrar por proveedor:</label>
+      <select 
+        id="proveedorFilter"
+        class="form-select" 
+        [(ngModel)]="proveedorSeleccionado"
+        (change)="filtrarPorProveedor()">
+        <option [ngValue]="null">Todos los proveedores</option>
+        <option *ngFor="let proveedor of getProveedores()" [ngValue]="proveedor.id">
+          {{ proveedor.nombre }}
+        </option>
+      </select>
+    </div>
 
-  <!-- Lista de pedidos con accordion -->
-  <div *ngIf="pedidos.length > 0">
-    <div *ngFor="let pedido of pedidos" class="card mb-3 shadow-sm">
+    <!-- Mensaje si no hay pedidos -->
+    <div *ngIf="pedidosFiltrados.length === 0" class="alert alert-info">
+      No hay pedidos registrado
+    </div>
 
-      <!-- Header del pedido (siempre visible) -->
-      <div class="card-header" [ngClass]="getBadgeClass(pedido.estadoId)" style="cursor: pointer;"
-           (click)="togglePedido(pedido.id!)">
-        <div class="row align-items-center text-white">
-          <div class="col-md-3">
-            <h5 class="mb-0">
-              <i class="bi bi-receipt me-2"></i>
-              Pedido #{{ pedido.id }}
-            </h5>
-          </div>
-          <div class="col-md-3">
-            <i class="bi bi-truck me-2"></i>
-            {{ pedido.proveedorNombre }}
-          </div>
-          <div class="col-md-2">
-            <i class="bi bi-calendar me-2"></i>
-            {{ pedido.fechaEstimada | date:'dd/MM/yyyy' }}
-          </div>
-          <div class="col-md-2">
-            <span class="badge bg-light text-dark">
-              {{ pedido.estadoNombre }}
-            </span>
-          </div>
-          <div class="col-md-2 text-end">
-            <i class="bi" [ngClass]="isPedidoExpandido(pedido.id!) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-            {{ pedido.productos.length }} producto(s)
-          </div>
-        </div>
-      </div>
+    <!-- Lista de pedidos con accordion -->
+    <div *ngIf="pedidosFiltrados.length > 0">
+      <div *ngFor="let pedido of pedidosFiltrados" class="card mb-3 shadow-sm">
 
-      <!-- Body expandible con productos -->
-      <div class="card-body" *ngIf="isPedidoExpandido(pedido.id!)" [@slideDown]>
-        <h6 class="mb-3">Productos del pedido:</h6>
-        <div class="table-responsive">
-          <table class="table table-sm table-hover">
-            <thead class="table-light">
-              <tr>
-                <th>Código</th>
-                <th>Producto</th>
-                <th class="text-center">Cantidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let producto of pedido.productos">
-                <td><code>{{ producto.codigoBarra }}</code></td>
-                <td>{{ producto.productoNombre }}</td>
-                <td class="text-center">
-                  <span class="badge bg-primary">{{ producto.cantidad }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Información adicional -->
-        <div class="row mt-3">
-          <div class="col-md-6" *ngIf="pedido.fechaEntrega">
-            <small class="text-muted">
-              <i class="bi bi-calendar-check me-1"></i>
-              Fecha de entrega: {{ pedido.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}
-            </small>
-          </div>
-          <div class="col-md-6" *ngIf="pedido.puntuacion">
-            <small class="text-muted">
-              <i class="bi bi-star-fill me-1 text-warning"></i>
-              Puntuación: {{ pedido.puntuacion }}/5
-            </small>
+        <!-- Header del pedido (siempre visible) -->
+        <div class="card-header" [ngClass]="getBadgeClass(pedido.estadoId)" style="cursor:
+   pointer;"
+             (click)="togglePedido(pedido.id!)">
+          <div class="row align-items-center text-white">
+            <div class="col-md-3">
+              <h5 class="mb-0">
+                <i class="bi bi-receipt me-2"></i>
+                Pedido #{{ pedido.id }}
+              </h5>
+            </div>
+            <div class="col-md-3">
+              <i class="bi bi-truck me-2"></i>
+              {{ pedido.proveedorNombre }}
+            </div>
+            <div class="col-md-2">
+              <i class="bi bi-calendar me-2"></i>
+              {{ pedido.fechaEstimada | date:'dd/MM/yyyy' }}
+            </div>
+            <div class="col-md-2">
+              <span class="badge bg-light text-dark">
+                {{ pedido.estadoNombre }}
+              </span>
+            </div>
+            <div class="col-md-2 text-end">
+              <i class="bi" [ngClass]="isPedidoExpandido(pedido.id!) ? 'bi-chevron-up' : 
+  'bi-chevron-down'"></i>
+              {{ pedido.productos.length }} producto(s)
+            </div>
           </div>
         </div>
 
-        <!-- Botón de cancelar pedido -->
-        <div class="row mt-3">
-          <div class="col-12">
-            <button
-              class="btn btn-danger btn-sm"
-              [disabled]="!puedeSerCancelado(pedido.estadoId)"
-              (click)="cancelarPedido(pedido)">
-              <i class="bi bi-x-circle me-1"></i>
-              Cancelar Pedido
-            </button>
-            <small class="text-muted ms-2" *ngIf="!puedeSerCancelado(pedido.estadoId)">
-              Solo se pueden cancelar pedidos pendientes
-            </small>
+        <!-- Body expandible con productos -->
+        <div class="card-body" *ngIf="isPedidoExpandido(pedido.id!)" [@slideDown]>
+          <h6 class="mb-3">Productos del pedido:</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Código</th>
+                  <th>Producto</th>
+                  <th class="text-center">Cantidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let producto of pedido.productos">
+                  <td><code>{{ producto.codigoBarra }}</code></td>
+                  <td>{{ producto.productoNombre }}</td>
+                  <td class="text-center">
+                    <span class="badge bg-primary">{{ producto.cantidad }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="row mt-3">
+            <div class="col-md-6" *ngIf="pedido.fechaEntrega">
+              <small class="text-muted">
+                <i class="bi bi-calendar-check me-1"></i>
+                Fecha de entrega: {{ pedido.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}
+              </small>
+            </div>
+            <div class="col-md-6" *ngIf="pedido.puntuacion">
+              <small class="text-muted">
+                <i class="bi bi-star-fill me-1 text-warning"></i>
+                Puntuación: {{ pedido.puntuacion }}/5
+              </small>
+            </div>
+          </div>
+
+          <!-- Botón de cancelar pedido -->
+          <div class="row mt-3">
+            <div class="col-12">
+              <button
+                class="btn btn-danger btn-sm"
+                [disabled]="!puedeSerCancelado(pedido.estadoId)"
+                (click)="cancelarPedido(pedido)">
+                <i class="bi bi-x-circle me-1"></i>
+                Cancelar Pedido
+              </button>
+              <small class="text-muted ms-2" *ngIf="!puedeSerCancelado(pedido.estadoId)">
+                Solo se pueden cancelar pedidos pendientes
+              </small>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
