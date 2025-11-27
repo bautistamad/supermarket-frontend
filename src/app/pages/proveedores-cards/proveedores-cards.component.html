@@ -1,0 +1,29 @@
+  <div class="container mt-4">
+    <h2 class="mb-4">Proveedores</h2>
+
+    <!-- Mensaje si no hay proveedores -->
+    <div *ngIf="proveedores.length === 0" class="alert alert-info">
+      No hay proveedores registrados o el backend no está respondiendo.
+    </div>
+
+    <!-- Grid de cards -->
+    <div *ngIf="proveedores.length > 0" class="row">
+      <div *ngFor="let proveedor of proveedores" class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">
+              <i class="bi bi-building me-2"></i>
+              {{ proveedor.name }}
+            </h5>
+          </div>
+          <div class="card-body text-center">
+            <i class="bi bi-building fs-1 text-primary mb-3"></i>
+            <h4>{{ proveedor.name }}</h4>
+          </div>
+          <div class="card-footer bg-light text-center">
+            <small class="text-muted">ID: {{ proveedor.id }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

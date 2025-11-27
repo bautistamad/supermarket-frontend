@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {IProducto} from '../../api/models/i-producto';
-import {ProductosResource} from '../../api/resources/productos-resource';
+import {ProductosResource} from '../../api/resources/productos-resource.service';
 
 @Component({
   selector: 'app-productos-list',

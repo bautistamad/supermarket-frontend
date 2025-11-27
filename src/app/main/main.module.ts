@@ -3,15 +3,25 @@ import { CommonModule } from '@angular/common';
 
 import { MainRoutingModule } from './main-routing.module';
 import { ProductosList } from '../pages/productos-list/productos-list';
-import { ProductosResource } from '../api/resources/productos-resource';
+import { ProductosResource } from '../api/resources/productos-resource.service';
+import { ProveedoresResource } from '../api/resources/proveedores-resource.service';
+import { PedidosResource } from '../api/resources/pedidos-resource.service';
+import { MainComponent } from './main.component';
+import { ProveedoresCardsComponent } from '../pages/proveedores-cards/proveedores-cards.component';
+import { PedidosListComponent } from '../pages/pedidos-list/pedidos-list.component';
 
 
 @NgModule({
   declarations: [
-    ProductosList
+    MainComponent,
+    ProductosList,
+    ProveedoresCardsComponent,
+    PedidosListComponent
   ],
   providers: [
-    ProductosResource
+    ProductosResource,
+    ProveedoresResource,
+    PedidosResource
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,6 @@
   import { NgModule } from '@angular/core';
   import { BrowserModule } from '@angular/platform-browser';
+  import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   import { HttpClientModule } from '@angular/common/http';
   import { ResourceModule } from '@ngx-resource/handler-ngx-http';
 
@@ -13,6 +14,7 @@
     ],
     imports: [
       BrowserModule,
+      BrowserAnimationsModule,
       HttpClientModule,
       ResourceModule.forRoot(),
       MainModule,

@@ -1,0 +1,85 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Pedidos</h2>
+
+  <!-- Mensaje si no hay pedidos -->
+  <div *ngIf="pedidos.length === 0" class="alert alert-info">
+    No hay pedidos registrado
+  </div>
+
+  <!-- Lista de pedidos con accordion -->
+  <div *ngIf="pedidos.length > 0">
+    <div *ngFor="let pedido of pedidos" class="card mb-3 shadow-sm">
+
+      <!-- Header del pedido (siempre visible) -->
+      <div class="card-header" [ngClass]="getBadgeClass(pedido.estadoId)" style="cursor: pointer;"
+           (click)="togglePedido(pedido.id!)">
+        <div class="row align-items-center text-white">
+          <div class="col-md-3">
+            <h5 class="mb-0">
+              <i class="bi bi-receipt me-2"></i>
+              Pedido #{{ pedido.id }}
+            </h5>
+          </div>
+          <div class="col-md-3">
+            <i class="bi bi-truck me-2"></i>
+            {{ pedido.proveedorNombre }}
+          </div>
+          <div class="col-md-2">
+            <i class="bi bi-calendar me-2"></i>
+            {{ pedido.fechaEstimada | date:'dd/MM/yyyy' }}
+          </div>
+          <div class="col-md-2">
+            <span class="badge bg-light text-dark">
+              {{ pedido.estadoNombre }}
+            </span>
+          </div>
+          <div class="col-md-2 text-end">
+            <i class="bi" [ngClass]="isPedidoExpandido(pedido.id!) ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+            {{ pedido.productos.length }} producto(s)
+          </div>
+        </div>
+      </div>
+
+      <!-- Body expandible con productos -->
+      <div class="card-body" *ngIf="isPedidoExpandido(pedido.id!)" [@slideDown]>
+        <h6 class="mb-3">Productos del pedido:</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th class="text-center">Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let producto of pedido.productos">
+                <td><code>{{ producto.codigoBarra }}</code></td>
+                <td>{{ producto.productoNombre }}</td>
+                <td class="text-center">
+                  <span class="badge bg-primary">{{ producto.cantidad }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="row mt-3">
+          <div class="col-md-6" *ngIf="pedido.fechaEntrega">
+            <small class="text-muted">
+              <i class="bi bi-calendar-check me-1"></i>
+              Fecha de entrega: {{ pedido.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}
+            </small>
+          </div>
+          <div class="col-md-6" *ngIf="pedido.puntuacion">
+            <small class="text-muted">
+              <i class="bi bi-star-fill me-1 text-warning"></i>
+              Puntuación: {{ pedido.puntuacion }}/5
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

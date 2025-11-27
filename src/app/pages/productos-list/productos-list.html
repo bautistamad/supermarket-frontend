@@ -6,33 +6,60 @@
     No hay productos cargados o el backend no está respondiendo.
   </div>
 
-  <!-- Tabla de productos -->
-  <div *ngIf="productos.length > 0" class="table-responsive">
-    <table class="table table-striped table-hover">
-      <thead class="table-dark">
-      <tr>
-        <th>Código Barra</th>
-        <th>Nombre</th>
-        <th>Stock Actual</th>
-        <th>Stock Mínimo</th>
-        <th>Stock Máximo</th>
-        <th>Estado</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let producto of productos">
-        <td>{{ producto.codigoBarra }}</td>
-        <td>{{ producto.nombre }}</td>
-        <td>{{ producto.actualStock }}</td>
-        <td>{{ producto.minStock }}</td>
-        <td>{{ producto.maxStock }}</td>
-        <td>
-              <span class="badge bg-success" *ngIf="producto.estadoNombre">
-                {{ producto.estadoNombre }}
-              </span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+  <!-- Grid de cards -->
+  <div *ngIf="productos.length > 0" class="row">
+    <div *ngFor="let producto of productos" class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        <!-- Header con nombre del producto -->
+        <div class="card-header bg-primary text-white">
+          <h5 class="card-title mb-0">
+            <i class="bi bi-box-seam me-2"></i>
+            {{ producto.nombre }}
+          </h5>
+        </div>
+
+        <!-- Body con información -->
+        <div class="card-body">
+          <div class="mb-3 text-center">
+            <i class="bi bi-upc-scan fs-1 text-primary"></i>
+            <p class="text-muted mb-0"><small>{{ producto.codigoBarra }}</small></p>
+          </div>
+
+          <div class="row text-center">
+            <div class="col-4">
+              <div class="mb-2">
+                <i class="bi bi-arrow-down-circle text-danger"></i>
+                <p class="mb-0"><small>Mínimo</small></p>
+                <strong>{{ producto.minStock }}</strong>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="mb-2">
+                <i class="bi bi-boxes text-primary"></i>
+                <p class="mb-0"><small>Actual</small></p>
+                <strong class="fs-5">{{ producto.actualStock }}</strong>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="mb-2">
+                <i class="bi bi-arrow-up-circle text-success"></i>
+                <p class="mb-0"><small>Máximo</small></p>
+                <strong>{{ producto.maxStock }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer con estado -->
+        <div class="card-footer bg-light text-center">
+          <span class="badge bg-success" *ngIf="producto.estadoNombre">
+            {{ producto.estadoNombre }}
+          </span>
+          <span class="badge bg-secondary" *ngIf="!producto.estadoNombre">
+            Sin estado
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

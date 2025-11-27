@@ -1,0 +1,34 @@
+  <div class="d-flex" style="min-height: 100vh;">
+    <!-- Menú lateral -->
+    <nav class="sidebar bg-dark text-white p-3">
+      <h4 class="text-center mb-4">Supermercado</h4>
+
+      <ul class="nav flex-column">
+        <li class="nav-item mb-3">
+          <a routerLink="/main/productos" routerLinkActive="active" class="nav-link text-white">
+            <i class="bi bi-box-seam fs-4"></i>
+            <span class="ms-2">Productos</span>
+          </a>
+        </li>
+
+        <li class="nav-item mb-3">
+          <a routerLink="/main/proveedores" routerLinkActive="active" class="nav-link text-white">
+            <i class="bi bi-truck fs-4"></i>
+            <span class="ms-2">Proveedores</span>
+          </a>
+        </li>
+
+        <li class="nav-item mb-3">
+          <a routerLink="/main/pedidos" routerLinkActive="active" class="nav-link text-white">
+            <i class="bi bi-cart-check fs-4"></i>
+            <span class="ms-2">Pedidos</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Área de contenido -->
+    <div class="content flex-grow-1 p-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
