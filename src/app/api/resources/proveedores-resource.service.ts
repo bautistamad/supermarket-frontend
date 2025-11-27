@@ -33,4 +33,10 @@ export class ProveedoresResource extends Resource {
     method: ResourceRequestMethod.Get
   })
   getById!: IResourceMethodObservable<{ id: number }, IProveedor>
+
+  @ResourceAction({
+    path: '/proveedores',
+    method: ResourceRequestMethod.Post
+  })
+  create!: IResourceMethodObservable<IProveedor, IProveedor>
 }
