@@ -35,6 +35,11 @@ export class PedidosListComponent implements OnInit {
       next: (pedidos: IPedido[]) => {
         this.pedidos = pedidos;
         console.log('Pedidos cargados:', pedidos);
+        console.log('Total de pedidos:', pedidos.length);
+        pedidos.forEach((pedido, index) => {
+          console.log(`Pedido ${index + 1} - ID: ${pedido.id}, Productos:`, pedido.productos);
+          console.log(`  - Cantidad de productos: ${pedido.productos?.length || 0}`);
+        });
       },
       error: (error: any) => {
         console.error('Error al cargar pedidos:', error);
@@ -60,5 +65,26 @@ export class PedidosListComponent implements OnInit {
       6: 'bg-danger'        // Cancelado
     };
     return badges[estadoId] || 'bg-secondary';
+  }
+
+  puedeSerCancelado(estadoId: number): boolean {
+    return estadoId === 1; // Solo "Pendiente"
+  }
+
+  cancelarPedido(pedido: IPedido): void {
+    if (!pedido.id) return;
+
+    if (confirm(`¿Estás seguro de que deseas cancelar el pedido #${pedido.id}?`)) {
+      this._pedidosService.delete({ id: pedido.id }).subscribe({
+        next: () => {
+          console.log(`Pedido #${pedido.id} cancelado exitosamente`);
+          this.cargarPedidos(); // Recargar la lista
+        },
+        error: (error: any) => {
+          console.error('Error al cancelar pedido:', error);
+          alert('Error al cancelar el pedido. Por favor, intenta nuevamente.');
+        }
+      });
+    }
   }
 }
