@@ -5,4 +5,5 @@ export interface IProveedor {
   tipoServicio: number;
   tipoServicioNombre?: string;
   apiKey: string;
+  clientId: string;
 }

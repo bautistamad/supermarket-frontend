@@ -43,21 +43,33 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="tipoServicio" class="form-label">Tipo de Servicio *</label>
-              <select 
-                class="form-select" 
+              <select
+                class="form-select"
                 id="tipoServicio"
                 [(ngModel)]="nuevoProveedor.tipoServicio"
                 name="tipoServicio"
                 required>
-                <option [ngValue]="1">SOAP</option>
-                <option [ngValue]="2">REST</option>
+                <option [ngValue]="1">REST</option>
+                <option [ngValue]="2">SOAP</option>
               </select>
             </div>
             <div class="col-md-6 mb-3">
+              <label for="clientId" class="form-label">Client ID *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="clientId"
+                [(ngModel)]="nuevoProveedor.clientId"
+                name="clientId"
+                required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 mb-3">
               <label for="apiKey" class="form-label">API Key *</label>
-              <input 
-                type="text" 
-                class="form-control" 
+              <input
+                type="text"
+                class="form-control"
                 id="apiKey"
                 [(ngModel)]="nuevoProveedor.apiKey"
                 name="apiKey"

@@ -15,7 +15,8 @@ export class ProveedoresCardsComponent implements OnInit {
     name: '',
     apiEndpoint: '',
     tipoServicio: 1,
-    apiKey: ''
+    apiKey: '',
+    clientId: ''
   };
 
   constructor(private _proveedoresService: ProveedoresResource) {}
@@ -48,12 +49,13 @@ export class ProveedoresCardsComponent implements OnInit {
       name: '',
       apiEndpoint: '',
       tipoServicio: 1,
-      apiKey: ''
+      apiKey: '',
+      clientId: ''
     };
   }
 
   guardarProveedor(): void {
-    if( !this.nuevoProveedor.name || !this.nuevoProveedor.apiEndpoint || !this.nuevoProveedor.apiKey){
+    if( !this.nuevoProveedor.name || !this.nuevoProveedor.apiEndpoint || !this.nuevoProveedor.apiKey || !this.nuevoProveedor.clientId){
       alert('Por favor completa todos los campos obligatorios');
       return;
     }
