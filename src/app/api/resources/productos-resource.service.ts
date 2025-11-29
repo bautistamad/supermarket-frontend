@@ -33,4 +33,10 @@ export class ProductosResource extends  Resource {
     method: ResourceRequestMethod.Get
   })
   getById!: IResourceMethodObservable<{ barCode: number},IProducto>
+
+  @ResourceAction({
+    path: '/productos/proveedor/{!id}',
+    method: ResourceRequestMethod.Get
+  })
+  getByProveedor!: IResourceMethodObservable<{ id: number, history?: boolean }, IProducto[]>
 }

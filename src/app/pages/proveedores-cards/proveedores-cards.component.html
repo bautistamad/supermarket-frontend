@@ -107,9 +107,91 @@
           <div class="card-body text-center">
             <i class="bi bi-building fs-1 text-primary mb-3"></i>
             <h4>{{ proveedor.name }}</h4>
+            <p class="text-muted mb-0">
+              <small><i class="bi bi-link-45deg me-1"></i>{{ proveedor.apiEndpoint }}</small>
+            </p>
+            <p class="text-muted">
+              <small><i class="bi bi-gear me-1"></i>{{ proveedor.tipoServicioNombre }}</small>
+            </p>
+
+            <!-- Botones de acciones -->
+            <div class="d-grid gap-2 mt-3">
+              <button
+                class="btn btn-outline-primary btn-sm"
+                (click)="verProductosProveedor(proveedor)">
+                <i class="bi bi-box-seam me-1"></i>
+                Ver Productos
+              </button>
+              <button
+                class="btn btn-outline-success btn-sm"
+                (click)="sincronizarPrecios(proveedor)">
+                <i class="bi bi-arrow-repeat me-1"></i>
+                Sincronizar Precios
+              </button>
+            </div>
           </div>
           <div class="card-footer bg-light text-center">
             <small class="text-muted">ID: {{ proveedor.id }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para mostrar productos del proveedor -->
+    <div *ngIf="mostrarProductos" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-box-seam me-2"></i>
+              Productos de {{ proveedorSeleccionado?.name }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="cerrarProductos()"></button>
+          </div>
+          <div class="modal-body">
+            <div *ngIf="productosProveedor.length === 0" class="alert alert-info">
+              No hay productos asociados a este proveedor.
+            </div>
+            <div *ngIf="productosProveedor.length > 0" class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Precio Actual</th>
+                    <th>Stock Actual</th>
+                    <th>Stock Mín/Máx</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let producto of productosProveedor">
+                    <td><code>{{ producto.codigoBarra }}</code></td>
+                    <td>{{ producto.nombre }}</td>
+                    <td class="text-center">
+                      <span *ngIf="obtenerPrecioActual(producto)" class="badge bg-success">
+                        ${{ obtenerPrecioActual(producto) | number:'1.2-2' }}
+                      </span>
+                      <span *ngIf="!obtenerPrecioActual(producto)" class="text-muted">
+                        <small>Sin precio</small>
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span class="badge bg-info">{{ producto.actualStock }}</span>
+                    </td>
+                    <td class="text-center">
+                      <small class="text-muted">{{ producto.minStock }} / {{ producto.maxStock }}</small>
+                    </td>
+                    <td>
+                      <span class="badge bg-success">{{ producto.estadoNombre || 'N/A' }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarProductos()">Cerrar</button>
           </div>
         </div>
       </div>
