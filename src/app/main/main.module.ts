@@ -6,6 +6,7 @@ import { ProductosList } from '../pages/productos-list/productos-list';
 import { ProductosResource } from '../api/resources/productos-resource.service';
 import { ProveedoresResource } from '../api/resources/proveedores-resource.service';
 import { PedidosResource } from '../api/resources/pedidos-resource.service';
+import { EscalasResource } from '../api/resources/escalas-resource.service';
 import { MainComponent } from './main.component';
 import { ProveedoresCardsComponent } from '../pages/proveedores-cards/proveedores-cards.component';
 import { PedidosListComponent } from '../pages/pedidos-list/pedidos-list.component';
@@ -22,7 +23,8 @@ import { FormsModule } from '@angular/forms';
   providers: [
     ProductosResource,
     ProveedoresResource,
-    PedidosResource
+    PedidosResource,
+    EscalasResource
   ],
   imports: [
     CommonModule,

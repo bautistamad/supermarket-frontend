@@ -3,6 +3,8 @@ import { IProveedor } from '../../api/models/i-proveedor';
 import { ProveedoresResource } from '../../api/resources/proveedores-resource.service';
 import { ProductosResource } from '../../api/resources/productos-resource.service';
 import { IProducto } from '../../api/models/i-producto';
+import { EscalasResource } from '../../api/resources/escalas-resource.service';
+import { IEscala } from '../../api/models/i-escala';
 
 @Component({
   selector: 'app-proveedores-cards',
@@ -16,6 +18,9 @@ export class ProveedoresCardsComponent implements OnInit {
   proveedorSeleccionado: IProveedor | null = null;
   productosProveedor: IProducto[] = [];
   mostrarProductos: boolean = false;
+  mostrarModalEscalas: boolean = false;
+  escalasParaMapear: IEscala[] = [];
+  proveedorPendienteEscala: IProveedor | null = null;
    nuevoProveedor: IProveedor = {
     name: '',
     apiEndpoint: '',
@@ -26,7 +31,8 @@ export class ProveedoresCardsComponent implements OnInit {
 
   constructor(
     private _proveedoresService: ProveedoresResource,
-    private _productosService: ProductosResource
+    private _productosService: ProductosResource,
+    private _escalasService: EscalasResource
   ) {}
 
   ngOnInit(): void {
@@ -71,15 +77,76 @@ export class ProveedoresCardsComponent implements OnInit {
     this._proveedoresService.create(this.nuevoProveedor).subscribe({
       next:(proveedor: IProveedor) => {
         console.log('Proveedor creado:', proveedor);
-        this.cargarProveedores();
+        this.proveedorPendienteEscala = proveedor;
         this.toggleFormulario();
-        alert('Proveedor creado exitosamente');
+
+        // Obtener escalas sin mapear para configurar
+        if (proveedor.id) {
+          this.cargarEscalasSinMapear(proveedor.id);
+        }
       },
       error: (error: any) => {
         console.error('Error al crear proveedor:', error);
         alert('Error al crear el proveedor. Por favor, intenta nuevamente.');
       }
     })
+  }
+
+  cargarEscalasSinMapear(proveedorId: number): void {
+    this._escalasService.getUnmapped({ proveedorId }).subscribe({
+      next: (escalas: IEscala[]) => {
+        if (escalas.length > 0) {
+          this.escalasParaMapear = escalas.map(e => ({ ...e, escalaInt: null }));
+          this.mostrarModalEscalas = true;
+        } else {
+          // No hay escalas para mapear, el proveedor está listo
+          this.cargarProveedores();
+          alert('Proveedor creado exitosamente. No requiere configuración de escalas.');
+        }
+      },
+      error: (error: any) => {
+        console.error('Error al cargar escalas:', error);
+        alert('Proveedor creado pero hubo un error al cargar las escalas. Recarga la página.');
+        this.cargarProveedores();
+      }
+    });
+  }
+
+  guardarMapeosEscalas(): void {
+    // Validar que todas las escalas tengan un valor asignado
+    const escalasSinMapear = this.escalasParaMapear.filter(e => e.escalaInt === null || e.escalaInt === undefined);
+
+    if (escalasSinMapear.length > 0) {
+      alert('Por favor asigna un valor a todas las escalas antes de continuar.');
+      return;
+    }
+
+    // Validar que los valores estén entre 1 y 5
+    const escalasInvalidas = this.escalasParaMapear.filter(e => e.escalaInt! < 1 || e.escalaInt! > 5);
+
+    if (escalasInvalidas.length > 0) {
+      alert('Los valores de escala deben estar entre 1 y 5.');
+      return;
+    }
+
+    this._escalasService.saveMappings(this.escalasParaMapear).subscribe({
+      next: (escalasGuardadas: IEscala[]) => {
+        console.log('Escalas mapeadas:', escalasGuardadas);
+        this.cerrarModalEscalas();
+        this.cargarProveedores();
+        alert(`Proveedor ${this.proveedorPendienteEscala?.name} configurado exitosamente.`);
+      },
+      error: (error: any) => {
+        console.error('Error al guardar escalas:', error);
+        alert('Error al guardar las escalas. Por favor, intenta nuevamente.');
+      }
+    });
+  }
+
+  cerrarModalEscalas(): void {
+    this.mostrarModalEscalas = false;
+    this.escalasParaMapear = [];
+    this.proveedorPendienteEscala = null;
   }
 
   sincronizarPrecios(proveedor: IProveedor): void {
