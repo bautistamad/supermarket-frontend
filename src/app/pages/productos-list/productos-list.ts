@@ -13,6 +13,7 @@ export class ProductosList implements OnInit {
   productos: IProducto[] = [];
   showModal: boolean = false;
   isSubmitting: boolean = false;
+  modoEdicion: boolean = false; // Indica si estamos editando o creando
 
   // Modelo del formulario
   nuevoProducto: IProducto = {
@@ -43,13 +44,30 @@ export class ProductosList implements OnInit {
     });
   }
 
-  abrirModal(): void {
+  abrirModalCrear(): void {
+    this.modoEdicion = false;
     this.showModal = true;
     this.resetForm();
   }
 
+  abrirModalEditar(producto: IProducto): void {
+    this.modoEdicion = true;
+    this.showModal = true;
+    // Copiar los datos del producto al formulario
+    this.nuevoProducto = {
+      codigoBarra: producto.codigoBarra,
+      nombre: producto.nombre,
+      imagen: producto.imagen || '',
+      minStock: producto.minStock,
+      maxStock: producto.maxStock,
+      actualStock: producto.actualStock,
+      estadoId: producto.estadoId || 1
+    };
+  }
+
   cerrarModal(): void {
     this.showModal = false;
+    this.modoEdicion = false;
     this.resetForm();
   }
 
@@ -63,6 +81,14 @@ export class ProductosList implements OnInit {
       actualStock: 0,
       estadoId: 1
     };
+  }
+
+  guardarProducto(): void {
+    if (this.modoEdicion) {
+      this.actualizarProducto();
+    } else {
+      this.crearProducto();
+    }
   }
 
   crearProducto(): void {
@@ -89,12 +115,67 @@ export class ProductosList implements OnInit {
     });
   }
 
+  actualizarProducto(): void {
+    // Validaciones básicas
+    if (!this.validarFormularioEdicion()) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    // El método update necesita el barCode explícitamente en el objeto
+    const productoActualizado = {
+      ...this.nuevoProducto,
+      barCode: this.nuevoProducto.codigoBarra
+    };
+
+    this._productosService.update(productoActualizado).subscribe({
+      next: (producto: IProducto) => {
+        console.log('Producto actualizado exitosamente:', producto);
+        alert(`Producto "${producto.nombre}" actualizado exitosamente`);
+        this.cerrarModal();
+        this.cargarProductos(); // Recargar la lista
+        this.isSubmitting = false;
+      },
+      error: (error: any) => {
+        console.error('Error al actualizar producto:', error);
+        alert('Error al actualizar el producto. Verifica los datos e intenta nuevamente.');
+        this.isSubmitting = false;
+      }
+    });
+  }
+
   validarFormulario(): boolean {
     if (!this.nuevoProducto.codigoBarra || this.nuevoProducto.codigoBarra <= 0) {
       alert('El código de barra debe ser un número positivo');
       return false;
     }
 
+    if (!this.nuevoProducto.nombre || this.nuevoProducto.nombre.trim() === '') {
+      alert('El nombre del producto es requerido');
+      return false;
+    }
+
+    if (this.nuevoProducto.minStock < 0) {
+      alert('El stock mínimo no puede ser negativo');
+      return false;
+    }
+
+    if (this.nuevoProducto.maxStock <= this.nuevoProducto.minStock) {
+      alert('El stock máximo debe ser mayor al stock mínimo');
+      return false;
+    }
+
+    if (this.nuevoProducto.actualStock < 0) {
+      alert('El stock actual no puede ser negativo');
+      return false;
+    }
+
+    return true;
+  }
+
+  validarFormularioEdicion(): boolean {
+    // En modo edición, el código de barra no se puede modificar
     if (!this.nuevoProducto.nombre || this.nuevoProducto.nombre.trim() === '') {
       alert('El nombre del producto es requerido');
       return false;

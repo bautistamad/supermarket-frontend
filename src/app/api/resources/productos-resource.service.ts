@@ -48,6 +48,12 @@ export class ProductosResource extends  Resource {
 
   @ResourceAction({
     path: '/productos/{!barCode}',
+    method: ResourceRequestMethod.Put
+  })
+  update!: IResourceMethodObservable<IProducto, IProducto>
+
+  @ResourceAction({
+    path: '/productos/{!barCode}',
     method: ResourceRequestMethod.Delete
   })
   delete!: IResourceMethodObservable<{ barCode: number }, void>
