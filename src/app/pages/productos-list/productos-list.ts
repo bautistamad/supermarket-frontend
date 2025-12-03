@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {IProducto} from '../../api/models/i-producto';
+import {IProveedor} from '../../api/models/i-proveedor';
 import {ProductosResource} from '../../api/resources/productos-resource.service';
+import {ProveedoresResource} from '../../api/resources/proveedores-resource.service';
 
 @Component({
   selector: 'app-productos-list',
@@ -15,6 +17,15 @@ export class ProductosList implements OnInit {
   isSubmitting: boolean = false;
   modoEdicion: boolean = false; // Indica si estamos editando o creando
 
+  // Modal de asignación a proveedor
+  showAsignacionModal: boolean = false;
+  proveedores: IProveedor[] = [];
+  productosProveedor: any[] = [];
+  proveedorSeleccionado: number | null = null;
+  productoSeleccionado: any | null = null;
+  productoActual: IProducto | null = null;
+  isLoadingProveedorProductos: boolean = false;
+
   // Modelo del formulario
   nuevoProducto: IProducto = {
     codigoBarra: 0,
@@ -26,10 +37,14 @@ export class ProductosList implements OnInit {
     estadoId: 1
   };
 
-  constructor(private _productosService: ProductosResource) {}
+  constructor(
+    private _productosService: ProductosResource,
+    private _proveedoresService: ProveedoresResource
+  ) {}
 
   ngOnInit(): void {
     this.cargarProductos();
+    this.cargarProveedores();
   }
 
   cargarProductos(): void {
@@ -213,6 +228,89 @@ export class ProductosList implements OnInit {
       error: (error: any) => {
         console.error('Error al eliminar producto:', error);
         alert('Error al eliminar el producto. Puede que tenga relaciones con otros datos.');
+      }
+    });
+  }
+
+  // Métodos para asignación a proveedor
+  cargarProveedores(): void {
+    this._proveedoresService.getAll().subscribe({
+      next: (proveedores: IProveedor[]) => {
+        this.proveedores = proveedores;
+        console.log('Proveedores cargados:', proveedores);
+      },
+      error: (error: any) => {
+        console.error('Error al cargar proveedores:', error);
+      }
+    });
+  }
+
+  abrirModalAsignacion(producto: IProducto): void {
+    this.productoActual = producto;
+    this.showAsignacionModal = true;
+    this.proveedorSeleccionado = null;
+    this.productosProveedor = [];
+    this.productoSeleccionado = null;
+  }
+
+  cerrarModalAsignacion(): void {
+    this.showAsignacionModal = false;
+    this.productoActual = null;
+    this.proveedorSeleccionado = null;
+    this.productosProveedor = [];
+    this.productoSeleccionado = null;
+  }
+
+  onProveedorChange(): void {
+    if (!this.proveedorSeleccionado) {
+      this.productosProveedor = [];
+      this.productoSeleccionado = null;
+      return;
+    }
+
+    this.isLoadingProveedorProductos = true;
+    this.productoSeleccionado = null;
+
+    this._proveedoresService.getProductosDisponibles({ id: this.proveedorSeleccionado }).subscribe({
+      next: (productos: any[]) => {
+        this.productosProveedor = productos;
+        console.log('Productos del proveedor:', productos);
+        this.isLoadingProveedorProductos = false;
+      },
+      error: (error: any) => {
+        console.error('Error al cargar productos del proveedor:', error);
+        alert('Error al cargar productos del proveedor. Verifica que el proveedor esté configurado correctamente.');
+        this.isLoadingProveedorProductos = false;
+        this.productosProveedor = [];
+      }
+    });
+  }
+
+  asignarProductoAProveedor(): void {
+    if (!this.productoActual || !this.proveedorSeleccionado || !this.productoSeleccionado) {
+      alert('Debes seleccionar un proveedor y un producto del proveedor');
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const requestData = {
+      barCode: this.productoActual.codigoBarra,
+      idProveedor: this.proveedorSeleccionado,
+      codigoBarraProveedor: this.productoSeleccionado.barCode || this.productoSeleccionado.codigoBarra
+    };
+
+    this._productosService.assignToProvider(requestData).subscribe({
+      next: () => {
+        alert(`Producto "${this.productoActual!.nombre}" asignado exitosamente al proveedor`);
+        this.cerrarModalAsignacion();
+        this.cargarProductos();
+        this.isSubmitting = false;
+      },
+      error: (error: any) => {
+        console.error('Error al asignar producto al proveedor:', error);
+        alert('Error al asignar el producto al proveedor. Verifica que los datos sean correctos.');
+        this.isSubmitting = false;
       }
     });
   }

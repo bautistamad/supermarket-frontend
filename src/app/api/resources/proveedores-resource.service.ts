@@ -45,4 +45,10 @@ export class ProveedoresResource extends Resource {
     method: ResourceRequestMethod.Post
   })
   syncPrecios!: IResourceMethodObservable<{ id: number }, { pricesCreated: number, pricesUpdated: number, errors: number }>
+
+  @ResourceAction({
+    path: '/proveedores/{!id}/productos-disponibles',
+    method: ResourceRequestMethod.Get
+  })
+  getProductosDisponibles!: IResourceMethodObservable<{ id: number }, any[]>
 }

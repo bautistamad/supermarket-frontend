@@ -24,6 +24,9 @@
               {{ producto.nombre }}
             </h5>
             <div>
+              <button class="btn btn-sm btn-info me-1" (click)="abrirModalAsignacion(producto)" title="Asignar a Proveedor">
+                <i class="bi bi-link-45deg"></i>
+              </button>
               <button class="btn btn-sm btn-light me-1" (click)="abrirModalEditar(producto)" title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
@@ -199,3 +202,104 @@
 
 <!-- Backdrop del modal -->
 <div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal"></div>
+
+<!-- Modal para asignar producto a proveedor -->
+<div class="modal" [class.show]="showAsignacionModal" [style.display]="showAsignacionModal ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-link-45deg me-2"></i>
+          Asignar Producto a Proveedor
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarModalAsignacion()" [disabled]="isSubmitting"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle me-2"></i>
+          <strong>Producto seleccionado:</strong> {{ productoActual?.nombre }} ({{ productoActual?.codigoBarra }})
+        </div>
+
+        <form>
+          <!-- Selector de proveedor -->
+          <div class="mb-3">
+            <label for="proveedor" class="form-label">Selecciona un Proveedor *</label>
+            <select
+              class="form-select"
+              id="proveedor"
+              [(ngModel)]="proveedorSeleccionado"
+              name="proveedor"
+              (change)="onProveedorChange()"
+              [disabled]="isSubmitting">
+              <option [ngValue]="null">-- Selecciona un proveedor --</option>
+              <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor.id">
+                {{ proveedor.name }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Mensaje de carga -->
+          <div *ngIf="isLoadingProveedorProductos" class="text-center my-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando productos...</span>
+            </div>
+            <p class="mt-2">Cargando productos del proveedor...</p>
+          </div>
+
+          <!-- Selector de producto del proveedor -->
+          <div class="mb-3" *ngIf="!isLoadingProveedorProductos && proveedorSeleccionado">
+            <label for="productoProveedor" class="form-label">Selecciona el Producto del Proveedor *</label>
+
+            <div *ngIf="productosProveedor.length === 0" class="alert alert-warning">
+              No hay productos disponibles para este proveedor
+            </div>
+
+            <select
+              *ngIf="productosProveedor.length > 0"
+              class="form-select"
+              id="productoProveedor"
+              [(ngModel)]="productoSeleccionado"
+              name="productoProveedor"
+              [disabled]="isSubmitting">
+              <option [ngValue]="null">-- Selecciona un producto --</option>
+              <option *ngFor="let producto of productosProveedor" [ngValue]="producto">
+                {{ producto.nombre || producto.name }} - {{ producto.codigoBarra || producto.barCode }}
+                <span *ngIf="producto.precio"> - ${{ producto.precio }}</span>
+              </option>
+            </select>
+          </div>
+
+          <!-- Detalles del producto seleccionado -->
+          <div *ngIf="productoSeleccionado" class="alert alert-success">
+            <i class="bi bi-check-circle me-2"></i>
+            <strong>Producto seleccionado:</strong> {{ productoSeleccionado.nombre || productoSeleccionado.name }}<br>
+            <small>Código: {{ productoSeleccionado.codigoBarra || productoSeleccionado.barCode }}</small>
+            <span *ngIf="productoSeleccionado.precio"><br><small>Precio: ${{ productoSeleccionado.precio }}</small></span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalAsignacion()" [disabled]="isSubmitting">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="asignarProductoAProveedor()"
+          [disabled]="isSubmitting || !proveedorSeleccionado || !productoSeleccionado">
+          <span *ngIf="!isSubmitting">
+            <i class="bi bi-link-45deg me-2"></i>
+            Asignar Producto
+          </span>
+          <span *ngIf="isSubmitting">
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Asignando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop del modal de asignación -->
+<div class="modal-backdrop fade" [class.show]="showAsignacionModal" *ngIf="showAsignacionModal"></div>

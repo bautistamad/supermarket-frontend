@@ -57,4 +57,16 @@ export class ProductosResource extends  Resource {
     method: ResourceRequestMethod.Delete
   })
   delete!: IResourceMethodObservable<{ barCode: number }, void>
+
+  @ResourceAction({
+    path: '/productos/{!barCode}/proveedor/{!idProveedor}',
+    method: ResourceRequestMethod.Post
+  })
+  assignToProvider!: IResourceMethodObservable<{ barCode: number, idProveedor: number, codigoBarraProveedor: number, estado?: number }, any>
+
+  @ResourceAction({
+    path: '/productos/{!barCode}/proveedor/{!idProveedor}',
+    method: ResourceRequestMethod.Delete
+  })
+  removeFromProvider!: IResourceMethodObservable<{ barCode: number, idProveedor: number }, void>
 }
