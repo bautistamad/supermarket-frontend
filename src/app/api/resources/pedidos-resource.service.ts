@@ -51,4 +51,10 @@ export class PedidosResource extends Resource {
     method: ResourceRequestMethod.Delete
   })
   delete!: IResourceMethodObservable<{ id: number }, void>
+
+  @ResourceAction({
+    path: '/pedidos/{!id}/rate',
+    method: ResourceRequestMethod.Post
+  })
+  rate!: IResourceMethodObservable<{ id: number, rating: number }, IPedido>
 }

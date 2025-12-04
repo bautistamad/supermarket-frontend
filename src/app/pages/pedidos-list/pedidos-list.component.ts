@@ -91,6 +91,51 @@ export class PedidosListComponent implements OnInit {
     }
   }
 
+  puedeSerPuntuado(estadoId: number): boolean {
+    return estadoId === 5; // Solo "Entregado"
+  }
+
+  puntuarPedido(pedido: IPedido): void {
+    if (!pedido.id) return;
+
+    // Solicitar puntuación al usuario (1-5)
+    const ratingStr = prompt(`Puntuar pedido #${pedido.id}\n\nIngrese una puntuación del 1 al 5:`);
+
+    if (ratingStr === null) {
+      // Usuario canceló
+      return;
+    }
+
+    const rating = parseInt(ratingStr, 10);
+
+    // Validar que sea un número entre 1 y 5
+    if (isNaN(rating) || rating < 1 || rating > 5) {
+      alert('Por favor ingrese un número válido entre 1 y 5.');
+      return;
+    }
+
+    // Enviar puntuación al backend
+    this._pedidosService.rate({ id: pedido.id, rating }).subscribe({
+      next: () => {
+        console.log(`Pedido #${pedido.id} puntuado exitosamente con ${rating} estrellas`);
+        alert(`Pedido #${pedido.id} puntuado exitosamente con ${rating} estrellas`);
+        this.cargarPedidos(); // Recargar la lista para mostrar la puntuación
+      },
+      error: (error: any) => {
+        console.error('Error al puntuar pedido:', error);
+        let errorMsg = 'Error al puntuar el pedido.';
+
+        if (error.status === 400) {
+          errorMsg = 'El pedido no puede ser puntuado. Verifique que esté en estado Entregado.';
+        } else if (error.status === 404) {
+          errorMsg = 'No se encontró el mapeo de escala para este proveedor.';
+        }
+
+        alert(errorMsg);
+      }
+    });
+  }
+
  getProveedores(): { id: number, nombre: string }[] {
     const proveedoresMap = new Map<number, string>();
     this.pedidos.forEach(pedido => {
