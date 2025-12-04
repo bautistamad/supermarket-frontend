@@ -44,9 +44,30 @@ export class ProveedoresCardsComponent implements OnInit {
       next: (proveedores: IProveedor[]) => {
         this.proveedores = proveedores;
         console.log('Proveedores cargados:', proveedores);
+
+        // Cargar el rating de cada proveedor
+        this.proveedores.forEach(proveedor => {
+          if (proveedor.id) {
+            this.cargarRatingProveedor(proveedor.id);
+          }
+        });
       },
       error: (error: any) => {
         console.error('Error al cargar proveedores:', error);
+      }
+    });
+  }
+
+  cargarRatingProveedor(proveedorId: number): void {
+    this._proveedoresService.getRating({ id: proveedorId }).subscribe({
+      next: (rating: number) => {
+        const proveedor = this.proveedores.find(p => p.id === proveedorId);
+        if (proveedor) {
+          proveedor.ratingPromedio = rating;
+        }
+      },
+      error: (error: any) => {
+        console.error(`Error al cargar rating del proveedor ${proveedorId}:`, error);
       }
     });
   }
@@ -198,5 +219,12 @@ export class ProveedoresCardsComponent implements OnInit {
     // El precio actual es el que tiene fechaFin = null
     const precioActual = producto.precios.find(p => p.fechaFin === null);
     return precioActual ? precioActual.precio : null;
+  }
+
+  obtenerTextoRating(rating: number | null | undefined): string {
+    if (!rating || rating === null) {
+      return 'Sin evaluaciones';
+    }
+    return rating.toFixed(2);
   }
 }

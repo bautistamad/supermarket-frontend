@@ -51,4 +51,10 @@ export class ProveedoresResource extends Resource {
     method: ResourceRequestMethod.Get
   })
   getProductosDisponibles!: IResourceMethodObservable<{ id: number }, any[]>
+
+  @ResourceAction({
+    path: '/proveedores/{!id}/rating',
+    method: ResourceRequestMethod.Get
+  })
+  getRating!: IResourceMethodObservable<{ id: number }, number>
 }
