@@ -1,6 +1,17 @@
   .sidebar {
-    width: 250px;
+    width: 280px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    min-height: 100vh;
+  }
+
+  .user-info {
+    background-color: rgba(108, 117, 125, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .user-info:hover {
+    background-color: rgba(108, 117, 125, 0.5) !important;
+    transition: background-color 0.3s ease;
   }
 
   .nav-link {
@@ -19,6 +30,29 @@
   .nav-link.active {
     background-color: #0d6efd;
     font-weight: bold;
+  }
+
+  .btn-logout {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-logout:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+  }
+
+  .btn-logout:active {
+    transform: translateY(0);
   }
 
   .content {
