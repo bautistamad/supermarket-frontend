@@ -8,10 +8,13 @@
   import { AppComponent } from './app.component';
   import { AppRoutingModule } from './app-routing.module';
   import { MainModule } from './main/main.module';
+  import { LoginComponent } from './pages/login/login.component';
+  import { AuthResource } from './api/resources/auth-resource.service';
 
   @NgModule({
     declarations: [
-      AppComponent
+      AppComponent,
+      LoginComponent
     ],
     imports: [
       BrowserModule,
@@ -22,7 +25,9 @@
       MainModule,
       AppRoutingModule
     ],
-    providers: [],
+    providers: [
+      AuthResource
+    ],
     bootstrap: [AppComponent]
   })
   export class AppModule { }

@@ -15,7 +15,8 @@ import { PedidosListComponent } from '../pages/pedidos-list/pedidos-list.compone
         { path: 'proveedores', component: ProveedoresCardsComponent },
         { path: 'pedidos', component: PedidosListComponent }
       ]
-    }
+    },
+    { path: 'productos', redirectTo: '/main/productos', pathMatch: 'full' }
   ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
