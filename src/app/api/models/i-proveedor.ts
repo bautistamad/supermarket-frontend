@@ -6,5 +6,5 @@ export interface IProveedor {
   tipoServicioNombre?: string;
   apiKey: string;
   clientId: string;
-  ratingPromedio?: number;
+  ratingPromedio?: number | null;
 }

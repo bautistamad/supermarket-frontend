@@ -60,14 +60,26 @@ export class ProveedoresCardsComponent implements OnInit {
 
   cargarRatingProveedor(proveedorId: number): void {
     this._proveedoresService.getRating({ id: proveedorId }).subscribe({
-      next: (rating: number) => {
+      next: (rating: any) => {
         const proveedor = this.proveedores.find(p => p.id === proveedorId);
         if (proveedor) {
-          proveedor.ratingPromedio = rating;
+          // Asegurar que sea un número o null
+          if (rating === null || rating === undefined) {
+            proveedor.ratingPromedio = null;
+          } else {
+            const ratingNumero = typeof rating === 'number' ? rating : parseFloat(rating.toString());
+            proveedor.ratingPromedio = isNaN(ratingNumero) ? null : ratingNumero;
+          }
+          console.log(`Rating del proveedor ${proveedorId}:`, proveedor.ratingPromedio);
         }
       },
       error: (error: any) => {
         console.error(`Error al cargar rating del proveedor ${proveedorId}:`, error);
+        // En caso de error, establecer null para que no rompa la UI
+        const proveedor = this.proveedores.find(p => p.id === proveedorId);
+        if (proveedor) {
+          proveedor.ratingPromedio = null;
+        }
       }
     });
   }
@@ -222,9 +234,16 @@ export class ProveedoresCardsComponent implements OnInit {
   }
 
   obtenerTextoRating(rating: number | null | undefined): string {
-    if (!rating || rating === null) {
+    if (!rating || rating === null || rating === undefined) {
       return 'Sin evaluaciones';
     }
-    return rating.toFixed(2);
+    // Convertir a número por si viene como string
+    const ratingNumero = typeof rating === 'number' ? rating : parseFloat(String(rating));
+
+    if (isNaN(ratingNumero)) {
+      return 'Sin evaluaciones';
+    }
+
+    return ratingNumero.toFixed(2);
   }
 }
