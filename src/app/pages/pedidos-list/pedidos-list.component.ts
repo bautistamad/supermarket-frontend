@@ -4,6 +4,7 @@ import { IPedido } from '../../api/models/i-pedido';
 import { IAutoGenerarResponse } from '../../api/models/i-auto-generar-response';
 import { PedidosResource } from '../../api/resources/pedidos-resource.service';
 import { PEDIDO_ESTADOS, PEDIDO_ESTADOS_COLORES } from '../../api/models/pedido-estados';
+import { AppMessageService } from '../../core/services/app-message.service';
 
 @Component({
   selector: 'app-pedidos-list',
@@ -29,7 +30,10 @@ export class PedidosListComponent implements OnInit {
   pedidosFiltrados: IPedido[] = [];
   generandoPedido: boolean = false;
 
-  constructor(private _pedidosService: PedidosResource) {}
+  constructor(
+    private _pedidosService: PedidosResource,
+    private _messageService: AppMessageService
+  ) {}
 
   ngOnInit(): void {
     this.cargarPedidos();
@@ -77,7 +81,10 @@ export class PedidosListComponent implements OnInit {
       this._pedidosService.cancelar({ id: pedido.id }).subscribe({
         next: (pedidoCancelado) => {
           console.log(`Pedido #${pedido.id} cancelado exitosamente`, pedidoCancelado);
-          alert(`Pedido #${pedido.id} cancelado exitosamente. Estado: ${pedidoCancelado.estadoNombre}`);
+          this._messageService.showSuccess(
+            `Pedido #${pedido.id} cancelado exitosamente.<br>Estado: ${pedidoCancelado.estadoNombre}`,
+            'Pedido cancelado'
+          );
           this.cargarPedidos(); // Recargar la lista
         },
         error: (error: any) => {
@@ -92,7 +99,7 @@ export class PedidosListComponent implements OnInit {
             errorMsg = 'Error al comunicarse con el proveedor. Por favor, intenta nuevamente.';
           }
 
-          alert(errorMsg);
+          this._messageService.showError(errorMsg, 'Error al cancelar');
         }
       });
     }
@@ -111,7 +118,7 @@ export class PedidosListComponent implements OnInit {
 
     // Verificar nuevamente si puede ser puntuado
     if (!this.puedeSerPuntuado(pedido)) {
-      alert('Este pedido ya fue puntuado o no está en estado Entregado.');
+      this._messageService.showError('Este pedido ya fue puntuado o no está en estado Entregado.', 'No se puede puntuar');
       return;
     }
 
@@ -127,7 +134,7 @@ export class PedidosListComponent implements OnInit {
 
     // Validar que sea un número entre 1 y 5
     if (isNaN(rating) || rating < 1 || rating > 5) {
-      alert('Por favor ingrese un número válido entre 1 y 5.');
+      this._messageService.showError('Por favor ingrese un número válido entre 1 y 5.', 'Valor inválido');
       return;
     }
 
@@ -146,7 +153,10 @@ export class PedidosListComponent implements OnInit {
           this.pedidosFiltrados[indexFiltrado] = pedidoActualizado;
         }
 
-        alert(`Pedido #${pedido.id} puntuado exitosamente con ${rating} estrellas.\nEvaluación registrada (ID: ${pedidoActualizado.evaluacionEscala})`);
+        this._messageService.showSuccess(
+          `Pedido #${pedido.id} puntuado exitosamente con ${rating} estrellas.<br>Evaluación registrada (ID: ${pedidoActualizado.evaluacionEscala})`,
+          'Puntuación registrada'
+        );
       },
       error: (error: any) => {
         console.error('Error al puntuar pedido:', error);
@@ -158,7 +168,7 @@ export class PedidosListComponent implements OnInit {
           errorMsg = 'No se encontró el mapeo de escala para este proveedor.';
         }
 
-        alert(errorMsg);
+        this._messageService.showError(errorMsg, 'Error al puntuar');
       }
     });
   }
@@ -193,20 +203,20 @@ export class PedidosListComponent implements OnInit {
           this.generandoPedido = false;
 
           if (resultado.exito) {
-            let mensaje = `¡Pedido generado exitosamente!\n\n`;
-            mensaje += `Pedido #${resultado.pedidoId}\n`;
-            mensaje += `Proveedor: ${resultado.proveedorSeleccionado}\n`;
-            mensaje += `Productos ordenados: ${resultado.productosOrdenados}\n`;
-            mensaje += `Costo total: $${resultado.costoTotal?.toFixed(2)}\n`;
+            let mensaje = `<strong>¡Pedido generado exitosamente!</strong><br><br>`;
+            mensaje += `<strong>Pedido #${resultado.pedidoId}</strong><br>`;
+            mensaje += `Proveedor: ${resultado.proveedorSeleccionado}<br>`;
+            mensaje += `Productos ordenados: ${resultado.productosOrdenados}<br>`;
+            mensaje += `Costo total: $${resultado.costoTotal?.toFixed(2)}<br>`;
 
             if (resultado.ratingProveedor) {
               mensaje += `Rating del proveedor: ${resultado.ratingProveedor.toFixed(2)}/5`;
             }
 
-            alert(mensaje);
+            this._messageService.showSuccess(mensaje, 'Pedido Automático Generado');
             this.cargarPedidos(); // Recargar la lista de pedidos
           } else {
-            alert(`${resultado.mensaje}`);
+            this._messageService.showInfo(resultado.mensaje, 'Información');
           }
         },
         error: (error: any) => {
@@ -223,7 +233,7 @@ export class PedidosListComponent implements OnInit {
             errorMsg = 'Error en el servidor. Por favor, intenta nuevamente.';
           }
 
-          alert(errorMsg);
+          this._messageService.showError(errorMsg, 'Error al generar pedido');
         }
       });
     }
