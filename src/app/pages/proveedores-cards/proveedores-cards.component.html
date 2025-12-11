@@ -16,28 +16,33 @@
         </h5>
       </div>
       <div class="card-body">
-        <form>
+        <form [formGroup]="proveedorForm" (ngSubmit)="guardarProveedor()">
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="name" class="form-label">Nombre *</label>
-              <input 
-                type="text" 
-                class="form-control" 
+              <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('name')"
                 id="name"
-                [(ngModel)]="nuevoProveedor.name"
-                name="name"
-                required>
+                formControlName="name"
+                placeholder="Ej: Proveedor ABC">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('name')">
+                {{ getFieldError('name') }}
+              </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="apiEndpoint" class="form-label">API Endpoint *</label>
-              <input 
-                type="text" 
-                class="form-control" 
+              <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('apiEndpoint')"
                 id="apiEndpoint"
-                [(ngModel)]="nuevoProveedor.apiEndpoint"
-                name="apiEndpoint"
-                placeholder="https://api.proveedor.com"
-                required>
+                formControlName="apiEndpoint"
+                placeholder="https://api.proveedor.com">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('apiEndpoint')">
+                {{ getFieldError('apiEndpoint') }}
+              </div>
             </div>
           </div>
           <div class="row">
@@ -45,42 +50,50 @@
               <label for="tipoServicio" class="form-label">Tipo de Servicio *</label>
               <select
                 class="form-select"
+                [class.is-invalid]="isFieldInvalid('tipoServicio')"
                 id="tipoServicio"
-                [(ngModel)]="nuevoProveedor.tipoServicio"
-                name="tipoServicio"
-                required>
+                formControlName="tipoServicio">
                 <option [ngValue]="1">REST</option>
                 <option [ngValue]="2">SOAP</option>
               </select>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('tipoServicio')">
+                {{ getFieldError('tipoServicio') }}
+              </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="clientId" class="form-label">Client ID *</label>
               <input
                 type="text"
                 class="form-control"
+                [class.is-invalid]="isFieldInvalid('clientId')"
                 id="clientId"
-                [(ngModel)]="nuevoProveedor.clientId"
-                name="clientId"
-                required>
+                formControlName="clientId"
+                placeholder="Ej: client_12345">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('clientId')">
+                {{ getFieldError('clientId') }}
+              </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12 mb-3">
               <label for="apiKey" class="form-label">API Key *</label>
               <input
-                type="text"
+                type="password"
                 class="form-control"
+                [class.is-invalid]="isFieldInvalid('apiKey')"
                 id="apiKey"
-                [(ngModel)]="nuevoProveedor.apiKey"
-                name="apiKey"
-                required>
+                formControlName="apiKey"
+                placeholder="Ingresa la API Key del proveedor">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('apiKey')">
+                {{ getFieldError('apiKey') }}
+              </div>
             </div>
           </div>
           <div class="d-flex justify-content-end gap-2">
             <button type="button" class="btn btn-secondary" (click)="toggleFormulario()">
               Cancelar
             </button>
-            <button type="submit" class="btn btn-success" (click)="guardarProveedor()">
+            <button type="submit" class="btn btn-success" [disabled]="proveedorForm.invalid">
               <i class="bi bi-save me-2"></i>
               Guardar Proveedor
             </button>

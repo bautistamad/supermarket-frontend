@@ -214,7 +214,7 @@ export class PedidosListComponent implements OnInit {
             }
 
             this._messageService.showSuccess(mensaje, 'Pedido Automático Generado');
-            this.cargarPedidos(); // Recargar la lista de pedidos
+            this.cargarPedidos();
           } else {
             this._messageService.showInfo(resultado.mensaje, 'Información');
           }

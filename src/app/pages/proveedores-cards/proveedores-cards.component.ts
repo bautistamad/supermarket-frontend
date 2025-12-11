@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IProveedor } from '../../api/models/i-proveedor';
 import { ProveedoresResource } from '../../api/resources/proveedores-resource.service';
 import { ProductosResource } from '../../api/resources/productos-resource.service';
@@ -21,22 +22,29 @@ export class ProveedoresCardsComponent implements OnInit {
   mostrarModalEscalas: boolean = false;
   escalasParaMapear: IEscala[] = [];
   proveedorPendienteEscala: IProveedor | null = null;
-   nuevoProveedor: IProveedor = {
-    name: '',
-    apiEndpoint: '',
-    tipoServicio: 1,
-    apiKey: '',
-    clientId: ''
-  };
+
+  proveedorForm!: FormGroup;
 
   constructor(
     private _proveedoresService: ProveedoresResource,
     private _productosService: ProductosResource,
-    private _escalasService: EscalasResource
+    private _escalasService: EscalasResource,
+    private _fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
     this.cargarProveedores();
+  }
+
+  private initForm(): void {
+    this.proveedorForm = this._fb.group({
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      apiEndpoint: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+      tipoServicio: [1, [Validators.required]],
+      clientId: ['', [Validators.required, Validators.minLength(5)]],
+      apiKey: ['', [Validators.required, Validators.minLength(10)]]
+    });
   }
 
   cargarProveedores(): void {
@@ -92,22 +100,25 @@ export class ProveedoresCardsComponent implements OnInit {
   }
 
   resetearFormulario(): void {
-    this.nuevoProveedor = {
+    this.proveedorForm.reset({
       name: '',
       apiEndpoint: '',
       tipoServicio: 1,
       apiKey: '',
       clientId: ''
-    };
+    });
   }
 
   guardarProveedor(): void {
-    if( !this.nuevoProveedor.name || !this.nuevoProveedor.apiEndpoint || !this.nuevoProveedor.apiKey || !this.nuevoProveedor.clientId){
-      alert('Por favor completa todos los campos obligatorios');
+    if (this.proveedorForm.invalid) {
+      this.proveedorForm.markAllAsTouched();
+      alert('Por favor completa todos los campos correctamente.');
       return;
     }
 
-    this._proveedoresService.create(this.nuevoProveedor).subscribe({
+    const nuevoProveedor: IProveedor = this.proveedorForm.value;
+
+    this._proveedoresService.create(nuevoProveedor).subscribe({
       next:(proveedor: IProveedor) => {
         console.log('Proveedor creado:', proveedor);
         this.proveedorPendienteEscala = proveedor;
@@ -123,6 +134,30 @@ export class ProveedoresCardsComponent implements OnInit {
         alert('Error al crear el proveedor. Por favor, intenta nuevamente.');
       }
     })
+  }
+
+  // Helper methods para validación en el template
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.proveedorForm.get(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.proveedorForm.get(fieldName);
+    if (!field || !field.errors) return '';
+
+    if (field.errors['required']) return 'Este campo es obligatorio';
+    if (field.errors['minlength']) {
+      const minLength = field.errors['minlength'].requiredLength;
+      return `Mínimo ${minLength} caracteres`;
+    }
+    if (field.errors['maxlength']) {
+      const maxLength = field.errors['maxlength'].requiredLength;
+      return `Máximo ${maxLength} caracteres`;
+    }
+    if (field.errors['pattern']) return 'Formato inválido. Debe comenzar con http:// o https://';
+
+    return 'Campo inválido';
   }
 
   cargarEscalasSinMapear(proveedorId: number): void {

@@ -10,7 +10,7 @@ import { EscalasResource } from '../api/resources/escalas-resource.service';
 import { MainComponent } from './main.component';
 import { ProveedoresCardsComponent } from '../pages/proveedores-cards/proveedores-cards.component';
 import { PedidosListComponent } from '../pages/pedidos-list/pedidos-list.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -29,7 +29,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     MainRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class MainModule { }

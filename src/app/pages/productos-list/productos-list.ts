@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IProducto} from '../../api/models/i-producto';
 import {IProveedor} from '../../api/models/i-proveedor';
 import {ProductosResource} from '../../api/resources/productos-resource.service';
@@ -15,7 +16,7 @@ export class ProductosList implements OnInit {
   productos: IProducto[] = [];
   showModal: boolean = false;
   isSubmitting: boolean = false;
-  modoEdicion: boolean = false; // Indica si estamos editando o creando
+  modoEdicion: boolean = false;
 
   // Modal de asignación a proveedor
   showAsignacionModal: boolean = false;
@@ -26,25 +27,38 @@ export class ProductosList implements OnInit {
   productoActual: IProducto | null = null;
   isLoadingProveedorProductos: boolean = false;
 
-  // Modelo del formulario
-  nuevoProducto: IProducto = {
-    codigoBarra: 0,
-    nombre: '',
-    imagen: '',
-    minStock: 0,
-    maxStock: 0,
-    actualStock: 0,
-    estadoId: 1
-  };
+  // Reactive Form
+  productoForm!: FormGroup;
 
   constructor(
     private _productosService: ProductosResource,
-    private _proveedoresService: ProveedoresResource
+    private _proveedoresService: ProveedoresResource,
+    private _fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
     this.cargarProductos();
     this.cargarProveedores();
+  }
+
+  private initForm(): void {
+    this.productoForm = this._fb.group({
+      codigoBarra: [0, [Validators.required, Validators.min(1)]],
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      imagen: [''],
+      minStock: [0, [Validators.required, Validators.min(0)]],
+      maxStock: [1, [Validators.required, Validators.min(1)]],
+      actualStock: [0, [Validators.required, Validators.min(0)]],
+      estadoId: [1, [Validators.required]]
+    }, { validators: this.stockValidator });
+  }
+
+  // Validador personalizado para verificar que maxStock > minStock
+  private stockValidator(group: FormGroup): {[key: string]: boolean} | null {
+    const minStock = group.get('minStock')?.value;
+    const maxStock = group.get('maxStock')?.value;
+    return maxStock > minStock ? null : { invalidStockRange: true };
   }
 
   cargarProductos(): void {
@@ -68,8 +82,7 @@ export class ProductosList implements OnInit {
   abrirModalEditar(producto: IProducto): void {
     this.modoEdicion = true;
     this.showModal = true;
-    // Copiar los datos del producto al formulario
-    this.nuevoProducto = {
+    this.productoForm.patchValue({
       codigoBarra: producto.codigoBarra,
       nombre: producto.nombre,
       imagen: producto.imagen || '',
@@ -77,7 +90,7 @@ export class ProductosList implements OnInit {
       maxStock: producto.maxStock,
       actualStock: producto.actualStock,
       estadoId: producto.estadoId || 1
-    };
+    });
   }
 
   cerrarModal(): void {
@@ -87,15 +100,15 @@ export class ProductosList implements OnInit {
   }
 
   resetForm(): void {
-    this.nuevoProducto = {
+    this.productoForm.reset({
       codigoBarra: 0,
       nombre: '',
       imagen: '',
       minStock: 0,
-      maxStock: 0,
+      maxStock: 1,
       actualStock: 0,
       estadoId: 1
-    };
+    });
   }
 
   guardarProducto(): void {
@@ -107,19 +120,21 @@ export class ProductosList implements OnInit {
   }
 
   crearProducto(): void {
-    // Validaciones básicas
-    if (!this.validarFormulario()) {
+    if (this.productoForm.invalid) {
+      this.productoForm.markAllAsTouched();
+      alert('Por favor completa todos los campos correctamente.');
       return;
     }
 
     this.isSubmitting = true;
+    const nuevoProducto: IProducto = this.productoForm.value;
 
-    this._productosService.create(this.nuevoProducto).subscribe({
+    this._productosService.create(nuevoProducto).subscribe({
       next: (producto: IProducto) => {
         console.log('Producto creado exitosamente:', producto);
         alert(`Producto "${producto.nombre}" creado exitosamente`);
         this.cerrarModal();
-        this.cargarProductos(); // Recargar la lista
+        this.cargarProductos();
         this.isSubmitting = false;
       },
       error: (error: any) => {
@@ -131,17 +146,16 @@ export class ProductosList implements OnInit {
   }
 
   actualizarProducto(): void {
-    // Validaciones básicas
-    if (!this.validarFormularioEdicion()) {
+    if (this.productoForm.invalid) {
+      this.productoForm.markAllAsTouched();
+      alert('Por favor completa todos los campos correctamente.');
       return;
     }
 
     this.isSubmitting = true;
-
-    // El método update necesita el barCode explícitamente en el objeto
     const productoActualizado = {
-      ...this.nuevoProducto,
-      barCode: this.nuevoProducto.codigoBarra
+      ...this.productoForm.value,
+      barCode: this.productoForm.value.codigoBarra
     };
 
     this._productosService.update(productoActualizado).subscribe({
@@ -149,7 +163,7 @@ export class ProductosList implements OnInit {
         console.log('Producto actualizado exitosamente:', producto);
         alert(`Producto "${producto.nombre}" actualizado exitosamente`);
         this.cerrarModal();
-        this.cargarProductos(); // Recargar la lista
+        this.cargarProductos();
         this.isSubmitting = false;
       },
       error: (error: any) => {
@@ -160,58 +174,38 @@ export class ProductosList implements OnInit {
     });
   }
 
-  validarFormulario(): boolean {
-    if (!this.nuevoProducto.codigoBarra || this.nuevoProducto.codigoBarra <= 0) {
-      alert('El código de barra debe ser un número positivo');
-      return false;
-    }
-
-    if (!this.nuevoProducto.nombre || this.nuevoProducto.nombre.trim() === '') {
-      alert('El nombre del producto es requerido');
-      return false;
-    }
-
-    if (this.nuevoProducto.minStock < 0) {
-      alert('El stock mínimo no puede ser negativo');
-      return false;
-    }
-
-    if (this.nuevoProducto.maxStock <= this.nuevoProducto.minStock) {
-      alert('El stock máximo debe ser mayor al stock mínimo');
-      return false;
-    }
-
-    if (this.nuevoProducto.actualStock < 0) {
-      alert('El stock actual no puede ser negativo');
-      return false;
-    }
-
-    return true;
+  // Helper methods para validación en el template
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.productoForm.get(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched));
   }
 
-  validarFormularioEdicion(): boolean {
-    // En modo edición, el código de barra no se puede modificar
-    if (!this.nuevoProducto.nombre || this.nuevoProducto.nombre.trim() === '') {
-      alert('El nombre del producto es requerido');
-      return false;
+  getFieldError(fieldName: string): string {
+    const field = this.productoForm.get(fieldName);
+    if (!field || !field.errors) return '';
+
+    if (field.errors['required']) return 'Este campo es obligatorio';
+    if (field.errors['min']) {
+      const min = field.errors['min'].min;
+      return `El valor mínimo es ${min}`;
+    }
+    if (field.errors['minlength']) {
+      const minLength = field.errors['minlength'].requiredLength;
+      return `Mínimo ${minLength} caracteres`;
+    }
+    if (field.errors['maxlength']) {
+      const maxLength = field.errors['maxlength'].requiredLength;
+      return `Máximo ${maxLength} caracteres`;
     }
 
-    if (this.nuevoProducto.minStock < 0) {
-      alert('El stock mínimo no puede ser negativo');
-      return false;
-    }
+    return 'Campo inválido';
+  }
 
-    if (this.nuevoProducto.maxStock <= this.nuevoProducto.minStock) {
-      alert('El stock máximo debe ser mayor al stock mínimo');
-      return false;
+  getFormError(): string {
+    if (this.productoForm.errors?.['invalidStockRange']) {
+      return 'El stock máximo debe ser mayor al stock mínimo';
     }
-
-    if (this.nuevoProducto.actualStock < 0) {
-      alert('El stock actual no puede ser negativo');
-      return false;
-    }
-
-    return true;
+    return '';
   }
 
   eliminarProducto(producto: IProducto): void {

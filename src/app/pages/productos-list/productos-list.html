@@ -95,31 +95,36 @@
         <button type="button" class="btn-close" (click)="cerrarModal()" [disabled]="isSubmitting"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="codigoBarra" class="form-label">Código de Barra *</label>
               <input
                 type="number"
                 class="form-control"
+                [class.is-invalid]="isFieldInvalid('codigoBarra')"
                 id="codigoBarra"
-                [(ngModel)]="nuevoProducto.codigoBarra"
-                name="codigoBarra"
-                required
+                formControlName="codigoBarra"
                 [disabled]="isSubmitting || modoEdicion"
                 [readonly]="modoEdicion">
               <small class="text-muted" *ngIf="modoEdicion">El código de barra no se puede modificar</small>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('codigoBarra')">
+                {{ getFieldError('codigoBarra') }}
+              </div>
             </div>
             <div class="col-md-6">
               <label for="nombre" class="form-label">Nombre del Producto *</label>
               <input
                 type="text"
                 class="form-control"
+                [class.is-invalid]="isFieldInvalid('nombre')"
                 id="nombre"
-                [(ngModel)]="nuevoProducto.nombre"
-                name="nombre"
-                required
+                formControlName="nombre"
+                placeholder="Ej: Leche Entera 1L"
                 [disabled]="isSubmitting">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('nombre')">
+                {{ getFieldError('nombre') }}
+              </div>
             </div>
           </div>
 
@@ -129,8 +134,7 @@
               type="url"
               class="form-control"
               id="imagen"
-              [(ngModel)]="nuevoProducto.imagen"
-              name="imagen"
+              formControlName="imagen"
               placeholder="https://ejemplo.com/imagen.jpg"
               [disabled]="isSubmitting">
             <small class="text-muted">Ingresa la URL completa de la imagen del producto</small>
@@ -142,37 +146,48 @@
               <input
                 type="number"
                 class="form-control"
+                [class.is-invalid]="isFieldInvalid('minStock')"
                 id="minStock"
-                [(ngModel)]="nuevoProducto.minStock"
-                name="minStock"
-                required
+                formControlName="minStock"
                 min="0"
                 [disabled]="isSubmitting">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('minStock')">
+                {{ getFieldError('minStock') }}
+              </div>
             </div>
             <div class="col-md-4">
               <label for="maxStock" class="form-label">Stock Máximo *</label>
               <input
                 type="number"
                 class="form-control"
+                [class.is-invalid]="isFieldInvalid('maxStock')"
                 id="maxStock"
-                [(ngModel)]="nuevoProducto.maxStock"
-                name="maxStock"
-                required
+                formControlName="maxStock"
                 min="1"
                 [disabled]="isSubmitting">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('maxStock')">
+                {{ getFieldError('maxStock') }}
+              </div>
             </div>
             <div class="col-md-4">
               <label for="actualStock" class="form-label">Stock Actual *</label>
               <input
                 type="number"
                 class="form-control"
+                [class.is-invalid]="isFieldInvalid('actualStock')"
                 id="actualStock"
-                [(ngModel)]="nuevoProducto.actualStock"
-                name="actualStock"
-                required
+                formControlName="actualStock"
                 min="0"
                 [disabled]="isSubmitting">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('actualStock')">
+                {{ getFieldError('actualStock') }}
+              </div>
             </div>
+          </div>
+
+          <div class="alert alert-danger" *ngIf="productoForm.errors?.['invalidStockRange'] && (productoForm.touched || productoForm.dirty)">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ getFormError() }}
           </div>
 
           <div class="alert alert-info">
@@ -185,7 +200,7 @@
         <button type="button" class="btn btn-secondary" (click)="cerrarModal()" [disabled]="isSubmitting">
           Cancelar
         </button>
-        <button type="button" class="btn btn-primary" (click)="guardarProducto()" [disabled]="isSubmitting">
+        <button type="button" class="btn btn-primary" (click)="guardarProducto()" [disabled]="isSubmitting || productoForm.invalid">
           <span *ngIf="!isSubmitting">
             <i class="bi bi-save me-2"></i>
             {{ modoEdicion ? 'Actualizar Producto' : 'Crear Producto' }}
