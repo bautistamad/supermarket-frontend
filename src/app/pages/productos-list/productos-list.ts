@@ -4,6 +4,7 @@ import {IProducto} from '../../api/models/i-producto';
 import {IProveedor} from '../../api/models/i-proveedor';
 import {ProductosResource} from '../../api/resources/productos-resource.service';
 import {ProveedoresResource} from '../../api/resources/proveedores-resource.service';
+import {AppMessageService} from '../../core/services/app-message.service';
 
 @Component({
   selector: 'app-productos-list',
@@ -33,7 +34,8 @@ export class ProductosList implements OnInit {
   constructor(
     private _productosService: ProductosResource,
     private _proveedoresService: ProveedoresResource,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _messageService: AppMessageService
   ) {}
 
   ngOnInit(): void {
@@ -122,7 +124,7 @@ export class ProductosList implements OnInit {
   crearProducto(): void {
     if (this.productoForm.invalid) {
       this.productoForm.markAllAsTouched();
-      alert('Por favor completa todos los campos correctamente.');
+      this._messageService.showInfo('Por favor completa todos los campos correctamente.', 'Formulario incompleto');
       return;
     }
 
@@ -132,14 +134,14 @@ export class ProductosList implements OnInit {
     this._productosService.create(nuevoProducto).subscribe({
       next: (producto: IProducto) => {
         console.log('Producto creado exitosamente:', producto);
-        alert(`Producto "${producto.nombre}" creado exitosamente`);
+        this._messageService.showSuccess(`Producto "${producto.nombre}" creado exitosamente`, 'Producto creado');
         this.cerrarModal();
         this.cargarProductos();
         this.isSubmitting = false;
       },
       error: (error: any) => {
         console.error('Error al crear producto:', error);
-        alert('Error al crear el producto. Verifica los datos e intenta nuevamente.');
+        this._messageService.showError('Error al crear el producto. Verifica los datos e intenta nuevamente.', 'Error al crear');
         this.isSubmitting = false;
       }
     });
@@ -148,7 +150,7 @@ export class ProductosList implements OnInit {
   actualizarProducto(): void {
     if (this.productoForm.invalid) {
       this.productoForm.markAllAsTouched();
-      alert('Por favor completa todos los campos correctamente.');
+      this._messageService.showInfo('Por favor completa todos los campos correctamente.', 'Formulario incompleto');
       return;
     }
 
@@ -161,14 +163,14 @@ export class ProductosList implements OnInit {
     this._productosService.update(productoActualizado).subscribe({
       next: (producto: IProducto) => {
         console.log('Producto actualizado exitosamente:', producto);
-        alert(`Producto "${producto.nombre}" actualizado exitosamente`);
+        this._messageService.showSuccess(`Producto "${producto.nombre}" actualizado exitosamente`, 'Producto actualizado');
         this.cerrarModal();
         this.cargarProductos();
         this.isSubmitting = false;
       },
       error: (error: any) => {
         console.error('Error al actualizar producto:', error);
-        alert('Error al actualizar el producto. Verifica los datos e intenta nuevamente.');
+        this._messageService.showError('Error al actualizar el producto. Verifica los datos e intenta nuevamente.', 'Error al actualizar');
         this.isSubmitting = false;
       }
     });
@@ -216,12 +218,12 @@ export class ProductosList implements OnInit {
     this._productosService.delete({ barCode: producto.codigoBarra }).subscribe({
       next: () => {
         console.log(`Producto ${producto.codigoBarra} eliminado exitosamente`);
-        alert(`Producto "${producto.nombre}" eliminado exitosamente`);
-        this.cargarProductos(); // Recargar la lista
+        this._messageService.showSuccess(`Producto "${producto.nombre}" eliminado exitosamente`, 'Producto eliminado');
+        this.cargarProductos();
       },
       error: (error: any) => {
         console.error('Error al eliminar producto:', error);
-        alert('Error al eliminar el producto. Puede que tenga relaciones con otros datos.');
+        this._messageService.showError('Error al eliminar el producto. Puede que tenga relaciones con otros datos.', 'Error al eliminar');
       }
     });
   }
@@ -273,7 +275,7 @@ export class ProductosList implements OnInit {
       },
       error: (error: any) => {
         console.error('Error al cargar productos del proveedor:', error);
-        alert('Error al cargar productos del proveedor. Verifica que el proveedor esté configurado correctamente.');
+        this._messageService.showError('Error al cargar productos del proveedor. Verifica que el proveedor esté configurado correctamente.', 'Error al cargar');
         this.isLoadingProveedorProductos = false;
         this.productosProveedor = [];
       }
@@ -282,7 +284,7 @@ export class ProductosList implements OnInit {
 
   asignarProductoAProveedor(): void {
     if (!this.productoActual || !this.proveedorSeleccionado || !this.productoSeleccionado) {
-      alert('Debes seleccionar un proveedor y un producto del proveedor');
+      this._messageService.showInfo('Debes seleccionar un proveedor y un producto del proveedor', 'Selección incompleta');
       return;
     }
 
@@ -296,14 +298,14 @@ export class ProductosList implements OnInit {
 
     this._productosService.assignToProvider(requestData).subscribe({
       next: () => {
-        alert(`Producto "${this.productoActual!.nombre}" asignado exitosamente al proveedor`);
+        this._messageService.showSuccess(`Producto "${this.productoActual!.nombre}" asignado exitosamente al proveedor`, 'Producto asignado');
         this.cerrarModalAsignacion();
         this.cargarProductos();
         this.isSubmitting = false;
       },
       error: (error: any) => {
         console.error('Error al asignar producto al proveedor:', error);
-        alert('Error al asignar el producto al proveedor. Verifica que los datos sean correctos.');
+        this._messageService.showError('Error al asignar el producto al proveedor. Verifica que los datos sean correctos.', 'Error al asignar');
         this.isSubmitting = false;
       }
     });

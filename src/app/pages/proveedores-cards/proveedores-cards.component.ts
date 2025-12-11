@@ -6,6 +6,7 @@ import { ProductosResource } from '../../api/resources/productos-resource.servic
 import { IProducto } from '../../api/models/i-producto';
 import { EscalasResource } from '../../api/resources/escalas-resource.service';
 import { IEscala } from '../../api/models/i-escala';
+import { AppMessageService } from '../../core/services/app-message.service';
 
 @Component({
   selector: 'app-proveedores-cards',
@@ -29,7 +30,8 @@ export class ProveedoresCardsComponent implements OnInit {
     private _proveedoresService: ProveedoresResource,
     private _productosService: ProductosResource,
     private _escalasService: EscalasResource,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _messageService: AppMessageService
   ) {}
 
   ngOnInit(): void {
@@ -112,7 +114,7 @@ export class ProveedoresCardsComponent implements OnInit {
   guardarProveedor(): void {
     if (this.proveedorForm.invalid) {
       this.proveedorForm.markAllAsTouched();
-      alert('Por favor completa todos los campos correctamente.');
+      this._messageService.showInfo('Por favor completa todos los campos correctamente.', 'Formulario incompleto');
       return;
     }
 
@@ -131,7 +133,7 @@ export class ProveedoresCardsComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error al crear proveedor:', error);
-        alert('Error al crear el proveedor. Por favor, intenta nuevamente.');
+        this._messageService.showError('Error al crear el proveedor. Por favor, intenta nuevamente.', 'Error al crear');
       }
     })
   }
@@ -169,12 +171,12 @@ export class ProveedoresCardsComponent implements OnInit {
         } else {
           // No hay escalas para mapear, el proveedor está listo
           this.cargarProveedores();
-          alert('Proveedor creado exitosamente. No requiere configuración de escalas.');
+          this._messageService.showSuccess('Proveedor creado exitosamente. No requiere configuración de escalas.', 'Proveedor creado');
         }
       },
       error: (error: any) => {
         console.error('Error al cargar escalas:', error);
-        alert('Proveedor creado pero hubo un error al cargar las escalas. Recarga la página.');
+        this._messageService.showError('Proveedor creado pero hubo un error al cargar las escalas. Recarga la página.', 'Error al cargar escalas');
         this.cargarProveedores();
       }
     });
@@ -185,7 +187,7 @@ export class ProveedoresCardsComponent implements OnInit {
     const escalasSinMapear = this.escalasParaMapear.filter(e => e.escalaInt === null || e.escalaInt === undefined);
 
     if (escalasSinMapear.length > 0) {
-      alert('Por favor asigna un valor a todas las escalas antes de continuar.');
+      this._messageService.showInfo('Por favor asigna un valor a todas las escalas antes de continuar.', 'Escalas incompletas');
       return;
     }
 
@@ -193,7 +195,7 @@ export class ProveedoresCardsComponent implements OnInit {
     const escalasInvalidas = this.escalasParaMapear.filter(e => e.escalaInt! < 1 || e.escalaInt! > 5);
 
     if (escalasInvalidas.length > 0) {
-      alert('Los valores de escala deben estar entre 1 y 5.');
+      this._messageService.showInfo('Los valores de escala deben estar entre 1 y 5.', 'Valores inválidos');
       return;
     }
 
@@ -202,11 +204,11 @@ export class ProveedoresCardsComponent implements OnInit {
         console.log('Escalas mapeadas:', escalasGuardadas);
         this.cerrarModalEscalas();
         this.cargarProveedores();
-        alert(`Proveedor ${this.proveedorPendienteEscala?.name} configurado exitosamente.`);
+        this._messageService.showSuccess(`Proveedor ${this.proveedorPendienteEscala?.name} configurado exitosamente.`, 'Proveedor configurado');
       },
       error: (error: any) => {
         console.error('Error al guardar escalas:', error);
-        alert('Error al guardar las escalas. Por favor, intenta nuevamente.');
+        this._messageService.showError('Error al guardar las escalas. Por favor, intenta nuevamente.', 'Error al guardar');
       }
     });
   }
@@ -224,11 +226,15 @@ export class ProveedoresCardsComponent implements OnInit {
       this._proveedoresService.syncPrecios({ id: proveedor.id }).subscribe({
         next: (resultado) => {
           console.log('Sincronización exitosa:', resultado);
-          alert(`Sincronización completada:\n- Precios creados: ${resultado.pricesCreated}\n- Precios actualizados: ${resultado.pricesUpdated}\n- Errores: ${resultado.errors}`);
+          const mensaje = `Sincronización completada:<br>
+            - Precios creados: ${resultado.pricesCreated}<br>
+            - Precios actualizados: ${resultado.pricesUpdated}<br>
+            - Errores: ${resultado.errors}`;
+          this._messageService.showSuccess(mensaje, 'Sincronización exitosa');
         },
         error: (error: any) => {
           console.error('Error al sincronizar precios:', error);
-          alert('Error al sincronizar precios. Por favor, intenta nuevamente.');
+          this._messageService.showError('Error al sincronizar precios. Por favor, intenta nuevamente.', 'Error al sincronizar');
         }
       });
     }
@@ -247,7 +253,7 @@ export class ProveedoresCardsComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error al cargar productos:', error);
-        alert('Error al cargar los productos del proveedor.');
+        this._messageService.showError('Error al cargar los productos del proveedor.', 'Error al cargar');
         this.cerrarProductos();
       }
     });
