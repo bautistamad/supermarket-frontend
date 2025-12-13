@@ -13,11 +13,13 @@
   import { AuthResource } from './api/resources/auth-resource.service';
   import { CoreModule } from './core/core.module';
   import { AppErrorService } from './core/handlers/app-error.service';
+import { SplashPageComponent } from './pages/splash-page/splash-page.component';
 
   @NgModule({
     declarations: [
       AppComponent,
-      LoginComponent
+      LoginComponent,
+      SplashPageComponent
     ],
     imports: [
       BrowserModule,

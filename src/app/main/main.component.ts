@@ -14,7 +14,6 @@ export class MainComponent implements OnInit {
   constructor(private _router: Router) {}
 
   ngOnInit(): void {
-    // Cargar el usuario desde localStorage
     const usuarioString = localStorage.getItem('usuario');
     if (usuarioString) {
       this.usuarioActual = JSON.parse(usuarioString);
@@ -22,10 +21,8 @@ export class MainComponent implements OnInit {
   }
 
   logout(): void {
-    // Limpiar localStorage
     localStorage.removeItem('usuario');
 
-    // Redirigir al login
     this._router.navigate(['/login']);
   }
 }

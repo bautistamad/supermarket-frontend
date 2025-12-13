@@ -201,7 +201,12 @@ export class PedidosListComponent implements OnInit {
         next: (resultado: IAutoGenerarResponse) => {
           this.generandoPedido = false;
 
-          if (resultado.exito) {
+          if (resultado.pedidoId == null){
+            let mensaje = `<strong>¡${resultado.mensaje}!</strong><br><br>`;
+            this._messageService.showError(mensaje, 'No es necesario realizar un pedido');
+          }
+
+          if (resultado.exito && resultado.pedidoId != null) {
             let mensaje = `<strong>¡Pedido generado exitosamente!</strong><br><br>`;
             mensaje += `<strong>Pedido #${resultado.pedidoId}</strong><br>`;
             mensaje += `Proveedor: ${resultado.proveedorSeleccionado}<br>`;
@@ -214,8 +219,6 @@ export class PedidosListComponent implements OnInit {
 
             this._messageService.showSuccess(mensaje, 'Pedido Automático Generado');
             this.cargarPedidos();
-          } else {
-            this._messageService.showInfo(resultado.mensaje, 'Información');
           }
         },
         error: (error: any) => {
