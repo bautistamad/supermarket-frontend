@@ -240,6 +240,24 @@ export class ProveedoresCardsComponent implements OnInit {
     }
   }
 
+  eliminarProveedor(proveedor: IProveedor): void {
+    if (!proveedor.id) return;
+
+    if (confirm(`¿Estás seguro de que deseas eliminar el proveedor "${proveedor.name}"?\n\nEsta acción no se puede deshacer.`)) {
+      this._proveedoresService.delete({ id: proveedor.id }).subscribe({
+        next: () => {
+          console.log('Proveedor eliminado:', proveedor.id);
+          this._messageService.showSuccess(`El proveedor "${proveedor.name}" ha sido eliminado exitosamente.`, 'Proveedor eliminado');
+          this.cargarProveedores(); // Recargar la lista de proveedores
+        },
+        error: (error: any) => {
+          console.error('Error al eliminar proveedor:', error);
+          this._messageService.showError('Error al eliminar el proveedor. Por favor, intenta nuevamente.', 'Error al eliminar');
+        }
+      });
+    }
+  }
+
   verProductosProveedor(proveedor: IProveedor): void {
     if (!proveedor.id) return;
 

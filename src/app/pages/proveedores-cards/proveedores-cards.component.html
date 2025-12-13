@@ -148,13 +148,19 @@
                 class="btn btn-outline-primary btn-sm"
                 (click)="verProductosProveedor(proveedor)">
                 <i class="bi bi-box-seam me-1"></i>
-                Ver Productos
+                <ng-container i18n="View products button">Ver Productos</ng-container>
               </button>
               <button
                 class="btn btn-outline-success btn-sm"
                 (click)="sincronizarPrecios(proveedor)">
                 <i class="bi bi-arrow-repeat me-1"></i>
-                Sincronizar Precios
+                <ng-container i18n="Sync prices button">Sincronizar Precios</ng-container>
+              </button>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="eliminarProveedor(proveedor)">
+                <i class="bi bi-trash me-1"></i>
+                <ng-container i18n="Delete supplier button">Eliminar Proveedor</ng-container>
               </button>
             </div>
           </div>

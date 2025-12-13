@@ -1,14 +1,14 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Lista de Productos</h2>
+    <h2 i18n="Products page title">Lista de Productos</h2>
     <button class="btn btn-primary" (click)="abrirModalCrear()">
       <i class="bi bi-plus-circle me-2"></i>
-      Crear Producto
+      <ng-container i18n="Create product button">Crear Producto</ng-container>
     </button>
   </div>
 
   <!-- Mensaje si no hay productos -->
-  <div *ngIf="productos.length === 0" class="alert alert-info">
+  <div *ngIf="productos.length === 0" class="alert alert-info" i18n="No products message">
     No hay productos cargados o el backend no está respondiendo.
   </div>
 
@@ -24,13 +24,13 @@
               {{ producto.nombre }}
             </h5>
             <div>
-              <button class="btn btn-sm btn-info me-1" (click)="abrirModalAsignacion(producto)" title="Asignar a Proveedor">
+              <button class="btn btn-sm btn-info me-1" (click)="abrirModalAsignacion(producto)" i18n-title="Assign to supplier button title" title="Asignar a Proveedor">
                 <i class="bi bi-link-45deg"></i>
               </button>
-              <button class="btn btn-sm btn-light me-1" (click)="abrirModalEditar(producto)" title="Editar">
+              <button class="btn btn-sm btn-light me-1" (click)="abrirModalEditar(producto)" i18n-title="Edit button title" title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-sm btn-danger" (click)="eliminarProducto(producto)" title="Eliminar">
+              <button class="btn btn-sm btn-danger" (click)="eliminarProducto(producto)" i18n-title="Delete button title" title="Eliminar">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
@@ -48,21 +48,21 @@
             <div class="col-4">
               <div class="mb-2">
                 <i class="bi bi-arrow-down-circle text-danger"></i>
-                <p class="mb-0"><small>Mínimo</small></p>
+                <p class="mb-0"><small i18n="Minimum stock label">Mínimo</small></p>
                 <strong>{{ producto.minStock }}</strong>
               </div>
             </div>
             <div class="col-4">
               <div class="mb-2">
                 <i class="bi bi-boxes text-primary"></i>
-                <p class="mb-0"><small>Actual</small></p>
+                <p class="mb-0"><small i18n="Current stock label">Actual</small></p>
                 <strong class="fs-5">{{ producto.actualStock }}</strong>
               </div>
             </div>
             <div class="col-4">
               <div class="mb-2">
                 <i class="bi bi-arrow-up-circle text-success"></i>
-                <p class="mb-0"><small>Máximo</small></p>
+                <p class="mb-0"><small i18n="Maximum stock label">Máximo</small></p>
                 <strong>{{ producto.maxStock }}</strong>
               </div>
             </div>
@@ -74,7 +74,7 @@
           <span class="badge bg-success" *ngIf="producto.estadoNombre">
             {{ producto.estadoNombre }}
           </span>
-          <span class="badge bg-secondary" *ngIf="!producto.estadoNombre">
+          <span class="badge bg-secondary" *ngIf="!producto.estadoNombre" i18n="No status label">
             Sin estado
           </span>
         </div>
@@ -90,7 +90,8 @@
       <div class="modal-header">
         <h5 class="modal-title">
           <i class="bi bi-box-seam me-2"></i>
-          {{ modoEdicion ? 'Editar Producto' : 'Crear Nuevo Producto' }}
+          <ng-container *ngIf="modoEdicion" i18n="Edit product modal title">Editar Producto</ng-container>
+          <ng-container *ngIf="!modoEdicion" i18n="Create product modal title">Crear Nuevo Producto</ng-container>
         </h5>
         <button type="button" class="btn-close" (click)="cerrarModal()" [disabled]="isSubmitting"></button>
       </div>
@@ -98,7 +99,7 @@
         <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label for="codigoBarra" class="form-label">Código de Barra *</label>
+              <label for="codigoBarra" class="form-label" i18n="Barcode label">Código de Barra *</label>
               <input
                 type="number"
                 class="form-control"
@@ -107,19 +108,20 @@
                 formControlName="codigoBarra"
                 [disabled]="isSubmitting || modoEdicion"
                 [readonly]="modoEdicion">
-              <small class="text-muted" *ngIf="modoEdicion">El código de barra no se puede modificar</small>
+              <small class="text-muted" *ngIf="modoEdicion" i18n="Barcode readonly message">El código de barra no se puede modificar</small>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('codigoBarra')">
                 {{ getFieldError('codigoBarra') }}
               </div>
             </div>
             <div class="col-md-6">
-              <label for="nombre" class="form-label">Nombre del Producto *</label>
+              <label for="nombre" class="form-label" i18n="Product name label">Nombre del Producto *</label>
               <input
                 type="text"
                 class="form-control"
                 [class.is-invalid]="isFieldInvalid('nombre')"
                 id="nombre"
                 formControlName="nombre"
+                i18n-placeholder="Product name placeholder"
                 placeholder="Ej: Leche Entera 1L"
                 [disabled]="isSubmitting">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('nombre')">
@@ -129,20 +131,21 @@
           </div>
 
           <div class="mb-3">
-            <label for="imagen" class="form-label">URL de Imagen (opcional)</label>
+            <label for="imagen" class="form-label" i18n="Image URL label">URL de Imagen (opcional)</label>
             <input
               type="url"
               class="form-control"
               id="imagen"
               formControlName="imagen"
+              i18n-placeholder="Image URL placeholder"
               placeholder="https://ejemplo.com/imagen.jpg"
               [disabled]="isSubmitting">
-            <small class="text-muted">Ingresa la URL completa de la imagen del producto</small>
+            <small class="text-muted" i18n="Image URL help text">Ingresa la URL completa de la imagen del producto</small>
           </div>
 
           <div class="row mb-3">
             <div class="col-md-4">
-              <label for="minStock" class="form-label">Stock Mínimo *</label>
+              <label for="minStock" class="form-label" i18n="Minimum stock form label">Stock Mínimo *</label>
               <input
                 type="number"
                 class="form-control"
@@ -156,7 +159,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <label for="maxStock" class="form-label">Stock Máximo *</label>
+              <label for="maxStock" class="form-label" i18n="Maximum stock form label">Stock Máximo *</label>
               <input
                 type="number"
                 class="form-control"
@@ -170,7 +173,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <label for="actualStock" class="form-label">Stock Actual *</label>
+              <label for="actualStock" class="form-label" i18n="Current stock form label">Stock Actual *</label>
               <input
                 type="number"
                 class="form-control"
@@ -192,22 +195,30 @@
 
           <div class="alert alert-info">
             <i class="bi bi-info-circle me-2"></i>
-            <strong>Nota:</strong> El stock máximo debe ser mayor al stock mínimo
+            <strong i18n="Note label">Nota:</strong> <span i18n="Stock validation note">El stock máximo debe ser mayor al stock mínimo</span>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="cerrarModal()" [disabled]="isSubmitting">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()" [disabled]="isSubmitting" i18n="Cancel button">
           Cancelar
         </button>
         <button type="button" class="btn btn-primary" (click)="guardarProducto()" [disabled]="isSubmitting || productoForm.invalid">
-          <span *ngIf="!isSubmitting">
+          <span *ngIf="!isSubmitting && !modoEdicion">
             <i class="bi bi-save me-2"></i>
-            {{ modoEdicion ? 'Actualizar Producto' : 'Crear Producto' }}
+            <ng-container i18n="Create product submit button">Crear Producto</ng-container>
           </span>
-          <span *ngIf="isSubmitting">
+          <span *ngIf="!isSubmitting && modoEdicion">
+            <i class="bi bi-save me-2"></i>
+            <ng-container i18n="Update product submit button">Actualizar Producto</ng-container>
+          </span>
+          <span *ngIf="isSubmitting && !modoEdicion">
             <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-            {{ modoEdicion ? 'Actualizando...' : 'Creando...' }}
+            <ng-container i18n="Creating product status">Creando...</ng-container>
+          </span>
+          <span *ngIf="isSubmitting && modoEdicion">
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            <ng-container i18n="Updating product status">Actualizando...</ng-container>
           </span>
         </button>
       </div>
@@ -223,7 +234,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">
+        <h5 class="modal-title" i18n="Assign product to supplier modal title">
           <i class="bi bi-link-45deg me-2"></i>
           Asignar Producto a Proveedor
         </h5>
@@ -232,13 +243,13 @@
       <div class="modal-body">
         <div class="alert alert-info">
           <i class="bi bi-info-circle me-2"></i>
-          <strong>Producto seleccionado:</strong> {{ productoActual?.nombre }} ({{ productoActual?.codigoBarra }})
+          <strong i18n="Selected product label">Producto seleccionado:</strong> {{ productoActual?.nombre }} ({{ productoActual?.codigoBarra }})
         </div>
 
         <form>
           <!-- Selector de proveedor -->
           <div class="mb-3">
-            <label for="proveedor" class="form-label">Selecciona un Proveedor *</label>
+            <label for="proveedor" class="form-label" i18n="Select supplier label">Selecciona un Proveedor *</label>
             <select
               class="form-select"
               id="proveedor"
@@ -246,7 +257,7 @@
               name="proveedor"
               (change)="onProveedorChange()"
               [disabled]="isSubmitting">
-              <option [ngValue]="null">-- Selecciona un proveedor --</option>
+              <option [ngValue]="null" i18n="Select supplier option">-- Selecciona un proveedor --</option>
               <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor.id">
                 {{ proveedor.name }}
               </option>
@@ -256,16 +267,16 @@
           <!-- Mensaje de carga -->
           <div *ngIf="isLoadingProveedorProductos" class="text-center my-3">
             <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Cargando productos...</span>
+              <span class="visually-hidden" i18n="Loading products spinner text">Cargando productos...</span>
             </div>
-            <p class="mt-2">Cargando productos del proveedor...</p>
+            <p class="mt-2" i18n="Loading supplier products message">Cargando productos del proveedor...</p>
           </div>
 
           <!-- Selector de producto del proveedor -->
           <div class="mb-3" *ngIf="!isLoadingProveedorProductos && proveedorSeleccionado">
-            <label for="productoProveedor" class="form-label">Selecciona el Producto del Proveedor *</label>
+            <label for="productoProveedor" class="form-label" i18n="Select supplier product label">Selecciona el Producto del Proveedor *</label>
 
-            <div *ngIf="productosProveedor.length === 0" class="alert alert-warning">
+            <div *ngIf="productosProveedor.length === 0" class="alert alert-warning" i18n="No products available message">
               No hay productos disponibles para este proveedor
             </div>
 
@@ -276,7 +287,7 @@
               [(ngModel)]="productoSeleccionado"
               name="productoProveedor"
               [disabled]="isSubmitting">
-              <option [ngValue]="null">-- Selecciona un producto --</option>
+              <option [ngValue]="null" i18n="Select product option">-- Selecciona un producto --</option>
               <option *ngFor="let producto of productosProveedor" [ngValue]="producto">
                 {{ producto.nombre || producto.name }} - {{ producto.codigoBarra || producto.barCode }}
                 <span *ngIf="producto.precio"> - ${{ producto.precio }}</span>
@@ -287,14 +298,14 @@
           <!-- Detalles del producto seleccionado -->
           <div *ngIf="productoSeleccionado" class="alert alert-success">
             <i class="bi bi-check-circle me-2"></i>
-            <strong>Producto seleccionado:</strong> {{ productoSeleccionado.nombre || productoSeleccionado.name }}<br>
-            <small>Código: {{ productoSeleccionado.codigoBarra || productoSeleccionado.barCode }}</small>
-            <span *ngIf="productoSeleccionado.precio"><br><small>Precio: ${{ productoSeleccionado.precio }}</small></span>
+            <strong i18n="Selected product label alt">Producto seleccionado:</strong> {{ productoSeleccionado.nombre || productoSeleccionado.name }}<br>
+            <small><ng-container i18n="Code label">Código:</ng-container> {{ productoSeleccionado.codigoBarra || productoSeleccionado.barCode }}</small>
+            <span *ngIf="productoSeleccionado.precio"><br><small><ng-container i18n="Price label">Precio:</ng-container> ${{ productoSeleccionado.precio }}</small></span>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="cerrarModalAsignacion()" [disabled]="isSubmitting">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalAsignacion()" [disabled]="isSubmitting" i18n="Cancel button alt">
           Cancelar
         </button>
         <button
@@ -304,11 +315,11 @@
           [disabled]="isSubmitting || !proveedorSeleccionado || !productoSeleccionado">
           <span *ngIf="!isSubmitting">
             <i class="bi bi-link-45deg me-2"></i>
-            Asignar Producto
+            <ng-container i18n="Assign product button">Asignar Producto</ng-container>
           </span>
           <span *ngIf="isSubmitting">
             <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-            Asignando...
+            <ng-container i18n="Assigning status">Asignando...</ng-container>
           </span>
         </button>
       </div>

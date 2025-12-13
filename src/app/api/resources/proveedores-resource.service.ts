@@ -57,4 +57,10 @@ export class ProveedoresResource extends Resource {
     method: ResourceRequestMethod.Get
   })
   getRating!: IResourceMethodObservable<{ id: number }, number>
+
+  @ResourceAction({
+    path: '/proveedores/{!id}',
+    method: ResourceRequestMethod.Delete
+  })
+  delete!: IResourceMethodObservable<{ id: number }, void>
 }

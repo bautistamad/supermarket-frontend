@@ -443,6 +443,346 @@
         </context-group>
         <note priority="1" from="description">No orders message</note>
       </trans-unit>
+      <trans-unit id="6463487656848434732" datatype="html">
+        <source>Lista de Productos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <note priority="1" from="description">Products page title</note>
+      </trans-unit>
+      <trans-unit id="1105254220056805208" datatype="html">
+        <source>Crear Producto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+        <note priority="1" from="description">Create product button</note>
+      </trans-unit>
+      <trans-unit id="6411299458811694708" datatype="html">
+        <source> No hay productos cargados o el backend no está respondiendo. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+        <note priority="1" from="description">No products message</note>
+      </trans-unit>
+      <trans-unit id="5490357222430404132" datatype="html">
+        <source>Asignar a Proveedor</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+        <note priority="1" from="description">Assign to supplier button title</note>
+      </trans-unit>
+      <trans-unit id="2153980152639237955" datatype="html">
+        <source>Editar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <note priority="1" from="description">Edit button title</note>
+      </trans-unit>
+      <trans-unit id="6665903341931535342" datatype="html">
+        <source>Eliminar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <note priority="1" from="description">Delete button title</note>
+      </trans-unit>
+      <trans-unit id="1956575616349236554" datatype="html">
+        <source>Mínimo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <note priority="1" from="description">Minimum stock label</note>
+      </trans-unit>
+      <trans-unit id="2628961601867476622" datatype="html">
+        <source>Actual</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <note priority="1" from="description">Current stock label</note>
+      </trans-unit>
+      <trans-unit id="3247133465095072852" datatype="html">
+        <source>Máximo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <note priority="1" from="description">Maximum stock label</note>
+      </trans-unit>
+      <trans-unit id="2014373643358672614" datatype="html">
+        <source> Sin estado </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">77,79</context>
+        </context-group>
+        <note priority="1" from="description">No status label</note>
+      </trans-unit>
+      <trans-unit id="7732003065131144733" datatype="html">
+        <source>Editar Producto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+        <note priority="1" from="description">Edit product modal title</note>
+      </trans-unit>
+      <trans-unit id="7161801261726802042" datatype="html">
+        <source>Crear Nuevo Producto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+        <note priority="1" from="description">Create product modal title</note>
+      </trans-unit>
+      <trans-unit id="7774761870815763168" datatype="html">
+        <source>Código de Barra *</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+        <note priority="1" from="description">Barcode label</note>
+      </trans-unit>
+      <trans-unit id="75858533270248402" datatype="html">
+        <source>El código de barra no se puede modificar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+        <note priority="1" from="description">Barcode readonly message</note>
+      </trans-unit>
+      <trans-unit id="2454114275858221076" datatype="html">
+        <source>Nombre del Producto *</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+        <note priority="1" from="description">Product name label</note>
+      </trans-unit>
+      <trans-unit id="4231384212440512245" datatype="html">
+        <source>Ej: Leche Entera 1L</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+        <note priority="1" from="description">Product name placeholder</note>
+      </trans-unit>
+      <trans-unit id="7484804065352364163" datatype="html">
+        <source>URL de Imagen (opcional)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+        <note priority="1" from="description">Image URL label</note>
+      </trans-unit>
+      <trans-unit id="9028840824566207090" datatype="html">
+        <source>https://ejemplo.com/imagen.jpg</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+        <note priority="1" from="description">Image URL placeholder</note>
+      </trans-unit>
+      <trans-unit id="8062361363228137314" datatype="html">
+        <source>Ingresa la URL completa de la imagen del producto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+        <note priority="1" from="description">Image URL help text</note>
+      </trans-unit>
+      <trans-unit id="7021530410731196623" datatype="html">
+        <source>Stock Mínimo *</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">148</context>
+        </context-group>
+        <note priority="1" from="description">Minimum stock form label</note>
+      </trans-unit>
+      <trans-unit id="9050278161777611297" datatype="html">
+        <source>Stock Máximo *</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">162</context>
+        </context-group>
+        <note priority="1" from="description">Maximum stock form label</note>
+      </trans-unit>
+      <trans-unit id="3389401900700870326" datatype="html">
+        <source>Stock Actual *</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">176</context>
+        </context-group>
+        <note priority="1" from="description">Current stock form label</note>
+      </trans-unit>
+      <trans-unit id="2785118345811394420" datatype="html">
+        <source>Nota:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+        <note priority="1" from="description">Note label</note>
+      </trans-unit>
+      <trans-unit id="735480687827606010" datatype="html">
+        <source>El stock máximo debe ser mayor al stock mínimo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+        <note priority="1" from="description">Stock validation note</note>
+      </trans-unit>
+      <trans-unit id="6060080757060540228" datatype="html">
+        <source> Cancelar </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">203,205</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">308,310</context>
+        </context-group>
+        <note priority="1" from="description">Cancel button</note>
+      </trans-unit>
+      <trans-unit id="4961051941062511309" datatype="html">
+        <source>Actualizar Producto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">213</context>
+        </context-group>
+        <note priority="1" from="description">Update product submit button</note>
+      </trans-unit>
+      <trans-unit id="363820252500379092" datatype="html">
+        <source>Creando...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+        <note priority="1" from="description">Creating product status</note>
+      </trans-unit>
+      <trans-unit id="2375720871982218839" datatype="html">
+        <source>Actualizando...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+        <note priority="1" from="description">Updating product status</note>
+      </trans-unit>
+      <trans-unit id="6835798013468920458" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-link-45deg me-2&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Asignar Producto a Proveedor </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">238,240</context>
+        </context-group>
+        <note priority="1" from="description">Assign product to supplier modal title</note>
+      </trans-unit>
+      <trans-unit id="3856819792690269695" datatype="html">
+        <source>Producto seleccionado:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">301</context>
+        </context-group>
+        <note priority="1" from="description">Selected product label</note>
+      </trans-unit>
+      <trans-unit id="4696420924519621133" datatype="html">
+        <source>Selecciona un Proveedor *</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">252</context>
+        </context-group>
+        <note priority="1" from="description">Select supplier label</note>
+      </trans-unit>
+      <trans-unit id="2867383944364059655" datatype="html">
+        <source>-- Selecciona un proveedor --</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">260</context>
+        </context-group>
+        <note priority="1" from="description">Select supplier option</note>
+      </trans-unit>
+      <trans-unit id="7363992291269808571" datatype="html">
+        <source>Cargando productos...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">270</context>
+        </context-group>
+        <note priority="1" from="description">Loading products spinner text</note>
+      </trans-unit>
+      <trans-unit id="7795724002645983007" datatype="html">
+        <source>Cargando productos del proveedor...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">272</context>
+        </context-group>
+        <note priority="1" from="description">Loading supplier products message</note>
+      </trans-unit>
+      <trans-unit id="3178586455191299506" datatype="html">
+        <source>Selecciona el Producto del Proveedor *</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">277</context>
+        </context-group>
+        <note priority="1" from="description">Select supplier product label</note>
+      </trans-unit>
+      <trans-unit id="279745374029736451" datatype="html">
+        <source> No hay productos disponibles para este proveedor </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">279,281</context>
+        </context-group>
+        <note priority="1" from="description">No products available message</note>
+      </trans-unit>
+      <trans-unit id="2995927334088414441" datatype="html">
+        <source>-- Selecciona un producto --</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">290</context>
+        </context-group>
+        <note priority="1" from="description">Select product option</note>
+      </trans-unit>
+      <trans-unit id="490718755281137004" datatype="html">
+        <source>Código:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">302</context>
+        </context-group>
+        <note priority="1" from="description">Code label</note>
+      </trans-unit>
+      <trans-unit id="2520628223219999682" datatype="html">
+        <source>Precio:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">303</context>
+        </context-group>
+        <note priority="1" from="description">Price label</note>
+      </trans-unit>
+      <trans-unit id="7438641203981102954" datatype="html">
+        <source>Asignar Producto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">318</context>
+        </context-group>
+        <note priority="1" from="description">Assign product button</note>
+      </trans-unit>
+      <trans-unit id="9041265134593607171" datatype="html">
+        <source>Asignando...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/productos-list/productos-list.html</context>
+          <context context-type="linenumber">322</context>
+        </context-group>
+        <note priority="1" from="description">Assigning status</note>
+      </trans-unit>
       <trans-unit id="5058759995093392936" datatype="html">
         <source>Proveedores</source>
         <context-group purpose="location">
