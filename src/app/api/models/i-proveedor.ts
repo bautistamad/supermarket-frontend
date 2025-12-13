@@ -7,4 +7,5 @@ export interface IProveedor {
   apiKey: string;
   clientId: string;
   ratingPromedio?: number | null;
+  activo?: boolean;
 }

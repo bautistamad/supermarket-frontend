@@ -63,4 +63,10 @@ export class ProveedoresResource extends Resource {
     method: ResourceRequestMethod.Delete
   })
   delete!: IResourceMethodObservable<{ id: number }, void>
+
+  @ResourceAction({
+    path: '/proveedores/{!id}/toggle-activo',
+    method: ResourceRequestMethod.Put
+  })
+  toggleActivo!: IResourceMethodObservable<{ id: number, activo: boolean }, IProveedor>
 }

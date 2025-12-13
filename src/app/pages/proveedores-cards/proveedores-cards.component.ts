@@ -258,6 +258,37 @@ export class ProveedoresCardsComponent implements OnInit {
     }
   }
 
+  toggleActivoProveedor(proveedor: IProveedor): void {
+    if (!proveedor.id) return;
+
+    const nuevoEstado = !proveedor.activo;
+    const accion = nuevoEstado ? 'activar' : 'desactivar';
+    const mensaje = nuevoEstado
+      ? `¿Deseas activar el proveedor "${proveedor.name}"?\n\nPodrá ser usado en pedidos automatizados.`
+      : `¿Deseas desactivar el proveedor "${proveedor.name}"?\n\nNo será considerado en futuros pedidos automatizados.`;
+
+    if (confirm(mensaje)) {
+      this._proveedoresService.toggleActivo({ id: proveedor.id, activo: nuevoEstado }).subscribe({
+        next: (proveedorActualizado: IProveedor) => {
+          console.log('Estado del proveedor actualizado:', proveedorActualizado);
+          const estadoTexto = nuevoEstado ? 'activado' : 'desactivado';
+          this._messageService.showSuccess(
+            `El proveedor "${proveedor.name}" ha sido ${estadoTexto} exitosamente.`,
+            `Proveedor ${estadoTexto}`
+          );
+          this.cargarProveedores(); // Recargar la lista de proveedores
+        },
+        error: (error: any) => {
+          console.error(`Error al ${accion} proveedor:`, error);
+          this._messageService.showError(
+            `Error al ${accion} el proveedor. Por favor, intenta nuevamente.`,
+            `Error al ${accion}`
+          );
+        }
+      });
+    }
+  }
+
   verProductosProveedor(proveedor: IProveedor): void {
     if (!proveedor.id) return;
 

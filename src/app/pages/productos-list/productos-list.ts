@@ -16,7 +16,6 @@ export class ProductosList implements OnInit {
 
   productos: IProducto[] = [];
   showModal: boolean = false;
-  isSubmitting: boolean = false;
   modoEdicion: boolean = false;
 
   // Modal de asignación a proveedor
@@ -26,7 +25,6 @@ export class ProductosList implements OnInit {
   proveedorSeleccionado: number | null = null;
   productoSeleccionado: any | null = null;
   productoActual: IProducto | null = null;
-  isLoadingProveedorProductos: boolean = false;
 
   // Reactive Form
   productoForm!: FormGroup;
@@ -128,7 +126,6 @@ export class ProductosList implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
     const nuevoProducto: IProducto = this.productoForm.value;
 
     this._productosService.create(nuevoProducto).subscribe({
@@ -137,12 +134,10 @@ export class ProductosList implements OnInit {
         this._messageService.showSuccess(`Producto "${producto.nombre}" creado exitosamente`, 'Producto creado');
         this.cerrarModal();
         this.cargarProductos();
-        this.isSubmitting = false;
       },
       error: (error: any) => {
         console.error('Error al crear producto:', error);
         this._messageService.showError('Error al crear el producto. Verifica los datos e intenta nuevamente.', 'Error al crear');
-        this.isSubmitting = false;
       }
     });
   }
@@ -154,7 +149,6 @@ export class ProductosList implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
     const productoActualizado = {
       ...this.productoForm.value,
       barCode: this.productoForm.value.codigoBarra
@@ -166,12 +160,10 @@ export class ProductosList implements OnInit {
         this._messageService.showSuccess(`Producto "${producto.nombre}" actualizado exitosamente`, 'Producto actualizado');
         this.cerrarModal();
         this.cargarProductos();
-        this.isSubmitting = false;
       },
       error: (error: any) => {
         console.error('Error al actualizar producto:', error);
         this._messageService.showError('Error al actualizar el producto. Verifica los datos e intenta nuevamente.', 'Error al actualizar');
-        this.isSubmitting = false;
       }
     });
   }
@@ -264,19 +256,16 @@ export class ProductosList implements OnInit {
       return;
     }
 
-    this.isLoadingProveedorProductos = true;
     this.productoSeleccionado = null;
 
     this._proveedoresService.getProductosDisponibles({ id: this.proveedorSeleccionado }).subscribe({
       next: (productos: any[]) => {
         this.productosProveedor = productos;
         console.log('Productos del proveedor:', productos);
-        this.isLoadingProveedorProductos = false;
       },
       error: (error: any) => {
         console.error('Error al cargar productos del proveedor:', error);
         this._messageService.showError('Error al cargar productos del proveedor. Verifica que el proveedor esté configurado correctamente.', 'Error al cargar');
-        this.isLoadingProveedorProductos = false;
         this.productosProveedor = [];
       }
     });
@@ -287,8 +276,6 @@ export class ProductosList implements OnInit {
       this._messageService.showInfo('Debes seleccionar un proveedor y un producto del proveedor', 'Selección incompleta');
       return;
     }
-
-    this.isSubmitting = true;
 
     const requestData = {
       barCode: this.productoActual.codigoBarra,
@@ -301,12 +288,10 @@ export class ProductosList implements OnInit {
         this._messageService.showSuccess(`Producto "${this.productoActual!.nombre}" asignado exitosamente al proveedor`, 'Producto asignado');
         this.cerrarModalAsignacion();
         this.cargarProductos();
-        this.isSubmitting = false;
       },
       error: (error: any) => {
         console.error('Error al asignar producto al proveedor:', error);
         this._messageService.showError('Error al asignar el producto al proveedor. Verifica que los datos sean correctos.', 'Error al asignar');
-        this.isSubmitting = false;
       }
     });
   }

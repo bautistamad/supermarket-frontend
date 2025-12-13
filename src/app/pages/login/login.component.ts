@@ -13,7 +13,6 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
   submitted: boolean = false;
-  isLoading: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -40,8 +39,6 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
-
     this._authService.login(this.loginForm.value).subscribe({
       next: (usuario) => {
         console.log('Login exitoso:', usuario);
@@ -50,11 +47,7 @@ export class LoginComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error en login:', error);
-        this.isLoading = false;
         this._messageService.showError('Usuario o contraseña incorrectos', 'Error de autenticación');
-      },
-      complete: () => {
-        this.isLoading = false;
       }
     });
   }

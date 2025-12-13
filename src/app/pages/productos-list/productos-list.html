@@ -93,7 +93,7 @@
           <ng-container *ngIf="modoEdicion" i18n="Edit product modal title">Editar Producto</ng-container>
           <ng-container *ngIf="!modoEdicion" i18n="Create product modal title">Crear Nuevo Producto</ng-container>
         </h5>
-        <button type="button" class="btn-close" (click)="cerrarModal()" [disabled]="isSubmitting"></button>
+        <button type="button" class="btn-close" (click)="cerrarModal()"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
@@ -106,7 +106,7 @@
                 [class.is-invalid]="isFieldInvalid('codigoBarra')"
                 id="codigoBarra"
                 formControlName="codigoBarra"
-                [disabled]="isSubmitting || modoEdicion"
+                [disabled]="modoEdicion"
                 [readonly]="modoEdicion">
               <small class="text-muted" *ngIf="modoEdicion" i18n="Barcode readonly message">El código de barra no se puede modificar</small>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('codigoBarra')">
@@ -122,8 +122,7 @@
                 id="nombre"
                 formControlName="nombre"
                 i18n-placeholder="Product name placeholder"
-                placeholder="Ej: Leche Entera 1L"
-                [disabled]="isSubmitting">
+                placeholder="Ej: Leche Entera 1L">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('nombre')">
                 {{ getFieldError('nombre') }}
               </div>
@@ -138,8 +137,7 @@
               id="imagen"
               formControlName="imagen"
               i18n-placeholder="Image URL placeholder"
-              placeholder="https://ejemplo.com/imagen.jpg"
-              [disabled]="isSubmitting">
+              placeholder="https://ejemplo.com/imagen.jpg">
             <small class="text-muted" i18n="Image URL help text">Ingresa la URL completa de la imagen del producto</small>
           </div>
 
@@ -152,8 +150,7 @@
                 [class.is-invalid]="isFieldInvalid('minStock')"
                 id="minStock"
                 formControlName="minStock"
-                min="0"
-                [disabled]="isSubmitting">
+                min="0">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('minStock')">
                 {{ getFieldError('minStock') }}
               </div>
@@ -166,8 +163,7 @@
                 [class.is-invalid]="isFieldInvalid('maxStock')"
                 id="maxStock"
                 formControlName="maxStock"
-                min="1"
-                [disabled]="isSubmitting">
+                min="1">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('maxStock')">
                 {{ getFieldError('maxStock') }}
               </div>
@@ -180,8 +176,7 @@
                 [class.is-invalid]="isFieldInvalid('actualStock')"
                 id="actualStock"
                 formControlName="actualStock"
-                min="0"
-                [disabled]="isSubmitting">
+                min="0">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('actualStock')">
                 {{ getFieldError('actualStock') }}
               </div>
@@ -200,26 +195,13 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="cerrarModal()" [disabled]="isSubmitting" i18n="Cancel button">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()" i18n="Cancel button">
           Cancelar
         </button>
-        <button type="button" class="btn btn-primary" (click)="guardarProducto()" [disabled]="isSubmitting || productoForm.invalid">
-          <span *ngIf="!isSubmitting && !modoEdicion">
-            <i class="bi bi-save me-2"></i>
-            <ng-container i18n="Create product submit button">Crear Producto</ng-container>
-          </span>
-          <span *ngIf="!isSubmitting && modoEdicion">
-            <i class="bi bi-save me-2"></i>
-            <ng-container i18n="Update product submit button">Actualizar Producto</ng-container>
-          </span>
-          <span *ngIf="isSubmitting && !modoEdicion">
-            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-            <ng-container i18n="Creating product status">Creando...</ng-container>
-          </span>
-          <span *ngIf="isSubmitting && modoEdicion">
-            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-            <ng-container i18n="Updating product status">Actualizando...</ng-container>
-          </span>
+        <button type="button" class="btn btn-primary" (click)="guardarProducto()" [disabled]="productoForm.invalid">
+          <i class="bi bi-save me-2"></i>
+          <ng-container *ngIf="!modoEdicion" i18n="Create product submit button">Crear Producto</ng-container>
+          <ng-container *ngIf="modoEdicion" i18n="Update product submit button">Actualizar Producto</ng-container>
         </button>
       </div>
     </div>
@@ -238,7 +220,7 @@
           <i class="bi bi-link-45deg me-2"></i>
           Asignar Producto a Proveedor
         </h5>
-        <button type="button" class="btn-close" (click)="cerrarModalAsignacion()" [disabled]="isSubmitting"></button>
+        <button type="button" class="btn-close" (click)="cerrarModalAsignacion()"></button>
       </div>
       <div class="modal-body">
         <div class="alert alert-info">
@@ -255,8 +237,7 @@
               id="proveedor"
               [(ngModel)]="proveedorSeleccionado"
               name="proveedor"
-              (change)="onProveedorChange()"
-              [disabled]="isSubmitting">
+              (change)="onProveedorChange()">
               <option [ngValue]="null" i18n="Select supplier option">-- Selecciona un proveedor --</option>
               <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor.id">
                 {{ proveedor.name }}
@@ -264,16 +245,8 @@
             </select>
           </div>
 
-          <!-- Mensaje de carga -->
-          <div *ngIf="isLoadingProveedorProductos" class="text-center my-3">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden" i18n="Loading products spinner text">Cargando productos...</span>
-            </div>
-            <p class="mt-2" i18n="Loading supplier products message">Cargando productos del proveedor...</p>
-          </div>
-
           <!-- Selector de producto del proveedor -->
-          <div class="mb-3" *ngIf="!isLoadingProveedorProductos && proveedorSeleccionado">
+          <div class="mb-3" *ngIf="proveedorSeleccionado">
             <label for="productoProveedor" class="form-label" i18n="Select supplier product label">Selecciona el Producto del Proveedor *</label>
 
             <div *ngIf="productosProveedor.length === 0" class="alert alert-warning" i18n="No products available message">
@@ -285,8 +258,7 @@
               class="form-select"
               id="productoProveedor"
               [(ngModel)]="productoSeleccionado"
-              name="productoProveedor"
-              [disabled]="isSubmitting">
+              name="productoProveedor">
               <option [ngValue]="null" i18n="Select product option">-- Selecciona un producto --</option>
               <option *ngFor="let producto of productosProveedor" [ngValue]="producto">
                 {{ producto.nombre || producto.name }} - {{ producto.codigoBarra || producto.barCode }}
@@ -305,22 +277,16 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="cerrarModalAsignacion()" [disabled]="isSubmitting" i18n="Cancel button alt">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalAsignacion()" i18n="Cancel button alt">
           Cancelar
         </button>
         <button
           type="button"
           class="btn btn-primary"
           (click)="asignarProductoAProveedor()"
-          [disabled]="isSubmitting || !proveedorSeleccionado || !productoSeleccionado">
-          <span *ngIf="!isSubmitting">
-            <i class="bi bi-link-45deg me-2"></i>
-            <ng-container i18n="Assign product button">Asignar Producto</ng-container>
-          </span>
-          <span *ngIf="isSubmitting">
-            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-            <ng-container i18n="Assigning status">Asignando...</ng-container>
-          </span>
+          [disabled]="!proveedorSeleccionado || !productoSeleccionado">
+          <i class="bi bi-link-45deg me-2"></i>
+          <ng-container i18n="Assign product button">Asignar Producto</ng-container>
         </button>
       </div>
     </div>
