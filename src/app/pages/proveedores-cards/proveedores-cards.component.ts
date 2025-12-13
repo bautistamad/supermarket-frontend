@@ -45,7 +45,7 @@ export class ProveedoresCardsComponent implements OnInit {
       apiEndpoint: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
       tipoServicio: [1, [Validators.required]],
       clientId: ['', [Validators.required, Validators.minLength(5)]],
-      apiKey: ['', [Validators.required, Validators.minLength(10)]]
+      apiKey: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 

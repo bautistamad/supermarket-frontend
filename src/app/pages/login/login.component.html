@@ -4,7 +4,7 @@
       <div class="col-md-5 col-lg-4">
       <div class="card shadow">
         <div class="card-header bg-primary text-white text-center">
-          <h4 class="mb-0">
+          <h4 class="mb-0" i18n="Login title">
             <i class="bi bi-box-arrow-in-right me-2"></i>
             Iniciar Sesión
           </h4>
@@ -13,40 +13,42 @@
           <form [formGroup]="loginForm" (ngSubmit)="login()">
             <!-- Campo Usuario -->
             <div class="mb-3">
-              <label for="username" class="form-label">Usuario</label>
+              <label for="username" class="form-label" i18n="Username label">Usuario</label>
               <input
                 type="text"
                 class="form-control"
                 id="username"
                 formControlName="username"
                 placeholder="Ingrese su usuario"
-                [class.is-invalid]="submitted && username?.errors">
+                [class.is-invalid]="submitted && username?.errors"
+                i18n-placeholder="Username placeholder">
 
               <!-- Mensajes de error -->
-              <div class="invalid-feedback" *ngIf="submitted && username?.errors?.['required']">
+              <div class="invalid-feedback" *ngIf="submitted && username?.errors?.['required']" i18n="Username required error">
                 El usuario es requerido
               </div>
-              <div class="invalid-feedback" *ngIf="submitted && username?.errors?.['minlength']">
+              <div class="invalid-feedback" *ngIf="submitted && username?.errors?.['minlength']" i18n="Username minlength error">
                 El usuario debe tener al menos 3 caracteres
               </div>
             </div>
 
             <!-- Campo Contraseña -->
             <div class="mb-3">
-              <label for="password" class="form-label">Contraseña</label>
+              <label for="password" class="form-label" i18n="Password label">Contraseña</label>
               <input
                 type="password"
                 class="form-control"
                 id="password"
                 formControlName="password"
                 placeholder="Ingrese su contraseña"
-                [class.is-invalid]="submitted && password?.errors">
+                [class.is-invalid]="submitted && password?.errors"
+                i18n-placeholder="Password placeholder">
 
               <!-- Mensajes de error -->
-              <div class="invalid-feedback" *ngIf="submitted && password?.errors?.['required']">
+              <div class="invalid-feedback" *ngIf="submitted && password?.errors?.['required']" i18n="Password required error">
                 La contraseña es requerida
               </div>
-              <div class="invalid-feedback" *ngIf="submitted && password?.errors?.['minlength']">
+              <div class="invalid-feedback" *ngIf="submitted && password?.errors?.['minlength']" i18n="Password minlength error">
                 La contraseña debe tener al menos 6 caracteres
               </div>
             </div>
@@ -58,7 +60,8 @@
                 [disabled]="isLoading">
                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
                 <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right me-2"></i>
-                {{ isLoading ? 'Iniciando sesión...' : 'Ingresar' }}
+                <span *ngIf="isLoading" i18n="Login submitting">Iniciando sesión...</span>
+                <span *ngIf="!isLoading" i18n="Login submit button">Ingresar</span>
               </button>
             </div>
           </form>

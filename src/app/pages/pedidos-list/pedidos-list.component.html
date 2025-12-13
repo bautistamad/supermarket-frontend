@@ -1,15 +1,15 @@
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">Pedidos</h2>
+      <h2 class="mb-0" i18n="Orders page title">Pedidos</h2>
       <button
         class="btn btn-success"
         [disabled]="generandoPedido"
         (click)="generarPedidoAutomatico()">
-        <span *ngIf="!generandoPedido">
+        <span *ngIf="!generandoPedido" i18n="Generate automatic order button">
           <i class="bi bi-magic me-2"></i>
           Generar Pedido Automático
         </span>
-        <span *ngIf="generandoPedido">
+        <span *ngIf="generandoPedido" i18n="Generating order text">
           <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
           Generando...
         </span>
@@ -18,13 +18,13 @@
 
     <!-- Filtro de proveedores -->
     <div class="mb-3">
-      <label for="proveedorFilter" class="form-label">Filtrar por proveedor:</label>
-      <select 
+      <label for="proveedorFilter" class="form-label" i18n="Filter by supplier label">Filtrar por proveedor:</label>
+      <select
         id="proveedorFilter"
-        class="form-select" 
+        class="form-select"
         [(ngModel)]="proveedorSeleccionado"
         (change)="filtrarPorProveedor()">
-        <option [ngValue]="null">Todos los proveedores</option>
+        <option [ngValue]="null" i18n="All suppliers option">Todos los proveedores</option>
         <option *ngFor="let proveedor of getProveedores()" [ngValue]="proveedor.id">
           {{ proveedor.nombre }}
         </option>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Mensaje si no hay pedidos -->
-    <div *ngIf="pedidosFiltrados.length === 0" class="alert alert-info">
+    <div *ngIf="pedidosFiltrados.length === 0" class="alert alert-info" i18n="No orders message">
       No hay pedidos registrado
     </div>
 

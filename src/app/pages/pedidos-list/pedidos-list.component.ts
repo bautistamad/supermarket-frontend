@@ -187,8 +187,7 @@ export class PedidosListComponent implements OnInit {
     if (this.proveedorSeleccionado === null) {
       this.pedidosFiltrados = this.pedidos;
     } else {
-      this.pedidosFiltrados = this.pedidos.filter(p => p.proveedorId ===
-      this.proveedorSeleccionado);
+      this.pedidosFiltrados = this.pedidos.filter(p => p.proveedorId === this.proveedorSeleccionado);
     }
   }
 

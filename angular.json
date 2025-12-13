@@ -9,6 +9,18 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "locales": {
+          "es": {
+            "translation": "src/locale/messages.es.xlf",
+            "baseHref": ""
+          },
+          "en": {
+            "translation": "src/locale/messages.en.xlf",
+            "baseHref": "/en/"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -48,7 +60,71 @@
               ],
               "outputHashing": "all"
             },
+            "production-es": {
+              "localize": ["es"],
+              "outputPath": "dist/supermarket-frontend/es",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "production-en": {
+              "localize": ["en"],
+              "outputPath": "dist/supermarket-frontend/en",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
+            },
+            "development-es": {
+              "localize": ["es"],
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
+            },
+            "development-en": {
+              "localize": ["en"],
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -71,11 +147,23 @@
             "production": {
               "browserTarget": "supermarket-frontend:build:production"
             },
+            "production-es": {
+              "browserTarget": "supermarket-frontend:build:production-es"
+            },
+            "production-en": {
+              "browserTarget": "supermarket-frontend:build:production-en"
+            },
             "development": {
               "browserTarget": "supermarket-frontend:build:development"
+            },
+            "development-es": {
+              "browserTarget": "supermarket-frontend:build:development-es"
+            },
+            "development-en": {
+              "browserTarget": "supermarket-frontend:build:development-en"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development-es"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

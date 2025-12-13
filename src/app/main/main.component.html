@@ -2,7 +2,7 @@
     <!-- Menú lateral -->
     <nav class="sidebar bg-dark text-white p-3 d-flex flex-column">
       <div>
-        <h4 class="text-center mb-4">Supermercado</h4>
+        <h4 class="text-center mb-4" i18n="App title">Supermercado</h4>
 
         <!-- Información del usuario -->
         <div class="user-info mb-4 p-3 bg-secondary rounded">
@@ -17,21 +17,21 @@
 
         <ul class="nav flex-column">
           <li class="nav-item mb-3">
-            <a routerLink="/main/productos" routerLinkActive="active" class="nav-link text-white">
+            <a routerLink="/main/productos" routerLinkActive="active" class="nav-link text-white" i18n="Nav products">
               <i class="bi bi-box-seam fs-4"></i>
               <span class="ms-2">Productos</span>
             </a>
           </li>
 
           <li class="nav-item mb-3">
-            <a routerLink="/main/proveedores" routerLinkActive="active" class="nav-link text-white">
+            <a routerLink="/main/proveedores" routerLinkActive="active" class="nav-link text-white" i18n="Nav suppliers">
               <i class="bi bi-truck fs-4"></i>
               <span class="ms-2">Proveedores</span>
             </a>
           </li>
 
           <li class="nav-item mb-3">
-            <a routerLink="/main/pedidos" routerLinkActive="active" class="nav-link text-white">
+            <a routerLink="/main/pedidos" routerLinkActive="active" class="nav-link text-white" i18n="Nav orders">
               <i class="bi bi-cart-check fs-4"></i>
               <span class="ms-2">Pedidos</span>
             </a>
@@ -41,7 +41,7 @@
 
       <!-- Botón de cerrar sesión en la parte inferior -->
       <div class="mt-auto">
-        <button (click)="logout()" class="btn btn-logout w-100">
+        <button (click)="logout()" class="btn btn-logout w-100" i18n="Logout button">
           <i class="bi bi-box-arrow-right me-2"></i>
           Cerrar Sesión
         </button>

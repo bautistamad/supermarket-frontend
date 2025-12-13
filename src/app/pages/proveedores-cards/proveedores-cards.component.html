@@ -1,16 +1,17 @@
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">Proveedores</h2>
+      <h2 class="mb-0" i18n="Suppliers page title">Proveedores</h2>
       <button class="btn btn-success" (click)="toggleFormulario()">
         <i class="bi bi-plus-circle me-2"></i>
-        {{ mostrarFormulario ? 'Cancelar' : 'Nuevo Proveedor' }}
+        <span *ngIf="mostrarFormulario" i18n="Cancel button text">Cancelar</span>
+        <span *ngIf="!mostrarFormulario" i18n="New supplier button text">Nuevo Proveedor</span>
       </button>
     </div>
 
     <!-- Formulario para nuevo proveedor -->
     <div *ngIf="mostrarFormulario" class="card mb-4">
       <div class="card-header bg-success text-white">
-        <h5 class="mb-0">
+        <h5 class="mb-0" i18n="Add new supplier header">
           <i class="bi bi-plus-circle me-2"></i>
           Agregar Nuevo Proveedor
         </h5>
