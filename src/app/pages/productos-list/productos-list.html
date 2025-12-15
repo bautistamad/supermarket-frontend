@@ -39,8 +39,16 @@
 
         <!-- Body con información -->
         <div class="card-body">
+          <!-- Imagen del producto -->
+          <div class="product-image-container mb-3">
+            <img *ngIf="producto.image" [src]="producto.image" alt="{{ producto.nombre }}" class="product-image">
+            <div *ngIf="!producto.image" class="product-image-placeholder">
+              <i class="bi bi-image fs-1 text-muted"></i>
+              <p class="text-muted small mt-2" i18n="No image available">Sin imagen</p>
+            </div>
+          </div>
+
           <div class="mb-3 text-center">
-            <i class="bi bi-upc-scan fs-1 text-primary"></i>
             <p class="text-muted mb-0"><small>{{ producto.codigoBarra }}</small></p>
           </div>
 

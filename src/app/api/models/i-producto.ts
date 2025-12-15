@@ -4,6 +4,7 @@ export interface IProducto {
   codigoBarra: number;
   nombre: string;
   imagen?: string;
+  image?: string;
   minStock: number;
   maxStock: number;
   actualStock: number;
