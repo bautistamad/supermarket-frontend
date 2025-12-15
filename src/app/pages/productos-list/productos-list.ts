@@ -46,7 +46,7 @@ export class ProductosList implements OnInit {
     this.productoForm = this._fb.group({
       codigoBarra: [0, [Validators.required, Validators.min(1)]],
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      imagen: [''],
+      image: [''],
       minStock: [0, [Validators.required, Validators.min(0)]],
       maxStock: [1, [Validators.required, Validators.min(1)]],
       actualStock: [0, [Validators.required, Validators.min(0)]],
@@ -85,7 +85,7 @@ export class ProductosList implements OnInit {
     this.productoForm.patchValue({
       codigoBarra: producto.codigoBarra,
       nombre: producto.nombre,
-      imagen: producto.imagen || '',
+      image: producto.image || '',
       minStock: producto.minStock,
       maxStock: producto.maxStock,
       actualStock: producto.actualStock,
@@ -103,7 +103,7 @@ export class ProductosList implements OnInit {
     this.productoForm.reset({
       codigoBarra: 0,
       nombre: '',
-      imagen: '',
+      image: '',
       minStock: 0,
       maxStock: 1,
       actualStock: 0,
