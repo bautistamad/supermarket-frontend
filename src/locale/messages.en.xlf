@@ -870,11 +870,399 @@
       </trans-unit>
       <trans-unit id="368469658417918996" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-plus-circle me-2&quot;&gt;" /><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;" /> Agregar Nuevo Proveedor </source>
+        <target><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-plus-circle me-2&quot;&gt;" /><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;" /> Add New Supplier </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
           <context context-type="linenumber">15,17</context>
         </context-group>
         <note priority="1" from="description">Add new supplier header</note>
+      </trans-unit>
+      <trans-unit id="5535643325128815202" datatype="html">
+        <source>Nombre *</source>
+        <target>Name *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <note priority="1" from="description">Supplier name label</note>
+      </trans-unit>
+      <trans-unit id="4196378503711962061" datatype="html">
+        <source>Ej: Proveedor ABC</source>
+        <target>e.g.: Supplier ABC</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <note priority="1" from="description">Supplier name placeholder</note>
+      </trans-unit>
+      <trans-unit id="5129664201829981375" datatype="html">
+        <source>API Endpoint *</source>
+        <target>API Endpoint *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <note priority="1" from="description">API endpoint label</note>
+      </trans-unit>
+      <trans-unit id="2916695539794604947" datatype="html">
+        <source>https://api.proveedor.com</source>
+        <target>https://api.supplier.com</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <note priority="1" from="description">API endpoint placeholder</note>
+      </trans-unit>
+      <trans-unit id="1638635502890738070" datatype="html">
+        <source>Tipo de Servicio *</source>
+        <target>Service Type *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <note priority="1" from="description">Service type label</note>
+      </trans-unit>
+      <trans-unit id="1356200968511280526" datatype="html">
+        <source>REST</source>
+        <target>REST</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+        <note priority="1" from="description">REST service type option</note>
+      </trans-unit>
+      <trans-unit id="1024460980431411243" datatype="html">
+        <source>SOAP</source>
+        <target>SOAP</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <note priority="1" from="description">SOAP service type option</note>
+      </trans-unit>
+      <trans-unit id="4627836970901742060" datatype="html">
+        <source>Client ID *</source>
+        <target>Client ID *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <note priority="1" from="description">Client ID label</note>
+      </trans-unit>
+      <trans-unit id="5371784413586689779" datatype="html">
+        <source>Ej: client_12345</source>
+        <target>e.g.: client_12345</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+        <note priority="1" from="description">Client ID placeholder</note>
+      </trans-unit>
+      <trans-unit id="7363912914303547494" datatype="html">
+        <source>API Key *</source>
+        <target>API Key *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <note priority="1" from="description">API key label</note>
+      </trans-unit>
+      <trans-unit id="2175834037369217467" datatype="html">
+        <source>Ingresa la API Key del proveedor</source>
+        <target>Enter the supplier's API Key</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+        <note priority="1" from="description">API key placeholder</note>
+      </trans-unit>
+      <trans-unit id="8856219434335621322" datatype="html">
+        <source>Guardar Proveedor</source>
+        <target>Save Supplier</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+        <note priority="1" from="description">Save supplier button</note>
+      </trans-unit>
+      <trans-unit id="1158013127773092575" datatype="html">
+        <source> No hay proveedores registrados o el backend no está respondiendo. </source>
+        <target> No suppliers registered or backend is not responding. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">111,113</context>
+        </context-group>
+        <note priority="1" from="description">No suppliers message</note>
+      </trans-unit>
+      <trans-unit id="5308089386353373336" datatype="html">
+        <source>Activo</source>
+        <target>Active</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">153</context>
+        </context-group>
+        <note priority="1" from="description">Active supplier status</note>
+      </trans-unit>
+      <trans-unit id="3838676801008878481" datatype="html">
+        <source>Inactivo</source>
+        <target>Inactive</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+        <note priority="1" from="description">Inactive supplier status</note>
+      </trans-unit>
+      <trans-unit id="3737090945159841789" datatype="html">
+        <source>Desactivar</source>
+        <target>Deactivate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+        <note priority="1" from="description">Deactivate supplier button</note>
+      </trans-unit>
+      <trans-unit id="6623674485145209487" datatype="html">
+        <source>Activar</source>
+        <target>Activate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+        <note priority="1" from="description">Activate supplier button</note>
+      </trans-unit>
+      <trans-unit id="5001862158731550412" datatype="html">
+        <source>Ver Productos</source>
+        <target>View Products</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+        <note priority="1" from="description">View products button</note>
+      </trans-unit>
+      <trans-unit id="3945867803007243778" datatype="html">
+        <source>Sincronizar Precios</source>
+        <target>Sync Prices</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">181</context>
+        </context-group>
+        <note priority="1" from="description">Sync prices button</note>
+      </trans-unit>
+      <trans-unit id="6192232347321583439" datatype="html">
+        <source>Eliminar Proveedor</source>
+        <target>Delete Supplier</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">187</context>
+        </context-group>
+        <note priority="1" from="description">Delete supplier button</note>
+      </trans-unit>
+      <trans-unit id="8057867127001170926" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-box-seam me-2&quot;&gt;" /><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;" /> Productos de <x id="INTERPOLATION" equiv-text="{{ proveedorSeleccionado?.name }}" /> </source>
+        <target><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-box-seam me-2&quot;&gt;" /><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;" /> Products of <x id="INTERPOLATION" equiv-text="{{ proveedorSeleccionado?.name }}" /> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">204,206</context>
+        </context-group>
+        <note priority="1" from="description">Supplier products modal title</note>
+      </trans-unit>
+      <trans-unit id="3593821123007054892" datatype="html">
+        <source> No hay productos asociados a este proveedor. </source>
+        <target> No products associated with this supplier. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">210,212</context>
+        </context-group>
+        <note priority="1" from="description">No products for supplier message</note>
+      </trans-unit>
+      <trans-unit id="8092481494731054331" datatype="html">
+        <source>Código</source>
+        <target>Code</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+        <note priority="1" from="description">Product code header</note>
+      </trans-unit>
+      <trans-unit id="5357661269973482487" datatype="html">
+        <source>Nombre</source>
+        <target>Name</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+        <note priority="1" from="description">Product name header</note>
+      </trans-unit>
+      <trans-unit id="5517372780131569666" datatype="html">
+        <source>Precio Actual</source>
+        <target>Current Price</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">219</context>
+        </context-group>
+        <note priority="1" from="description">Current price header</note>
+      </trans-unit>
+      <trans-unit id="7570001531849871027" datatype="html">
+        <source>Stock Actual</source>
+        <target>Current Stock</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">220</context>
+        </context-group>
+        <note priority="1" from="description">Current stock header</note>
+      </trans-unit>
+      <trans-unit id="1894528682950539824" datatype="html">
+        <source>Stock Mín/Máx</source>
+        <target>Min/Max Stock</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+        <note priority="1" from="description">Min max stock header</note>
+      </trans-unit>
+      <trans-unit id="4963172891871550734" datatype="html">
+        <source>Estado</source>
+        <target>Status</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">222</context>
+        </context-group>
+        <note priority="1" from="description">Status header</note>
+      </trans-unit>
+      <trans-unit id="219739306561038681" datatype="html">
+        <source>Sin precio</source>
+        <target>No price</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">234</context>
+        </context-group>
+        <note priority="1" from="description">No price text</note>
+      </trans-unit>
+      <trans-unit id="1222204292829857694" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-star-fill me-2&quot;&gt;" /><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;" /> Configurar Escalas de Calificación - <x id="INTERPOLATION" equiv-text="{{ proveedorPendienteEscala?.name }}" /> </source>
+        <target><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-star-fill me-2&quot;&gt;" /><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;" /> Configure Rating Scales - <x id="INTERPOLATION" equiv-text="{{ proveedorPendienteEscala?.name }}" /> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">264,266</context>
+        </context-group>
+        <note priority="1" from="description">Configure rating scales modal title</note>
+      </trans-unit>
+      <trans-unit id="2848219041084023310" datatype="html">
+        <source>Importante:</source>
+        <target>Important:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">271</context>
+        </context-group>
+        <note priority="1" from="description">Important label</note>
+      </trans-unit>
+      <trans-unit id="7621196212890310453" datatype="html">
+        <source>Debes mapear cada valor de calificación del proveedor a nuestra escala interna (1-5). Esto permite comparar todos los proveedores usando una escala unificada.</source>
+        <target>You must map each supplier rating value to our internal scale (1-5). This allows comparing all suppliers using a unified scale.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">271,272</context>
+        </context-group>
+        <note priority="1" from="description">Rating scales info message</note>
+      </trans-unit>
+      <trans-unit id="3220308283861917641" datatype="html">
+        <source>Escala del Proveedor</source>
+        <target>Supplier Scale</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">279</context>
+        </context-group>
+        <note priority="1" from="description">Supplier scale header</note>
+      </trans-unit>
+      <trans-unit id="2702769239797460498" datatype="html">
+        <source>Descripción</source>
+        <target>Description</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">280</context>
+        </context-group>
+        <note priority="1" from="description">Description header</note>
+      </trans-unit>
+      <trans-unit id="4735491902432324170" datatype="html">
+        <source>Valor Interno (1-5)</source>
+        <target>Internal Value (1-5)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">281</context>
+        </context-group>
+        <note priority="1" from="description">Internal value header</note>
+      </trans-unit>
+      <trans-unit id="8487961673517003169" datatype="html">
+        <source>Seleccionar...</source>
+        <target>Select...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">297</context>
+        </context-group>
+        <note priority="1" from="description">Select option</note>
+      </trans-unit>
+      <trans-unit id="4345684827942776357" datatype="html">
+        <source>5 - Excelente</source>
+        <target>5 - Excellent</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">298</context>
+        </context-group>
+        <note priority="1" from="description">Excellent rating option</note>
+      </trans-unit>
+      <trans-unit id="6369201385392200820" datatype="html">
+        <source>4 - Muy Bueno</source>
+        <target>4 - Very Good</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">299</context>
+        </context-group>
+        <note priority="1" from="description">Very good rating option</note>
+      </trans-unit>
+      <trans-unit id="2646253405770397616" datatype="html">
+        <source>3 - Bueno</source>
+        <target>3 - Good</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">300</context>
+        </context-group>
+        <note priority="1" from="description">Good rating option</note>
+      </trans-unit>
+      <trans-unit id="1330317464937089441" datatype="html">
+        <source>2 - Regular</source>
+        <target>2 - Fair</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">301</context>
+        </context-group>
+        <note priority="1" from="description">Fair rating option</note>
+      </trans-unit>
+      <trans-unit id="6419142625688814991" datatype="html">
+        <source>1 - Malo</source>
+        <target>1 - Poor</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">302</context>
+        </context-group>
+        <note priority="1" from="description">Poor rating option</note>
+      </trans-unit>
+      <trans-unit id="3889193916257672274" datatype="html">
+        <source>Una vez configuradas las escalas, no podrás cerrar este modal hasta completar el mapeo.</source>
+        <target>Once the scales are configured, you won't be able to close this modal until completing the mapping.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">312</context>
+        </context-group>
+        <note priority="1" from="description">Rating scales warning message</note>
+      </trans-unit>
+      <trans-unit id="6725738641356792624" datatype="html">
+        <source>Guardar Configuración</source>
+        <target>Save Configuration</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">321</context>
+        </context-group>
+        <note priority="1" from="description">Save configuration button</note>
       </trans-unit>
     </body>
   </file>

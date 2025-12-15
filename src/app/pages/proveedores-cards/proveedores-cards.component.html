@@ -20,26 +20,28 @@
         <form [formGroup]="proveedorForm" (ngSubmit)="guardarProveedor()">
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="name" class="form-label">Nombre *</label>
+              <label for="name" class="form-label" i18n="Supplier name label">Nombre *</label>
               <input
                 type="text"
                 class="form-control"
                 [class.is-invalid]="isFieldInvalid('name')"
                 id="name"
                 formControlName="name"
+                i18n-placeholder="Supplier name placeholder"
                 placeholder="Ej: Proveedor ABC">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('name')">
                 {{ getFieldError('name') }}
               </div>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="apiEndpoint" class="form-label">API Endpoint *</label>
+              <label for="apiEndpoint" class="form-label" i18n="API endpoint label">API Endpoint *</label>
               <input
                 type="text"
                 class="form-control"
                 [class.is-invalid]="isFieldInvalid('apiEndpoint')"
                 id="apiEndpoint"
                 formControlName="apiEndpoint"
+                i18n-placeholder="API endpoint placeholder"
                 placeholder="https://api.proveedor.com">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('apiEndpoint')">
                 {{ getFieldError('apiEndpoint') }}
@@ -48,27 +50,28 @@
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="tipoServicio" class="form-label">Tipo de Servicio *</label>
+              <label for="tipoServicio" class="form-label" i18n="Service type label">Tipo de Servicio *</label>
               <select
                 class="form-select"
                 [class.is-invalid]="isFieldInvalid('tipoServicio')"
                 id="tipoServicio"
                 formControlName="tipoServicio">
-                <option [ngValue]="1">REST</option>
-                <option [ngValue]="2">SOAP</option>
+                <option [ngValue]="1" i18n="REST service type option">REST</option>
+                <option [ngValue]="2" i18n="SOAP service type option">SOAP</option>
               </select>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('tipoServicio')">
                 {{ getFieldError('tipoServicio') }}
               </div>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="clientId" class="form-label">Client ID *</label>
+              <label for="clientId" class="form-label" i18n="Client ID label">Client ID *</label>
               <input
                 type="text"
                 class="form-control"
                 [class.is-invalid]="isFieldInvalid('clientId')"
                 id="clientId"
                 formControlName="clientId"
+                i18n-placeholder="Client ID placeholder"
                 placeholder="Ej: client_12345">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('clientId')">
                 {{ getFieldError('clientId') }}
@@ -77,13 +80,14 @@
           </div>
           <div class="row">
             <div class="col-md-12 mb-3">
-              <label for="apiKey" class="form-label">API Key *</label>
+              <label for="apiKey" class="form-label" i18n="API key label">API Key *</label>
               <input
                 type="password"
                 class="form-control"
                 [class.is-invalid]="isFieldInvalid('apiKey')"
                 id="apiKey"
                 formControlName="apiKey"
+                i18n-placeholder="API key placeholder"
                 placeholder="Ingresa la API Key del proveedor">
               <div class="invalid-feedback" *ngIf="isFieldInvalid('apiKey')">
                 {{ getFieldError('apiKey') }}
@@ -91,12 +95,12 @@
             </div>
           </div>
           <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn btn-secondary" (click)="toggleFormulario()">
+            <button type="button" class="btn btn-secondary" (click)="toggleFormulario()" i18n="Cancel form button">
               Cancelar
             </button>
             <button type="submit" class="btn btn-success" [disabled]="proveedorForm.invalid">
               <i class="bi bi-save me-2"></i>
-              Guardar Proveedor
+              <ng-container i18n="Save supplier button">Guardar Proveedor</ng-container>
             </button>
           </div>
         </form>
@@ -104,7 +108,7 @@
     </div>
 
     <!-- Mensaje si no hay proveedores -->
-    <div *ngIf="proveedores.length === 0" class="alert alert-info">
+    <div *ngIf="proveedores.length === 0" class="alert alert-info" i18n="No suppliers message">
       No hay proveedores registrados o el backend no está respondiendo.
     </div>
 
@@ -196,26 +200,26 @@
       <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">
+            <h5 class="modal-title" i18n="Supplier products modal title">
               <i class="bi bi-box-seam me-2"></i>
               Productos de {{ proveedorSeleccionado?.name }}
             </h5>
             <button type="button" class="btn-close btn-close-white" (click)="cerrarProductos()"></button>
           </div>
           <div class="modal-body">
-            <div *ngIf="productosProveedor.length === 0" class="alert alert-info">
+            <div *ngIf="productosProveedor.length === 0" class="alert alert-info" i18n="No products for supplier message">
               No hay productos asociados a este proveedor.
             </div>
             <div *ngIf="productosProveedor.length > 0" class="table-responsive">
               <table class="table table-hover">
                 <thead class="table-light">
                   <tr>
-                    <th>Código</th>
-                    <th>Nombre</th>
-                    <th>Precio Actual</th>
-                    <th>Stock Actual</th>
-                    <th>Stock Mín/Máx</th>
-                    <th>Estado</th>
+                    <th i18n="Product code header">Código</th>
+                    <th i18n="Product name header">Nombre</th>
+                    <th i18n="Current price header">Precio Actual</th>
+                    <th i18n="Current stock header">Stock Actual</th>
+                    <th i18n="Min max stock header">Stock Mín/Máx</th>
+                    <th i18n="Status header">Estado</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -227,7 +231,7 @@
                         ${{ obtenerPrecioActual(producto) | number:'1.2-2' }}
                       </span>
                       <span *ngIf="!obtenerPrecioActual(producto)" class="text-muted">
-                        <small>Sin precio</small>
+                        <small i18n="No price text">Sin precio</small>
                       </span>
                     </td>
                     <td class="text-center">
@@ -245,7 +249,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="cerrarProductos()">Cerrar</button>
+            <button type="button" class="btn btn-secondary" (click)="cerrarProductos()" i18n="Close modal button">Cerrar</button>
           </div>
         </div>
       </div>
@@ -256,7 +260,7 @@
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-warning text-dark">
-            <h5 class="modal-title">
+            <h5 class="modal-title" i18n="Configure rating scales modal title">
               <i class="bi bi-star-fill me-2"></i>
               Configurar Escalas de Calificación - {{ proveedorPendienteEscala?.name }}
             </h5>
@@ -264,17 +268,17 @@
           <div class="modal-body">
             <div class="alert alert-info">
               <i class="bi bi-info-circle me-2"></i>
-              <strong>Importante:</strong> Debes mapear cada valor de calificación del proveedor a nuestra escala interna (1-5).
-              Esto permite comparar todos los proveedores usando una escala unificada.
+              <strong i18n="Important label">Importante:</strong> <span i18n="Rating scales info message">Debes mapear cada valor de calificación del proveedor a nuestra escala interna (1-5).
+              Esto permite comparar todos los proveedores usando una escala unificada.</span>
             </div>
 
             <div class="table-responsive">
               <table class="table table-bordered">
                 <thead class="table-light">
                   <tr>
-                    <th style="width: 40%">Escala del Proveedor</th>
-                    <th style="width: 40%">Descripción</th>
-                    <th style="width: 20%" class="text-center">Valor Interno (1-5)</th>
+                    <th style="width: 40%" i18n="Supplier scale header">Escala del Proveedor</th>
+                    <th style="width: 40%" i18n="Description header">Descripción</th>
+                    <th style="width: 20%" class="text-center" i18n="Internal value header">Valor Interno (1-5)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -290,12 +294,12 @@
                         class="form-select form-select-sm"
                         [(ngModel)]="escalasParaMapear[i].escalaInt"
                         required>
-                        <option [ngValue]="null" disabled>Seleccionar...</option>
-                        <option [ngValue]="5">5 - Excelente</option>
-                        <option [ngValue]="4">4 - Muy Bueno</option>
-                        <option [ngValue]="3">3 - Bueno</option>
-                        <option [ngValue]="2">2 - Regular</option>
-                        <option [ngValue]="1">1 - Malo</option>
+                        <option [ngValue]="null" disabled i18n="Select option">Seleccionar...</option>
+                        <option [ngValue]="5" i18n="Excellent rating option">5 - Excelente</option>
+                        <option [ngValue]="4" i18n="Very good rating option">4 - Muy Bueno</option>
+                        <option [ngValue]="3" i18n="Good rating option">3 - Bueno</option>
+                        <option [ngValue]="2" i18n="Fair rating option">2 - Regular</option>
+                        <option [ngValue]="1" i18n="Poor rating option">1 - Malo</option>
                       </select>
                     </td>
                   </tr>
@@ -305,7 +309,7 @@
 
             <div class="alert alert-warning mt-3">
               <i class="bi bi-exclamation-triangle me-2"></i>
-              <strong>Nota:</strong> Una vez configuradas las escalas, no podrás cerrar este modal hasta completar el mapeo.
+              <strong i18n="Note label">Nota:</strong> <span i18n="Rating scales warning message">Una vez configuradas las escalas, no podrás cerrar este modal hasta completar el mapeo.</span>
             </div>
           </div>
           <div class="modal-footer">
@@ -314,7 +318,7 @@
               class="btn btn-success"
               (click)="guardarMapeosEscalas()">
               <i class="bi bi-check-circle me-2"></i>
-              Guardar Configuración
+              <ng-container i18n="Save configuration button">Guardar Configuración</ng-container>
             </button>
           </div>
         </div>
