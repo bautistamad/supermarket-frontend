@@ -28,6 +28,7 @@ export class ProveedoresCardsComponent implements OnInit {
   mostrarModalProductos: boolean = false;
   productosProveedorDisponibles: any[] = [];
   seleccionarTodos: boolean = false;
+  modoAgregarProductos: boolean = false;
 
   proveedorForm!: FormGroup;
 
@@ -233,9 +234,59 @@ export class ProveedoresCardsComponent implements OnInit {
       next: (productos: any[]) => {
         this.productosProveedorDisponibles = productos.map(p => ({
           ...p,
-          seleccionado: false
+          seleccionado: false,
+          yaSincronizado: false
         }));
+        this.modoAgregarProductos = false;
         this.mostrarModalProductos = true;
+      },
+      error: (error: any) => {
+        console.error('Error al cargar productos disponibles:', error);
+        this._messageService.showError(
+          'Error al cargar productos del proveedor.',
+          'Error'
+        );
+      }
+    });
+  }
+
+  // Método: Abrir modal para agregar productos adicionales a un proveedor existente
+  abrirModalAgregarProductos(proveedor: IProveedor): void {
+    if (!proveedor.id) return;
+
+    this.proveedorPendienteEscala = proveedor;
+    this.modoAgregarProductos = true;
+    const proveedorId = proveedor.id;
+
+    // Cargar productos disponibles del proveedor
+    this._proveedoresService.getProductosDisponibles({
+      id: proveedorId
+    }).subscribe({
+      next: (productosDisponibles: any[]) => {
+        // Cargar productos ya asociados
+        this._productosService.getByProveedor({ id: proveedorId, history: false }).subscribe({
+          next: (productosActuales: IProducto[]) => {
+            const codigosActuales = new Set(productosActuales.map(p => p.codigoBarra));
+
+            // Marcar cuáles ya están sincronizados
+            this.productosProveedorDisponibles = productosDisponibles.map(p => ({
+              ...p,
+              seleccionado: false,
+              yaSincronizado: codigosActuales.has(p.barCode || p.codigoBarra)
+            }));
+            this.mostrarModalProductos = true;
+          },
+          error: (error: any) => {
+            console.error('Error al cargar productos actuales:', error);
+            // Si hay error al cargar actuales, mostrar solo los disponibles sin marcar
+            this.productosProveedorDisponibles = productosDisponibles.map(p => ({
+              ...p,
+              seleccionado: false,
+              yaSincronizado: false
+            }));
+            this.mostrarModalProductos = true;
+          }
+        });
       },
       error: (error: any) => {
         console.error('Error al cargar productos disponibles:', error);
@@ -249,7 +300,10 @@ export class ProveedoresCardsComponent implements OnInit {
 
   toggleSeleccionarTodos(): void {
     this.productosProveedorDisponibles.forEach(p => {
-      p.seleccionado = this.seleccionarTodos;
+      // No permitir seleccionar productos ya sincronizados
+      if (!p.yaSincronizado) {
+        p.seleccionado = this.seleccionarTodos;
+      }
     });
   }
 
@@ -433,4 +487,5 @@ export class ProveedoresCardsComponent implements OnInit {
 
     return ratingNumero.toFixed(2);
   }
+
 }
