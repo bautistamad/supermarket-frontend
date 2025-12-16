@@ -3,7 +3,7 @@ import { trigger, style, transition, animate } from '@angular/animations';
 import { IPedido } from '../../api/models/i-pedido';
 import { IAutoGenerarResponse } from '../../api/models/i-auto-generar-response';
 import { PedidosResource } from '../../api/resources/pedidos-resource.service';
-import { PEDIDO_ESTADOS, PEDIDO_ESTADOS_COLORES } from '../../api/models/pedido-estados';
+import { PEDIDO_ESTADOS, PEDIDO_ESTADOS_COLORES, PEDIDO_ESTADOS_NOMBRES } from '../../api/models/pedido-estados';
 import { AppMessageService } from '../../core/services/app-message.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class PedidosListComponent implements OnInit {
 
   pedidos: IPedido[] = [];
   pedidoExpandido: number | null = null;
-  proveedorSeleccionado: number | null = null;
+  estadoSeleccionado: number | null = null;
   pedidosFiltrados: IPedido[] = [];
   generandoPedido: boolean = false;
 
@@ -173,21 +173,22 @@ export class PedidosListComponent implements OnInit {
     });
   }
 
- getProveedores(): { id: number, nombre: string }[] {
-    const proveedoresMap = new Map<number, string>();
-    this.pedidos.forEach(pedido => {
-      if (pedido.proveedorId && pedido.proveedorNombre) {
-        proveedoresMap.set(pedido.proveedorId, pedido.proveedorNombre);
-      }
-    });
-    return Array.from(proveedoresMap, ([id, nombre]) => ({ id, nombre }));
+  getEstados(): { id: number, nombre: string }[] {
+    // Retornar todos los estados posibles, no solo los que tienen pedidos
+    return [
+      { id: PEDIDO_ESTADOS.PENDIENTE, nombre: PEDIDO_ESTADOS_NOMBRES[PEDIDO_ESTADOS.PENDIENTE] },
+      { id: PEDIDO_ESTADOS.EN_PROCESO, nombre: PEDIDO_ESTADOS_NOMBRES[PEDIDO_ESTADOS.EN_PROCESO] },
+      { id: PEDIDO_ESTADOS.ENVIADO, nombre: PEDIDO_ESTADOS_NOMBRES[PEDIDO_ESTADOS.ENVIADO] },
+      { id: PEDIDO_ESTADOS.ENTREGADO, nombre: PEDIDO_ESTADOS_NOMBRES[PEDIDO_ESTADOS.ENTREGADO] },
+      { id: PEDIDO_ESTADOS.CANCELADO, nombre: PEDIDO_ESTADOS_NOMBRES[PEDIDO_ESTADOS.CANCELADO] }
+    ];
   }
 
-  filtrarPorProveedor(): void {
-    if (this.proveedorSeleccionado === null) {
+  filtrarPorEstado(): void {
+    if (this.estadoSeleccionado === null) {
       this.pedidosFiltrados = this.pedidos;
     } else {
-      this.pedidosFiltrados = this.pedidos.filter(p => p.proveedorId === this.proveedorSeleccionado);
+      this.pedidosFiltrados = this.pedidos.filter(p => p.estadoId === this.estadoSeleccionado);
     }
   }
 

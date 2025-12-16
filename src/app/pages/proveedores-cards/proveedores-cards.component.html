@@ -324,4 +324,98 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para sincronizar productos (obligatorio después de escalas) -->
+    <div *ngIf="mostrarModalProductos" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" i18n="Sync products modal title">
+              <i class="bi bi-box-seam me-2"></i>
+              Sincronizar Productos - {{ proveedorPendienteEscala?.name }}
+            </h5>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              <strong i18n="Important label">Importante:</strong> <span i18n="Sync products info message">Debes seleccionar al menos un producto para completar la configuración del proveedor.
+              Los productos seleccionados serán sincronizados y estarán disponibles para pedidos.</span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="seleccionarTodos"
+                  [(ngModel)]="seleccionarTodos"
+                  (change)="toggleSeleccionarTodos()">
+                <label class="form-check-label" for="seleccionarTodos" i18n="Select all products checkbox">
+                  Seleccionar todos los productos
+                </label>
+              </div>
+              <span class="badge bg-primary fs-6">
+                <ng-container i18n="Selected products count">Seleccionados:</ng-container> {{ contarSeleccionados() }} / {{ productosProveedorDisponibles.length }}
+              </span>
+            </div>
+
+            <div *ngIf="productosProveedorDisponibles.length === 0" class="alert alert-warning" i18n="No products available message">
+              No hay productos disponibles para este proveedor.
+            </div>
+
+            <div *ngIf="productosProveedorDisponibles.length > 0" class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width: 60px" class="text-center" i18n="Select header">Seleccionar</th>
+                    <th i18n="Product code header">Código</th>
+                    <th i18n="Product name header">Nombre</th>
+                    <th class="text-center" i18n="Price header">Precio</th>
+                    <th class="text-center" i18n="Stock header">Stock</th>
+                    <th class="text-center" i18n="Status header">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let producto of productosProveedorDisponibles">
+                    <td class="text-center">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="producto.seleccionado">
+                    </td>
+                    <td><code>{{ producto.barCode || producto.codigoBarra }}</code></td>
+                    <td>{{ producto.name || producto.nombre }}</td>
+                    <td class="text-center">
+                      <span class="badge bg-success">${{ producto.price || producto.precio || 0 | number:'1.2-2' }}</span>
+                    </td>
+                    <td class="text-center">
+                      <span class="badge bg-info">{{ producto.stock || producto.actualStock || 0 }}</span>
+                    </td>
+                    <td class="text-center">
+                      <span class="badge bg-secondary">{{ producto.status || producto.estado || 'N/A' }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="alert alert-warning mt-3">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <strong i18n="Note label">Nota:</strong> <span i18n="Sync products warning message">Debes seleccionar al menos un producto antes de poder continuar. Esta acción es obligatoria para completar la configuración del proveedor.</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-success"
+              [disabled]="contarSeleccionados() === 0"
+              (click)="sincronizarProductos()">
+              <i class="bi bi-cloud-arrow-up me-2"></i>
+              <ng-container i18n="Sync selected products button">Sincronizar Productos Seleccionados</ng-container>
+              <span class="badge bg-light text-dark ms-2">{{ contarSeleccionados() }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>

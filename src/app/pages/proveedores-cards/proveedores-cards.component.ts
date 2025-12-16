@@ -24,6 +24,11 @@ export class ProveedoresCardsComponent implements OnInit {
   escalasParaMapear: IEscala[] = [];
   proveedorPendienteEscala: IProveedor | null = null;
 
+  // Nuevas propiedades para modal de sincronización de productos
+  mostrarModalProductos: boolean = false;
+  productosProveedorDisponibles: any[] = [];
+  seleccionarTodos: boolean = false;
+
   proveedorForm!: FormGroup;
 
   constructor(
@@ -73,7 +78,6 @@ export class ProveedoresCardsComponent implements OnInit {
       next: (rating: any) => {
         const proveedor = this.proveedores.find(p => p.id === proveedorId);
         if (proveedor) {
-          // Asegurar que sea un número o null
           if (rating === null || rating === undefined) {
             proveedor.ratingPromedio = null;
           } else {
@@ -203,8 +207,8 @@ export class ProveedoresCardsComponent implements OnInit {
       next: (escalasGuardadas: IEscala[]) => {
         console.log('Escalas mapeadas:', escalasGuardadas);
         this.cerrarModalEscalas();
-        this.cargarProveedores();
-        this._messageService.showSuccess(`Proveedor ${this.proveedorPendienteEscala?.name} configurado exitosamente.`, 'Proveedor configurado');
+        // Después de mapear las escalas, abrir modal de productos (obligatorio)
+        this.abrirModalProductos();
       },
       error: (error: any) => {
         console.error('Error al guardar escalas:', error);
@@ -216,6 +220,99 @@ export class ProveedoresCardsComponent implements OnInit {
   cerrarModalEscalas(): void {
     this.mostrarModalEscalas = false;
     this.escalasParaMapear = [];
+    // No limpiamos proveedorPendienteEscala aquí porque lo necesitamos para el modal de productos
+  }
+
+  // Nuevo método: Abrir modal de productos (llamado después de guardar escalas)
+  abrirModalProductos(): void {
+    if (!this.proveedorPendienteEscala?.id) return;
+
+    this._proveedoresService.getProductosDisponibles({
+      id: this.proveedorPendienteEscala.id
+    }).subscribe({
+      next: (productos: any[]) => {
+        this.productosProveedorDisponibles = productos.map(p => ({
+          ...p,
+          seleccionado: false
+        }));
+        this.mostrarModalProductos = true;
+      },
+      error: (error: any) => {
+        console.error('Error al cargar productos disponibles:', error);
+        this._messageService.showError(
+          'Error al cargar productos del proveedor.',
+          'Error'
+        );
+      }
+    });
+  }
+
+  toggleSeleccionarTodos(): void {
+    this.productosProveedorDisponibles.forEach(p => {
+      p.seleccionado = this.seleccionarTodos;
+    });
+  }
+
+  contarSeleccionados(): number {
+    return this.productosProveedorDisponibles.filter(p => p.seleccionado).length;
+  }
+
+  sincronizarProductos(): void {
+    const seleccionados = this.productosProveedorDisponibles
+      .filter(p => p.seleccionado)
+      .map(p => p.barCode || p.codigoBarra);
+
+    if (seleccionados.length === 0) {
+      this._messageService.showInfo(
+        'Debes seleccionar al menos un producto.',
+        'Selección requerida'
+      );
+      return;
+    }
+
+    console.log('Productos seleccionados:', seleccionados);
+    console.log('Tipo de seleccionados:', Array.isArray(seleccionados), seleccionados.length);
+
+    // Crear objeto con método toJSON personalizado para controlar la serialización
+    const payload = {
+      id: this.proveedorPendienteEscala!.id!,
+      codigosBarraProveedor: seleccionados,
+      // Este método se llama automáticamente al serializar a JSON
+      toJSON() {
+        // Solo enviar codigosBarraProveedor en el body (no el id)
+        return { codigosBarraProveedor: this.codigosBarraProveedor };
+      }
+    };
+
+    console.log('Payload a enviar:', payload);
+    console.log('Body que se enviará:', JSON.stringify(payload));
+
+    this._proveedoresService.syncProductos(payload as any).subscribe({
+      next: (result) => {
+        console.log('Productos sincronizados:', result);
+        const mensaje = `Sincronización completada:<br>
+          - Total: ${result.total}<br>
+          - Creados: ${result.created || 0}<br>
+          - Actualizados: ${result.updated || 0}<br>
+          - Errores: ${result.errors || 0}`;
+        this._messageService.showSuccess(mensaje, 'Proveedor configurado');
+        this.cerrarModalProductos();
+        this.cargarProveedores();
+      },
+      error: (error: any) => {
+        console.error('Error al sincronizar productos:', error);
+        this._messageService.showError(
+          'Error al sincronizar productos.',
+          'Error'
+        );
+      }
+    });
+  }
+
+  cerrarModalProductos(): void {
+    this.mostrarModalProductos = false;
+    this.productosProveedorDisponibles = [];
+    this.seleccionarTodos = false;
     this.proveedorPendienteEscala = null;
   }
 

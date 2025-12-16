@@ -637,6 +637,10 @@
           <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
           <context context-type="linenumber">312</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
         <note priority="1" from="description">Note label</note>
       </trans-unit>
       <trans-unit id="735480687827606010" datatype="html">
@@ -969,6 +973,10 @@
           <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
           <context context-type="linenumber">217</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">371</context>
+        </context-group>
         <note priority="1" from="description">Product code header</note>
       </trans-unit>
       <trans-unit id="5357661269973482487" datatype="html">
@@ -976,6 +984,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
           <context context-type="linenumber">218</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">372</context>
         </context-group>
         <note priority="1" from="description">Product name header</note>
       </trans-unit>
@@ -1009,6 +1021,10 @@
           <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
           <context context-type="linenumber">222</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">375</context>
+        </context-group>
         <note priority="1" from="description">Status header</note>
       </trans-unit>
       <trans-unit id="219739306561038681" datatype="html">
@@ -1032,6 +1048,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
           <context context-type="linenumber">271</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">341</context>
         </context-group>
         <note priority="1" from="description">Important label</note>
       </trans-unit>
@@ -1130,6 +1150,86 @@
           <context context-type="linenumber">321</context>
         </context-group>
         <note priority="1" from="description">Save configuration button</note>
+      </trans-unit>
+      <trans-unit id="209864441060866157" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-box-seam me-2&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Sincronizar Productos - <x id="INTERPOLATION" equiv-text="{{ proveedorPendienteEscala?.name }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">334,336</context>
+        </context-group>
+        <note priority="1" from="description">Sync products modal title</note>
+      </trans-unit>
+      <trans-unit id="3323307778214818898" datatype="html">
+        <source>Debes seleccionar al menos un producto para completar la configuración del proveedor. Los productos seleccionados serán sincronizados y estarán disponibles para pedidos.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">341,342</context>
+        </context-group>
+        <note priority="1" from="description">Sync products info message</note>
+      </trans-unit>
+      <trans-unit id="4692751737363366849" datatype="html">
+        <source> Seleccionar todos los productos </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">353,355</context>
+        </context-group>
+        <note priority="1" from="description">Select all products checkbox</note>
+      </trans-unit>
+      <trans-unit id="1614863240714179280" datatype="html">
+        <source>Seleccionados:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">358</context>
+        </context-group>
+        <note priority="1" from="description">Selected products count</note>
+      </trans-unit>
+      <trans-unit id="4123770696107018818" datatype="html">
+        <source> No hay productos disponibles para este proveedor. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">362,364</context>
+        </context-group>
+        <note priority="1" from="description">No products available message</note>
+      </trans-unit>
+      <trans-unit id="2229594745304510307" datatype="html">
+        <source>Seleccionar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">370</context>
+        </context-group>
+        <note priority="1" from="description">Select header</note>
+      </trans-unit>
+      <trans-unit id="2090485092107532642" datatype="html">
+        <source>Precio</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">373</context>
+        </context-group>
+        <note priority="1" from="description">Price header</note>
+      </trans-unit>
+      <trans-unit id="4613338085351943838" datatype="html">
+        <source>Stock</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">374</context>
+        </context-group>
+        <note priority="1" from="description">Stock header</note>
+      </trans-unit>
+      <trans-unit id="4094556562510074000" datatype="html">
+        <source>Debes seleccionar al menos un producto antes de poder continuar. Esta acción es obligatoria para completar la configuración del proveedor.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+        <note priority="1" from="description">Sync products warning message</note>
+      </trans-unit>
+      <trans-unit id="8769212292746958927" datatype="html">
+        <source>Sincronizar Productos Seleccionados</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">414</context>
+        </context-group>
+        <note priority="1" from="description">Sync selected products button</note>
       </trans-unit>
     </body>
   </file>

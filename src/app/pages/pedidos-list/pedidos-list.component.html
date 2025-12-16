@@ -16,17 +16,17 @@
       </button>
     </div>
 
-    <!-- Filtro de proveedores -->
+    <!-- Filtro de estados -->
     <div class="mb-3">
-      <label for="proveedorFilter" class="form-label" i18n="Filter by supplier label">Filtrar por proveedor:</label>
+      <label for="estadoFilter" class="form-label" i18n="Filter by status label">Filtrar por estado:</label>
       <select
-        id="proveedorFilter"
+        id="estadoFilter"
         class="form-select"
-        [(ngModel)]="proveedorSeleccionado"
-        (change)="filtrarPorProveedor()">
-        <option [ngValue]="null" i18n="All suppliers option">Todos los proveedores</option>
-        <option *ngFor="let proveedor of getProveedores()" [ngValue]="proveedor.id">
-          {{ proveedor.nombre }}
+        [(ngModel)]="estadoSeleccionado"
+        (change)="filtrarPorEstado()">
+        <option [ngValue]="null" i18n="All statuses option">Todos los estados</option>
+        <option *ngFor="let estado of getEstados()" [ngValue]="estado.id">
+          {{ estado.nombre }}
         </option>
       </select>
     </div>

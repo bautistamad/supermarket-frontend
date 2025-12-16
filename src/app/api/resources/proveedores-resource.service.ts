@@ -69,4 +69,10 @@ export class ProveedoresResource extends Resource {
     method: ResourceRequestMethod.Put
   })
   toggleActivo!: IResourceMethodObservable<{ id: number, activo: boolean }, IProveedor>
+
+  @ResourceAction({
+    path: '/proveedores/{!id}/sync-productos',
+    method: ResourceRequestMethod.Post
+  })
+  syncProductos!: IResourceMethodObservable<{ id: number, codigosBarraProveedor: number[] }, { proveedorId: number, total: number, created?: number, updated?: number, errors?: number }>
 }

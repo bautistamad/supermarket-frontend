@@ -1264,6 +1264,96 @@
         </context-group>
         <note priority="1" from="description">Save configuration button</note>
       </trans-unit>
+      <trans-unit id="209864441060866157" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-box-seam me-2&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Sincronizar Productos - <x id="INTERPOLATION" equiv-text="{{ proveedorPendienteEscala?.name }}"/> </source>
+        <target><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i class=&quot;bi bi-box-seam me-2&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Sync Products - <x id="INTERPOLATION" equiv-text="{{ proveedorPendienteEscala?.name }}"/> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">334,336</context>
+        </context-group>
+        <note priority="1" from="description">Sync products modal title</note>
+      </trans-unit>
+      <trans-unit id="3323307778214818898" datatype="html">
+        <source>Debes seleccionar al menos un producto para completar la configuración del proveedor. Los productos seleccionados serán sincronizados y estarán disponibles para pedidos.</source>
+        <target>You must select at least one product to complete the supplier configuration. Selected products will be synchronized and available for orders.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">341,342</context>
+        </context-group>
+        <note priority="1" from="description">Sync products info message</note>
+      </trans-unit>
+      <trans-unit id="4692751737363366849" datatype="html">
+        <source> Seleccionar todos los productos </source>
+        <target> Select all products </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">353,355</context>
+        </context-group>
+        <note priority="1" from="description">Select all products checkbox</note>
+      </trans-unit>
+      <trans-unit id="1614863240714179280" datatype="html">
+        <source>Seleccionados:</source>
+        <target>Selected:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">358</context>
+        </context-group>
+        <note priority="1" from="description">Selected products count</note>
+      </trans-unit>
+      <trans-unit id="4123770696107018818" datatype="html">
+        <source> No hay productos disponibles para este proveedor. </source>
+        <target> No products available for this supplier. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">362,364</context>
+        </context-group>
+        <note priority="1" from="description">No products available message</note>
+      </trans-unit>
+      <trans-unit id="2229594745304510307" datatype="html">
+        <source>Seleccionar</source>
+        <target>Select</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">370</context>
+        </context-group>
+        <note priority="1" from="description">Select header</note>
+      </trans-unit>
+      <trans-unit id="2090485092107532642" datatype="html">
+        <source>Precio</source>
+        <target>Price</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">373</context>
+        </context-group>
+        <note priority="1" from="description">Price header</note>
+      </trans-unit>
+      <trans-unit id="4613338085351943838" datatype="html">
+        <source>Stock</source>
+        <target>Stock</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">374</context>
+        </context-group>
+        <note priority="1" from="description">Stock header</note>
+      </trans-unit>
+      <trans-unit id="4094556562510074000" datatype="html">
+        <source>Debes seleccionar al menos un producto antes de poder continuar. Esta acción es obligatoria para completar la configuración del proveedor.</source>
+        <target>You must select at least one product before continuing. This action is mandatory to complete the supplier configuration.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">404</context>
+        </context-group>
+        <note priority="1" from="description">Sync products warning message</note>
+      </trans-unit>
+      <trans-unit id="8769212292746958927" datatype="html">
+        <source>Sincronizar Productos Seleccionados</source>
+        <target>Sync Selected Products</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/proveedores-cards/proveedores-cards.component.html</context>
+          <context context-type="linenumber">414</context>
+        </context-group>
+        <note priority="1" from="description">Sync selected products button</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>
