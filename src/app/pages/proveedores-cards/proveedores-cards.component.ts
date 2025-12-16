@@ -224,10 +224,11 @@ export class ProveedoresCardsComponent implements OnInit {
     // No limpiamos proveedorPendienteEscala aquí porque lo necesitamos para el modal de productos
   }
 
-  // Nuevo método: Abrir modal de productos (llamado después de guardar escalas)
+  // Nuevo método: Abrir modal de productos (llamado después de guardar escalas - primera vez)
   abrirModalProductos(): void {
     if (!this.proveedorPendienteEscala?.id) return;
 
+    // Primera apertura: solo mostrar productos disponibles (sin estados)
     this._proveedoresService.getProductosDisponibles({
       id: this.proveedorPendienteEscala.id
     }).subscribe({
@@ -349,9 +350,16 @@ export class ProveedoresCardsComponent implements OnInit {
           - Creados: ${result.created || 0}<br>
           - Actualizados: ${result.updated || 0}<br>
           - Errores: ${result.errors || 0}`;
-        this._messageService.showSuccess(mensaje, 'Proveedor configurado');
-        this.cerrarModalProductos();
-        this.cargarProveedores();
+        this._messageService.showSuccess(mensaje, 'Productos sincronizados');
+
+        // Recargar la modal para mostrar cambios (si estamos en modo agregar)
+        if (this.modoAgregarProductos && this.proveedorPendienteEscala?.id) {
+          this.verProductosProveedor(this.proveedorPendienteEscala);
+        } else {
+          // Sino, cerrar y recargar lista de proveedores
+          this.cerrarModalProductos();
+          this.cargarProveedores();
+        }
       },
       error: (error: any) => {
         console.error('Error al sincronizar productos:', error);
@@ -372,10 +380,12 @@ export class ProveedoresCardsComponent implements OnInit {
   }
 
   // Método: Desasignar producto de un proveedor
-  desasignarProducto(producto: IProducto, proveedorId: number): void {
+  desasignarProducto(producto: any, proveedorId: number): void {
     if (!producto.codigoBarra) return;
 
-    if (confirm(`¿Estás seguro de que deseas desasignar "${producto.nombre}" de este proveedor?\n\nEsta acción no se puede deshacer.`)) {
+    const nombreProducto = producto.nombre || producto.name || 'Producto desconocido';
+
+    if (confirm(`¿Estás seguro de que deseas desasignar "${nombreProducto}" de este proveedor?\n\nEsta acción no se puede deshacer.`)) {
       this._productosService.removeFromProvider({
         barCode: producto.codigoBarra,
         idProveedor: proveedorId
@@ -383,12 +393,12 @@ export class ProveedoresCardsComponent implements OnInit {
         next: () => {
           console.log(`Producto ${producto.codigoBarra} desasignado del proveedor`);
           this._messageService.showSuccess(
-            `"${producto.nombre}" ha sido desasignado exitosamente.`,
+            `"${nombreProducto}" ha sido desasignado exitosamente.`,
             'Producto desasignado'
           );
-          // Recargar productos del proveedor
-          if (this.proveedorSeleccionado) {
-            this.verProductosProveedor(this.proveedorSeleccionado);
+          // Recargar productos del proveedor para actualizar la modal
+          if (this.proveedorPendienteEscala?.id) {
+            this.verProductosProveedor(this.proveedorPendienteEscala);
           }
         },
         error: (error: any) => {
@@ -477,36 +487,55 @@ export class ProveedoresCardsComponent implements OnInit {
 
     this.proveedorSeleccionado = proveedor;
     this.proveedorPendienteEscala = proveedor;
-    this.modoAgregarProductos = false;
+    this.modoAgregarProductos = true; // Modo agregar productos para proveedor existente
     const proveedorId = proveedor.id;
 
-    // Cargar productos disponibles del proveedor
-    this._proveedoresService.getProductosDisponibles({
-      id: proveedorId
-    }).subscribe({
-      next: (productosDisponibles: any[]) => {
-        // Cargar productos ya asociados
-        this._productosService.getByProveedor({ id: proveedorId, history: true }).subscribe({
-          next: (productosActuales: IProducto[]) => {
-            const codigosActuales = new Set(productosActuales.map(p => p.codigoBarra));
+    // Cargar productos guardados en nuestra DB (con toda la información incluyendo estados)
+    this._productosService.getByProveedor({ id: proveedorId, history: false }).subscribe({
+      next: (productosDB: IProducto[]) => {
+        // Cargar productos disponibles del proveedor
+        this._proveedoresService.getProductosDisponibles({
+          id: proveedorId
+        }).subscribe({
+          next: (productosDisponibles: any[]) => {
+            const codigosDB = new Set(productosDB.map(p => p.codigoBarra));
 
-            // Mapear todos los productos y marcar cuáles ya están sincronizados
-            this.productosProveedorDisponibles = productosDisponibles.map(p => ({
+            // Combinar: primero los productos de nuestra DB, luego los disponibles no guardados
+            const productosGuardados = productosDB.map(p => ({
               ...p,
               seleccionado: false,
-              yaSincronizado: codigosActuales.has(p.barCode || p.codigoBarra)
+              yaSincronizado: true,
+              codigoBarra: p.codigoBarra,
+              nombre: p.nombre,
+              imagen: p.image || p.imagen
             }));
+
+            const productosNuevos = productosDisponibles
+              .filter(p => !codigosDB.has(p.barCode || p.codigoBarra))
+              .map(p => ({
+                ...p,
+                seleccionado: false,
+                yaSincronizado: false
+              }));
+
+            this.productosProveedorDisponibles = [...productosGuardados, ...productosNuevos];
             this.mostrarModalProductos = true;
             console.log(`Productos del proveedor ${proveedor.name}:`, this.productosProveedorDisponibles);
           },
           error: (error: any) => {
-            console.error('Error al cargar productos actuales:', error);
-            this._messageService.showError('Error al cargar los productos del proveedor.', 'Error al cargar');
+            console.error('Error al cargar productos disponibles:', error);
+            // Si falla cargar disponibles, mostrar solo los de nuestra DB
+            this.productosProveedorDisponibles = productosDB.map(p => ({
+              ...p,
+              seleccionado: false,
+              yaSincronizado: true
+            }));
+            this.mostrarModalProductos = true;
           }
         });
       },
       error: (error: any) => {
-        console.error('Error al cargar productos disponibles:', error);
+        console.error('Error al cargar productos de nuestra DB:', error);
         this._messageService.showError('Error al cargar los productos del proveedor.', 'Error al cargar');
       }
     });
