@@ -490,8 +490,8 @@ export class ProveedoresCardsComponent implements OnInit {
     this.modoAgregarProductos = true; // Modo agregar productos para proveedor existente
     const proveedorId = proveedor.id;
 
-    // Cargar productos guardados en nuestra DB (con toda la información incluyendo estados)
-    this._productosService.getByProveedor({ id: proveedorId, history: false }).subscribe({
+    // Cargar productos guardados en nuestra DB (con toda la información incluyendo estados y precios)
+    this._productosService.getByProveedor({ id: proveedorId, history: true }).subscribe({
       next: (productosDB: IProducto[]) => {
         // Cargar productos disponibles del proveedor
         this._proveedoresService.getProductosDisponibles({
