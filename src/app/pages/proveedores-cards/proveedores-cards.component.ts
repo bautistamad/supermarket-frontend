@@ -367,7 +367,39 @@ export class ProveedoresCardsComponent implements OnInit {
     this.mostrarModalProductos = false;
     this.productosProveedorDisponibles = [];
     this.seleccionarTodos = false;
+    this.modoAgregarProductos = false;
     this.proveedorPendienteEscala = null;
+  }
+
+  // Método: Desasignar producto de un proveedor
+  desasignarProducto(producto: IProducto, proveedorId: number): void {
+    if (!producto.codigoBarra) return;
+
+    if (confirm(`¿Estás seguro de que deseas desasignar "${producto.nombre}" de este proveedor?\n\nEsta acción no se puede deshacer.`)) {
+      this._productosService.removeFromProvider({
+        barCode: producto.codigoBarra,
+        idProveedor: proveedorId
+      }).subscribe({
+        next: () => {
+          console.log(`Producto ${producto.codigoBarra} desasignado del proveedor`);
+          this._messageService.showSuccess(
+            `"${producto.nombre}" ha sido desasignado exitosamente.`,
+            'Producto desasignado'
+          );
+          // Recargar productos del proveedor
+          if (this.proveedorSeleccionado) {
+            this.verProductosProveedor(this.proveedorSeleccionado);
+          }
+        },
+        error: (error: any) => {
+          console.error('Error al desasignar producto:', error);
+          this._messageService.showError(
+            'Error al desasignar el producto. Por favor, intenta nuevamente.',
+            'Error al desasignar'
+          );
+        }
+      });
+    }
   }
 
   sincronizarPrecios(proveedor: IProveedor): void {
@@ -444,24 +476,49 @@ export class ProveedoresCardsComponent implements OnInit {
     if (!proveedor.id) return;
 
     this.proveedorSeleccionado = proveedor;
-    this.mostrarProductos = true;
+    this.proveedorPendienteEscala = proveedor;
+    this.modoAgregarProductos = false;
+    const proveedorId = proveedor.id;
 
-    this._productosService.getByProveedor({ id: proveedor.id, history: true }).subscribe({
-      next: (productos: IProducto[]) => {
-        this.productosProveedor = productos;
-        console.log(`Productos del proveedor ${proveedor.name}:`, productos);
+    // Cargar productos disponibles del proveedor
+    this._proveedoresService.getProductosDisponibles({
+      id: proveedorId
+    }).subscribe({
+      next: (productosDisponibles: any[]) => {
+        // Cargar productos ya asociados
+        this._productosService.getByProveedor({ id: proveedorId, history: true }).subscribe({
+          next: (productosActuales: IProducto[]) => {
+            const codigosActuales = new Set(productosActuales.map(p => p.codigoBarra));
+
+            // Mapear todos los productos y marcar cuáles ya están sincronizados
+            this.productosProveedorDisponibles = productosDisponibles.map(p => ({
+              ...p,
+              seleccionado: false,
+              yaSincronizado: codigosActuales.has(p.barCode || p.codigoBarra)
+            }));
+            this.mostrarModalProductos = true;
+            console.log(`Productos del proveedor ${proveedor.name}:`, this.productosProveedorDisponibles);
+          },
+          error: (error: any) => {
+            console.error('Error al cargar productos actuales:', error);
+            this._messageService.showError('Error al cargar los productos del proveedor.', 'Error al cargar');
+          }
+        });
       },
       error: (error: any) => {
-        console.error('Error al cargar productos:', error);
+        console.error('Error al cargar productos disponibles:', error);
         this._messageService.showError('Error al cargar los productos del proveedor.', 'Error al cargar');
-        this.cerrarProductos();
       }
     });
   }
 
   cerrarProductos(): void {
-    this.mostrarProductos = false;
+    this.mostrarModalProductos = false;
+    this.productosProveedorDisponibles = [];
+    this.seleccionarTodos = false;
+    this.modoAgregarProductos = false;
     this.proveedorSeleccionado = null;
+    this.proveedorPendienteEscala = null;
     this.productosProveedor = [];
   }
 

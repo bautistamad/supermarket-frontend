@@ -174,11 +174,6 @@
                 <i class="bi bi-box-seam me-1"></i>
                 <ng-container i18n="View products button">Ver Productos</ng-container>
               </button>
-               <button class="btn btn-outline-info btn-sm"
-                  (click)="abrirModalAgregarProductos(proveedor)">
-                   <i class="bi bi-plus-circle me-1"></i>
-                    Agregar más productos
-                </button>
               <!-- <button
                 class="btn btn-outline-success btn-sm"
                 (click)="sincronizarPrecios(proveedor)">
@@ -200,65 +195,6 @@
       </div>
     </div>
 
-    <!-- Modal para mostrar productos del proveedor -->
-    <div *ngIf="mostrarProductos" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-      <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" i18n="Supplier products modal title">
-              <i class="bi bi-box-seam me-2"></i>
-              Productos de {{ proveedorSeleccionado?.name }}
-            </h5>
-            <button type="button" class="btn-close btn-close-white" (click)="cerrarProductos()"></button>
-          </div>
-          <div class="modal-body">
-            <div *ngIf="productosProveedor.length === 0" class="alert alert-info" i18n="No products for supplier message">
-              No hay productos asociados a este proveedor.
-            </div>
-            <div *ngIf="productosProveedor.length > 0" class="table-responsive">
-              <table class="table table-hover">
-                <thead class="table-light">
-                  <tr>
-                    <th i18n="Product code header">Código</th>
-                    <th i18n="Product name header">Nombre</th>
-                    <th i18n="Current price header">Precio Actual</th>
-                    <th i18n="Current stock header">Stock Actual</th>
-                    <th i18n="Min max stock header">Stock Mín/Máx</th>
-                    <th i18n="Status header">Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let producto of productosProveedor">
-                    <td><code>{{ producto.codigoBarra }}</code></td>
-                    <td>{{ producto.nombre }}</td>
-                    <td class="text-center">
-                      <span *ngIf="obtenerPrecioActual(producto)" class="badge bg-success">
-                        ${{ obtenerPrecioActual(producto) | number:'1.2-2' }}
-                      </span>
-                      <span *ngIf="!obtenerPrecioActual(producto)" class="text-muted">
-                        <small i18n="No price text">Sin precio</small>
-                      </span>
-                    </td>
-                    <td class="text-center">
-                      <span class="badge bg-info">{{ producto.actualStock }}</span>
-                    </td>
-                    <td class="text-center">
-                      <small class="text-muted">{{ producto.minStock }} / {{ producto.maxStock }}</small>
-                    </td>
-                    <td>
-                      <span class="badge bg-success">{{ producto.estadoNombre || 'N/A' }}</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="cerrarProductos()" i18n="Close modal button">Cerrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Modal para mapear escalas de calificación -->
     <div *ngIf="mostrarModalEscalas" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
@@ -330,16 +266,16 @@
       </div>
     </div>
 
-    <!-- Modal para sincronizar productos (obligatorio después de escalas) -->
+    <!-- Modal unificado para ver/gestionar productos del proveedor -->
     <div *ngIf="mostrarModalProductos" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-          <div class="modal-header bg-success text-white">
-            <h5 class="modal-title" i18n="Sync products modal title">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" i18n="Supplier products modal title">
               <i class="bi bi-box-seam me-2"></i>
-              {{ modoAgregarProductos ? 'Agregar más productos' : 'Sincronizar Productos' }} - {{ proveedorPendienteEscala?.name }}
+              Productos de {{ proveedorPendienteEscala?.name }}
             </h5>
-            <button type="button" class="btn-close btn-close-white" *ngIf="modoAgregarProductos" (click)="cerrarModalProductos()"></button>
+            <button type="button" class="btn-close btn-close-white" (click)="cerrarProductos()"></button>
           </div>
           <div class="modal-body">
             <div class="alert alert-info">
@@ -379,6 +315,7 @@
                     <th class="text-center" i18n="Price header">Precio</th>
                     <th class="text-center" i18n="Stock header">Stock</th>
                     <th class="text-center" i18n="Status header">Estado</th>
+                    <th class="text-center" style="width: 80px;" i18n="Actions header">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -398,13 +335,26 @@
                     </td>
                     <td>{{ producto.name || producto.nombre }}</td>
                     <td class="text-center">
-                      <span class="badge bg-success">${{ producto.price || producto.precio || 0 | number:'1.2-2' }}</span>
+                      <span *ngIf="obtenerPrecioActual(producto)" class="badge bg-success">
+                        ${{ obtenerPrecioActual(producto) | number:'1.2-2' }}
+                      </span>
+                      <span *ngIf="!obtenerPrecioActual(producto)" class="text-muted">
+                        <small i18n="No price text">Sin precio</small>
+                      </span>
                     </td>
                     <td class="text-center">
-                      <span class="badge bg-info">{{ producto.stock || producto.actualStock || 0 }}</span>
+                      <span class="badge bg-info">{{ producto.actualStock || producto.stock || 0 }}</span>
                     </td>
                     <td class="text-center">
                       <span class="badge bg-secondary">{{ producto.status || producto.estado || 'N/A' }}</span>
+                    </td>
+                    <td class="text-center">
+                      <button class="btn btn-sm btn-outline-danger"
+                              *ngIf="producto.yaSincronizado"
+                              (click)="desasignarProducto(producto, proveedorPendienteEscala?.id!)"
+                              [title]="'Desasignar ' + producto.nombre">
+                        <i class="bi bi-trash"></i>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -419,8 +369,15 @@
           <div class="modal-footer">
             <button
               type="button"
+              class="btn btn-secondary"
+              (click)="cerrarProductos()"
+              i18n="Close modal button">
+              Cerrar
+            </button>
+            <button
+              type="button"
               class="btn btn-success"
-              [disabled]="contarSeleccionados() === 0"
+              *ngIf="contarSeleccionados() > 0"
               (click)="sincronizarProductos()">
               <i class="bi bi-cloud-arrow-up me-2"></i>
               <ng-container i18n="Sync selected products button">Sincronizar Productos Seleccionados</ng-container>
