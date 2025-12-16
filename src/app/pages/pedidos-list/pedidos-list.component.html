@@ -128,13 +128,6 @@
                 <i class="bi bi-x-circle me-1"></i>
                 Cancelar Pedido
               </button>
-              <button
-                class="btn btn-warning btn-sm"
-                [disabled]="!puedeSerPuntuado(pedido)"
-                (click)="$event.stopPropagation(); puntuarPedido(pedido)">
-                <i class="bi bi-star me-1"></i>
-                Puntuar Pedido
-              </button>
               <div class="mt-2">
                 <small class="text-muted d-block" *ngIf="!puedeSerCancelado(pedido.estadoId) && !puedeSerPuntuado(pedido)">
                   <i class="bi bi-info-circle me-1"></i>
@@ -144,15 +137,38 @@
                   <i class="bi bi-info-circle me-1"></i>
                   Este pedido puede ser cancelado
                 </small>
-                <small class="text-muted d-block" *ngIf="puedeSerPuntuado(pedido)">
-                  <i class="bi bi-info-circle me-1"></i>
-                  Este pedido puede ser puntuado
-                </small>
-                <small class="text-muted d-block" *ngIf="pedido.estadoId === 4 && pedido.evaluacionEscala">
-                  <i class="bi bi-check-circle me-1 text-success"></i>
-                  Este pedido ya fue puntuado (Evaluación ID: {{ pedido.evaluacionEscala }})
-                </small>
               </div>
+            </div>
+          </div>
+
+          <!-- Opciones de puntuación (escalas del proveedor) -->
+          <div class="row mt-3" *ngIf="puedeSerPuntuado(pedido)">
+            <div class="col-12">
+              <h6 class="mb-2">
+                <i class="bi bi-star-fill me-1 text-warning"></i>
+                Seleccionar puntuación:
+              </h6>
+              <div class="d-flex flex-wrap gap-2">
+                <button
+                  *ngFor="let escala of getEscalasDelPedido(pedido)"
+                  class="btn btn-outline-warning btn-sm"
+                  (click)="$event.stopPropagation(); seleccionarEscalaYPuntuar(pedido, escala)"
+                  [title]="escala.descripcionExt || escala.escalaExt">
+                  <i class="bi bi-star-fill me-1"></i>
+                  {{ escala.escalaExt }}
+                  <span class="d-none d-sm-inline">- {{ escala.descripcionExt }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pedido ya puntuado -->
+          <div class="row mt-3" *ngIf="pedido.estadoId === 4 && pedido.evaluacionEscala">
+            <div class="col-12">
+              <small class="text-muted d-block">
+                <i class="bi bi-check-circle me-1 text-success"></i>
+                Este pedido ya fue puntuado (Evaluación ID: {{ pedido.evaluacionEscala }})
+              </small>
             </div>
           </div>
         </div>

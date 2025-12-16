@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { IPedido } from '../../api/models/i-pedido';
 import { IAutoGenerarResponse } from '../../api/models/i-auto-generar-response';
+import { IEscala } from '../../api/models/i-escala';
 import { PedidosResource } from '../../api/resources/pedidos-resource.service';
+import { EscalasResource } from '../../api/resources/escalas-resource.service';
 import { PEDIDO_ESTADOS, PEDIDO_ESTADOS_COLORES, PEDIDO_ESTADOS_NOMBRES } from '../../api/models/pedido-estados';
 import { AppMessageService } from '../../core/services/app-message.service';
 
@@ -30,8 +32,12 @@ export class PedidosListComponent implements OnInit {
   pedidosFiltrados: IPedido[] = [];
   generandoPedido: boolean = false;
 
+  // Mapas para almacenar escalas de proveedores: proveedorId -> Array de escalas
+  escalasPorProveedor: Map<number, IEscala[]> = new Map();
+
   constructor(
     private _pedidosService: PedidosResource,
+    private _escalasService: EscalasResource,
     private _messageService: AppMessageService
   ) {}
 
@@ -50,9 +56,32 @@ export class PedidosListComponent implements OnInit {
           console.log(`Pedido ${index + 1} - ID: ${pedido.id}, Productos:`, pedido.productos);
           console.log(`  - Cantidad de productos: ${pedido.productos?.length || 0}`);
         });
+
+        // Cargar escalas para todos los proveedores únicos
+        this.cargarEscalasDeProveedores(pedidos);
       },
       error: (error: any) => {
         console.error('Error al cargar pedidos:', error);
+      }
+    });
+  }
+
+  cargarEscalasDeProveedores(pedidos: IPedido[]): void {
+    // Obtener proveedores únicos
+    const proveedoresUnicos = new Set(pedidos.map(p => p.proveedorId));
+
+    // Cargar escalas para cada proveedor
+    proveedoresUnicos.forEach(proveedorId => {
+      if (!this.escalasPorProveedor.has(proveedorId)) {
+        this._escalasService.getAll({ proveedorId }).subscribe({
+          next: (escalas: IEscala[]) => {
+            this.escalasPorProveedor.set(proveedorId, escalas);
+            console.log(`Escalas cargadas para proveedor ${proveedorId}:`, escalas);
+          },
+          error: (error: any) => {
+            console.error(`Error al cargar escalas del proveedor ${proveedorId}:`, error);
+          }
+        });
       }
     });
   }
@@ -106,11 +135,64 @@ export class PedidosListComponent implements OnInit {
   }
 
   puedeSerPuntuado(pedido: IPedido): boolean {
-    // Solo pedidos entregados pueden ser puntuados y que no hayan sido evaluados antes
-    // Verificamos evaluacionEscala porque el backend guarda la evaluación allí, no en puntuacion
     return pedido.estadoId === PEDIDO_ESTADOS.ENTREGADO &&
            !pedido.evaluacionEscala &&
            pedido.evaluacionEscala !== 0;
+  }
+
+  // Obtener escalas del proveedor de un pedido específico
+  getEscalasDelPedido(pedido: IPedido): IEscala[] {
+    return this.escalasPorProveedor.get(pedido.proveedorId) || [];
+  }
+
+  // Seleccionar una escala y enviar la puntuación
+  seleccionarEscalaYPuntuar(pedido: IPedido, escala: IEscala): void {
+    if (pedido.id === undefined || pedido.id === null) return;
+
+    // Verificar que la escala tenga un valor interno mapeado
+    if (escala.escalaInt === null || escala.escalaInt === undefined) {
+      this._messageService.showError(
+        'Esta escala no tiene un valor interno mapeado. Contacta al administrador.',
+        'Escala no configurada'
+      );
+      return;
+    }
+
+    // Enviar la puntuación usando el valor interno mapeado
+    const rating = escala.escalaInt;
+
+    this._pedidosService.rate({ id: pedido.id, rating }).subscribe({
+      next: (pedidoActualizado: IPedido) => {
+        // Actualizar el pedido en la lista local
+        const index = this.pedidos.findIndex(p => p.id === pedido.id);
+        if (index !== -1) {
+          this.pedidos[index] = pedidoActualizado;
+        }
+
+        // Actualizar también en la lista filtrada
+        const indexFiltrado = this.pedidosFiltrados.findIndex(p => p.id === pedido.id);
+        if (indexFiltrado !== -1) {
+          this.pedidosFiltrados[indexFiltrado] = pedidoActualizado;
+        }
+
+        this._messageService.showSuccess(
+          `Pedido #${pedido.id} puntuado exitosamente con: ${escala.descripcionExt || escala.escalaExt}.<br>Evaluación registrada (ID: ${pedidoActualizado.evaluacionEscala})`,
+          'Puntuación registrada'
+        );
+      },
+      error: (error: any) => {
+        console.error('Error al puntuar pedido:', error);
+        let errorMsg = 'Error al puntuar el pedido.';
+
+        if (error.status === 400) {
+          errorMsg = 'El pedido no puede ser puntuado. Verifique que esté en estado Entregado.';
+        } else if (error.status === 404) {
+          errorMsg = 'No se encontró el mapeo de escala para este proveedor.';
+        }
+
+        this._messageService.showError(errorMsg, 'Error al puntuar');
+      }
+    });
   }
 
   puntuarPedido(pedido: IPedido): void {

@@ -23,6 +23,12 @@ export class EscalasResource extends Resource {
   }
 
   @ResourceAction({
+    path: '/escalas/proveedor/{!proveedorId}',
+    method: ResourceRequestMethod.Get
+  })
+  getAll!: IResourceMethodObservable<{ proveedorId: number }, IEscala[]>
+
+  @ResourceAction({
     path: '/escalas/proveedor/{!proveedorId}/unmapped',
     method: ResourceRequestMethod.Get
   })
