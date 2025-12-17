@@ -223,16 +223,16 @@
               <table class="table table-bordered">
                 <thead class="table-light">
                   <tr>
-                    <th style="width: 40%" i18n="Supplier scale header">Escala del Proveedor</th>
-                    <th style="width: 40%" i18n="Description header">Descripción</th>
+                    <!-- <th style="width: 40%" i18n="Supplier scale header">Escala del Proveedor</th> -->
+                    <th style="width: 40%" i18n="Description header">Escala Proveedor</th>
                     <th style="width: 20%" class="text-center" i18n="Internal value header">Valor Interno (1-5)</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let escala of escalasParaMapear; let i = index">
-                    <td>
+                    <!-- <td>
                       <strong>{{ escala.escalaExt }}</strong>
-                    </td>
+                    </td> -->
                     <td>
                       <small class="text-muted">{{ escala.descripcionExt || 'Sin descripción' }}</small>
                     </td>

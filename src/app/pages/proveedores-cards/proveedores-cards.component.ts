@@ -237,7 +237,6 @@ export class ProveedoresCardsComponent implements OnInit {
     this._escalasService.saveMappings(this.escalasParaMapear).subscribe({
       next: (escalasGuardadas: IEscala[]) => {
         console.log('Escalas mapeadas:', escalasGuardadas);
-        this._messageService.showSuccess('Escalas actualizadas exitosamente.', 'Escalas guardadas');
         this.cerrarModalEscalas();
 
         // Si estamos en modo agregar productos (nuevo proveedor), abrir modal de productos
