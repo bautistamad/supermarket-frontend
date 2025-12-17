@@ -95,9 +95,7 @@
   </div>
 </div>
 
-<!-- Modal para crear/editar producto - DESHABILITADO
-Modal deshabilitado: Ya no se puede crear productos desde esta interfaz.
-El modal se mantiene en el código por si es necesario habilitarlo en el futuro.
+<!-- Modal para crear/editar producto -->
 <div class="modal" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -222,9 +220,8 @@ El modal se mantiene en el código por si es necesario habilitarlo en el futuro.
   </div>
 </div>
 
-Backdrop del modal
+<!-- Backdrop del modal -->
 <div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal"></div>
--->
 
 <!-- Modal para asignar producto a proveedor -->
 
