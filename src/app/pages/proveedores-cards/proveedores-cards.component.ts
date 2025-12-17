@@ -187,6 +187,36 @@ export class ProveedoresCardsComponent implements OnInit {
     });
   }
 
+  // Método: Editar escalas mapeadas de un proveedor existente
+  editarEscalasProveedor(proveedor: IProveedor): void {
+    if (!proveedor.id) return;
+
+    this.proveedorPendienteEscala = proveedor;
+
+    // Cargar todas las escalas del proveedor (mapeadas)
+    this._escalasService.getAll({ proveedorId: proveedor.id }).subscribe({
+      next: (escalas: IEscala[]) => {
+        if (escalas.length > 0) {
+          // Las escalas ya vienen con sus valores mapeados (escalaInt)
+          this.escalasParaMapear = escalas.map(e => ({ ...e }));
+          this.mostrarModalEscalas = true;
+        } else {
+          this._messageService.showInfo(
+            'Este proveedor aún no tiene escalas configuradas.',
+            'Sin escalas'
+          );
+        }
+      },
+      error: (error: any) => {
+        console.error('Error al cargar escalas del proveedor:', error);
+        this._messageService.showError(
+          'Error al cargar las escalas del proveedor.',
+          'Error al cargar'
+        );
+      }
+    });
+  }
+
   guardarMapeosEscalas(): void {
     // Validar que todas las escalas tengan un valor asignado
     const escalasSinMapear = this.escalasParaMapear.filter(e => e.escalaInt === null || e.escalaInt === undefined);
@@ -207,9 +237,17 @@ export class ProveedoresCardsComponent implements OnInit {
     this._escalasService.saveMappings(this.escalasParaMapear).subscribe({
       next: (escalasGuardadas: IEscala[]) => {
         console.log('Escalas mapeadas:', escalasGuardadas);
+        this._messageService.showSuccess('Escalas actualizadas exitosamente.', 'Escalas guardadas');
         this.cerrarModalEscalas();
-        // Después de mapear las escalas, abrir modal de productos (obligatorio)
-        this.abrirModalProductos();
+
+        // Si estamos en modo agregar productos (nuevo proveedor), abrir modal de productos
+        // Si no, simplemente cerrar la modal
+        if (this.modoAgregarProductos === false) {
+          this.abrirModalProductos();
+        } else {
+          // Recargar proveedores para reflejar cambios
+          this.cargarProveedores();
+        }
       },
       error: (error: any) => {
         console.error('Error al guardar escalas:', error);

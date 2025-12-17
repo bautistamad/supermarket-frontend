@@ -29,6 +29,7 @@ export class PedidosListComponent implements OnInit {
   pedidos: IPedido[] = [];
   pedidoExpandido: number | null = null;
   estadoSeleccionado: number | null = null;
+  proveedorSeleccionado: number | null = null; // Nuevo: filtro de proveedor
   pedidosFiltrados: IPedido[] = [];
   generandoPedido: boolean = false;
 
@@ -267,11 +268,41 @@ export class PedidosListComponent implements OnInit {
   }
 
   filtrarPorEstado(): void {
-    if (this.estadoSeleccionado === null) {
-      this.pedidosFiltrados = this.pedidos;
-    } else {
-      this.pedidosFiltrados = this.pedidos.filter(p => p.estadoId === this.estadoSeleccionado);
+    this.aplicarFiltros();
+  }
+
+  filtrarPorProveedor(): void {
+    this.aplicarFiltros();
+  }
+
+  // Método que aplica ambos filtros (estado y proveedor)
+  private aplicarFiltros(): void {
+    let filtrados = this.pedidos;
+
+    // Filtrar por estado si está seleccionado
+    if (this.estadoSeleccionado !== null) {
+      filtrados = filtrados.filter(p => p.estadoId === this.estadoSeleccionado);
     }
+
+    // Filtrar por proveedor si está seleccionado
+    if (this.proveedorSeleccionado !== null) {
+      filtrados = filtrados.filter(p => p.proveedorId === this.proveedorSeleccionado);
+    }
+
+    this.pedidosFiltrados = filtrados;
+  }
+
+  // Obtener lista de proveedores únicos de los pedidos
+  getProveedores(): { id: number, nombre: string }[] {
+    const proveedoresMap = new Map<number, string>();
+
+    this.pedidos.forEach(pedido => {
+      if (pedido.proveedorId && pedido.proveedorNombre && !proveedoresMap.has(pedido.proveedorId)) {
+        proveedoresMap.set(pedido.proveedorId, pedido.proveedorNombre);
+      }
+    });
+
+    return Array.from(proveedoresMap.entries()).map(([id, nombre]) => ({ id, nombre }));
   }
 
   generarPedidoAutomatico(): void {
@@ -284,11 +315,14 @@ export class PedidosListComponent implements OnInit {
         next: (resultado: IAutoGenerarResponse) => {
           this.generandoPedido = false;
 
-          if (resultado.pedidoId == null){
-            let mensaje = `<strong>¡${resultado.mensaje}!</strong><br><br>`;
-            this._messageService.showError(mensaje, 'No es necesario realizar un pedido');
+          // Si no hay pedido ID, mostrar mensaje de información (no error)
+          if (resultado.pedidoId == null) {
+            let mensaje = `<strong>${resultado.mensaje}</strong><br><br>`;
+            this._messageService.showInfo(mensaje, 'Información');
+            return;
           }
 
+          // Si hay pedido ID y fue exitoso, mostrar éxito
           if (resultado.exito && resultado.pedidoId != null) {
             let mensaje = `<strong>¡Pedido generado exitosamente!</strong><br><br>`;
             mensaje += `<strong>Pedido #${resultado.pedidoId}</strong><br>`;
