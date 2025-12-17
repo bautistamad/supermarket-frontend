@@ -24,7 +24,7 @@ export class ProveedoresCardsComponent implements OnInit {
   escalasParaMapear: IEscala[] = [];
   proveedorPendienteEscala: IProveedor | null = null;
 
-  // Nuevas propiedades para modal de sincronización de productos
+  //propiedades para modal de sincronización de productos
   mostrarModalProductos: boolean = false;
   productosProveedorDisponibles: any[] = [];
   seleccionarTodos: boolean = false;
@@ -197,7 +197,6 @@ export class ProveedoresCardsComponent implements OnInit {
     this._escalasService.getAll({ proveedorId: proveedor.id }).subscribe({
       next: (escalas: IEscala[]) => {
         if (escalas.length > 0) {
-          // Las escalas ya vienen con sus valores mapeados (escalaInt)
           this.escalasParaMapear = escalas.map(e => ({ ...e }));
           this.mostrarModalEscalas = true;
         } else {
@@ -226,13 +225,6 @@ export class ProveedoresCardsComponent implements OnInit {
       return;
     }
 
-    // Validar que los valores estén entre 1 y 5
-    const escalasInvalidas = this.escalasParaMapear.filter(e => e.escalaInt! < 1 || e.escalaInt! > 5);
-
-    if (escalasInvalidas.length > 0) {
-      this._messageService.showInfo('Los valores de escala deben estar entre 1 y 5.', 'Valores inválidos');
-      return;
-    }
 
     this._escalasService.saveMappings(this.escalasParaMapear).subscribe({
       next: (escalasGuardadas: IEscala[]) => {
@@ -261,11 +253,11 @@ export class ProveedoresCardsComponent implements OnInit {
     // No limpiamos proveedorPendienteEscala aquí porque lo necesitamos para el modal de productos
   }
 
-  // Nuevo método: Abrir modal de productos (llamado después de guardar escalas - primera vez)
+  // Abrir modal de productos (llamado después de guardar escalas - primera vez)
   abrirModalProductos(): void {
     if (!this.proveedorPendienteEscala?.id) return;
 
-    // Primera apertura: solo mostrar productos disponibles (sin estados)
+    // solo mostrar productos disponibles (sin estados)
     this._proveedoresService.getProductosDisponibles({
       id: this.proveedorPendienteEscala.id
     }).subscribe({
@@ -365,13 +357,12 @@ export class ProveedoresCardsComponent implements OnInit {
     console.log('Productos seleccionados:', seleccionados);
     console.log('Tipo de seleccionados:', Array.isArray(seleccionados), seleccionados.length);
 
-    // Crear objeto con método toJSON personalizado para controlar la serialización
     const payload = {
       id: this.proveedorPendienteEscala!.id!,
       codigosBarraProveedor: seleccionados,
-      // Este método se llama automáticamente al serializar a JSON
+    
       toJSON() {
-        // Solo enviar codigosBarraProveedor en el body (no el id)
+        
         return { codigosBarraProveedor: this.codigosBarraProveedor };
       }
     };
@@ -449,26 +440,26 @@ export class ProveedoresCardsComponent implements OnInit {
     }
   }
 
-  sincronizarPrecios(proveedor: IProveedor): void {
-    if (!proveedor.id) return;
+  // sincronizarPrecios(proveedor: IProveedor): void {
+  //   if (!proveedor.id) return;
 
-    if (confirm(`¿Deseas sincronizar los precios del proveedor ${proveedor.name}?`)) {
-      this._proveedoresService.syncPrecios({ id: proveedor.id }).subscribe({
-        next: (resultado) => {
-          console.log('Sincronización exitosa:', resultado);
-          const mensaje = `Sincronización completada:<br>
-            - Precios creados: ${resultado.pricesCreated}<br>
-            - Precios actualizados: ${resultado.pricesUpdated}<br>
-            - Errores: ${resultado.errors}`;
-          this._messageService.showSuccess(mensaje, 'Sincronización exitosa');
-        },
-        error: (error: any) => {
-          console.error('Error al sincronizar precios:', error);
-          this._messageService.showError('Error al sincronizar precios. Por favor, intenta nuevamente.', 'Error al sincronizar');
-        }
-      });
-    }
-  }
+  //   if (confirm(`¿Deseas sincronizar los precios del proveedor ${proveedor.name}?`)) {
+  //     this._proveedoresService.syncPrecios({ id: proveedor.id }).subscribe({
+  //       next: (resultado) => {
+  //         console.log('Sincronización exitosa:', resultado);
+  //         const mensaje = `Sincronización completada:<br>
+  //           - Precios creados: ${resultado.pricesCreated}<br>
+  //           - Precios actualizados: ${resultado.pricesUpdated}<br>
+  //           - Errores: ${resultado.errors}`;
+  //         this._messageService.showSuccess(mensaje, 'Sincronización exitosa');
+  //       },
+  //       error: (error: any) => {
+  //         console.error('Error al sincronizar precios:', error);
+  //         this._messageService.showError('Error al sincronizar precios. Por favor, intenta nuevamente.', 'Error al sincronizar');
+  //       }
+  //     });
+  //   }
+  // }
 
   eliminarProveedor(proveedor: IProveedor): void {
     if (!proveedor.id) return;
@@ -592,7 +583,6 @@ export class ProveedoresCardsComponent implements OnInit {
     if (!producto.precios || producto.precios.length === 0) {
       return null;
     }
-    // El precio actual es el que tiene fechaFin = null
     const precioActual = producto.precios.find(p => p.fechaFin === null);
     return precioActual ? precioActual.precio : null;
   }
@@ -601,7 +591,7 @@ export class ProveedoresCardsComponent implements OnInit {
     if (!rating || rating === null || rating === undefined) {
       return 'Sin evaluaciones';
     }
-    // Convertir a número por si viene como string
+    
     const ratingNumero = typeof rating === 'number' ? rating : parseFloat(String(rating));
 
     if (isNaN(ratingNumero)) {

@@ -54,7 +54,7 @@ export class ProductosList implements OnInit {
     }, { validators: this.stockValidator });
   }
 
-  // Validador personalizado para verificar que maxStock > minStock
+  // Validador  para verificar que maxStock > minStock
   private stockValidator(group: FormGroup): {[key: string]: boolean} | null {
     const minStock = group.get('minStock')?.value;
     const maxStock = group.get('maxStock')?.value;
@@ -73,11 +73,11 @@ export class ProductosList implements OnInit {
     });
   }
 
-  abrirModalCrear(): void {
-    this.modoEdicion = false;
-    this.showModal = true;
-    this.resetForm();
-  }
+  // abrirModalCrear(): void {
+  //   this.modoEdicion = false;
+  //   this.showModal = true;
+  //   this.resetForm();
+  // }
 
   abrirModalEditar(producto: IProducto): void {
     this.modoEdicion = true;
@@ -115,32 +115,32 @@ export class ProductosList implements OnInit {
     if (this.modoEdicion) {
       this.actualizarProducto();
     } else {
-      this.crearProducto();
+      // this.crearProducto();
     }
   }
 
-  crearProducto(): void {
-    if (this.productoForm.invalid) {
-      this.productoForm.markAllAsTouched();
-      this._messageService.showInfo('Por favor completa todos los campos correctamente.', 'Formulario incompleto');
-      return;
-    }
+  // crearProducto(): void {
+  //   if (this.productoForm.invalid) {
+  //     this.productoForm.markAllAsTouched();
+  //     this._messageService.showInfo('Por favor completa todos los campos correctamente.', 'Formulario incompleto');
+  //     return;
+  //   }
 
-    const nuevoProducto: IProducto = this.productoForm.value;
+  //   const nuevoProducto: IProducto = this.productoForm.value;
 
-    this._productosService.create(nuevoProducto).subscribe({
-      next: (producto: IProducto) => {
-        console.log('Producto creado exitosamente:', producto);
-        this._messageService.showSuccess(`Producto "${producto.nombre}" creado exitosamente`, 'Producto creado');
-        this.cerrarModal();
-        this.cargarProductos();
-      },
-      error: (error: any) => {
-        console.error('Error al crear producto:', error);
-        this._messageService.showError('Error al crear el producto. Verifica los datos e intenta nuevamente.', 'Error al crear');
-      }
-    });
-  }
+  //   this._productosService.create(nuevoProducto).subscribe({
+  //     next: (producto: IProducto) => {
+  //       console.log('Producto creado exitosamente:', producto);
+  //       this._messageService.showSuccess(`Producto "${producto.nombre}" creado exitosamente`, 'Producto creado');
+  //       this.cerrarModal();
+  //       this.cargarProductos();
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Error al crear producto:', error);
+  //       this._messageService.showError('Error al crear el producto. Verifica los datos e intenta nuevamente.', 'Error al crear');
+  //     }
+  //   });
+  // }
 
   actualizarProducto(): void {
     if (this.productoForm.invalid) {
@@ -249,50 +249,50 @@ export class ProductosList implements OnInit {
     this.productoSeleccionado = null;
   }
 
-  onProveedorChange(): void {
-    if (!this.proveedorSeleccionado) {
-      this.productosProveedor = [];
-      this.productoSeleccionado = null;
-      return;
-    }
+  // onProveedorChange(): void {
+  //   if (!this.proveedorSeleccionado) {
+  //     this.productosProveedor = [];
+  //     this.productoSeleccionado = null;
+  //     return;
+  //   }
 
-    this.productoSeleccionado = null;
+  //   this.productoSeleccionado = null;
 
-    this._proveedoresService.getProductosDisponibles({ id: this.proveedorSeleccionado }).subscribe({
-      next: (productos: any[]) => {
-        this.productosProveedor = productos;
-        console.log('Productos del proveedor:', productos);
-      },
-      error: (error: any) => {
-        console.error('Error al cargar productos del proveedor:', error);
-        this._messageService.showError('Error al cargar productos del proveedor. Verifica que el proveedor esté configurado correctamente.', 'Error al cargar');
-        this.productosProveedor = [];
-      }
-    });
-  }
+  //   this._proveedoresService.getProductosDisponibles({ id: this.proveedorSeleccionado }).subscribe({
+  //     next: (productos: any[]) => {
+  //       this.productosProveedor = productos;
+  //       console.log('Productos del proveedor:', productos);
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Error al cargar productos del proveedor:', error);
+  //       this._messageService.showError('Error al cargar productos del proveedor. Verifica que el proveedor esté configurado correctamente.', 'Error al cargar');
+  //       this.productosProveedor = [];
+  //     }
+  //   });
+  // }
 
-  asignarProductoAProveedor(): void {
-    if (!this.productoActual || !this.proveedorSeleccionado || !this.productoSeleccionado) {
-      this._messageService.showInfo('Debes seleccionar un proveedor y un producto del proveedor', 'Selección incompleta');
-      return;
-    }
+  // asignarProductoAProveedor(): void {
+  //   if (!this.productoActual || !this.proveedorSeleccionado || !this.productoSeleccionado) {
+  //     this._messageService.showInfo('Debes seleccionar un proveedor y un producto del proveedor', 'Selección incompleta');
+  //     return;
+  //   }
 
-    const requestData = {
-      barCode: this.productoActual.codigoBarra,
-      idProveedor: this.proveedorSeleccionado,
-      codigoBarraProveedor: this.productoSeleccionado.barCode || this.productoSeleccionado.codigoBarra
-    };
+  //   const requestData = {
+  //     barCode: this.productoActual.codigoBarra,
+  //     idProveedor: this.proveedorSeleccionado,
+  //     codigoBarraProveedor: this.productoSeleccionado.barCode || this.productoSeleccionado.codigoBarra
+  //   };
 
-    this._productosService.assignToProvider(requestData).subscribe({
-      next: () => {
-        this._messageService.showSuccess(`Producto "${this.productoActual!.nombre}" asignado exitosamente al proveedor`, 'Producto asignado');
-        this.cerrarModalAsignacion();
-        this.cargarProductos();
-      },
-      error: (error: any) => {
-        console.error('Error al asignar producto al proveedor:', error);
-        this._messageService.showError('Error al asignar el producto al proveedor. Verifica que los datos sean correctos.', 'Error al asignar');
-      }
-    });
-  }
+  //   this._productosService.assignToProvider(requestData).subscribe({
+  //     next: () => {
+  //       this._messageService.showSuccess(`Producto "${this.productoActual!.nombre}" asignado exitosamente al proveedor`, 'Producto asignado');
+  //       this.cerrarModalAsignacion();
+  //       this.cargarProductos();
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Error al asignar producto al proveedor:', error);
+  //       this._messageService.showError('Error al asignar el producto al proveedor. Verifica que los datos sean correctos.', 'Error al asignar');
+  //     }
+  //   });
+  // }
 }

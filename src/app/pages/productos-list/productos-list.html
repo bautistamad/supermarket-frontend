@@ -1,10 +1,12 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 i18n="Products page title">Lista de Productos</h2>
-    <!-- <button class="btn btn-primary" (click)="abrirModalCrear()">
+    <!-- Botón crear producto deshabilitado - Ya no se puede crear productos desde esta interfaz
+    <button class="btn btn-primary" (click)="abrirModalCrear()">
       <i class="bi bi-plus-circle me-2"></i>
       <ng-container i18n="Create product button">Crear Producto</ng-container>
-    </button> -->
+    </button>
+    -->
   </div>
 
   <!-- Mensaje si no hay productos -->
@@ -24,9 +26,11 @@
               {{ producto.nombre }}
             </h5>
             <div>
-              <!-- <button class="btn btn-sm btn-info me-1" (click)="abrirModalAsignacion(producto)" i18n-title="Assign to supplier button title" title="Asignar a Proveedor">
+              <!-- Botón asignar a proveedor deshabilitado - Ya no es necesario
+              <button class="btn btn-sm btn-info me-1" (click)="abrirModalAsignacion(producto)" i18n-title="Assign to supplier button title" title="Asignar a Proveedor">
                 <i class="bi bi-link-45deg"></i>
-              </button> -->
+              </button>
+              -->
               <button class="btn btn-sm btn-light me-1" (click)="abrirModalEditar(producto)" i18n-title="Edit button title" title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
@@ -91,7 +95,9 @@
   </div>
 </div>
 
-<!-- Modal para crear/editar producto -->
+<!-- Modal para crear/editar producto - DESHABILITADO
+Modal deshabilitado: Ya no se puede crear productos desde esta interfaz.
+El modal se mantiene en el código por si es necesario habilitarlo en el futuro.
 <div class="modal" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -216,8 +222,9 @@
   </div>
 </div>
 
-<!-- Backdrop del modal -->
+Backdrop del modal
 <div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal"></div>
+-->
 
 <!-- Modal para asignar producto a proveedor -->
 

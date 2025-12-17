@@ -8,7 +8,7 @@ import {
   ResourceRequestMethod
 } from '@ngx-resource/core';
 import { IPedido } from '../models/i-pedido';
-import { IAutoGenerarResponse } from '../models/i-auto-generar-response';
+// import { IAutoGenerarResponse } from '../models/i-auto-generar-response';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
@@ -65,9 +65,9 @@ export class PedidosResource extends Resource {
   })
   rate!: IResourceMethodObservable<{ id: number, rating: number }, IPedido>
 
-  @ResourceAction({
-    path: '/pedidos/auto-generar',
-    method: ResourceRequestMethod.Post
-  })
-  autoGenerar!: IResourceMethodObservable<void, IAutoGenerarResponse>
+  // @ResourceAction({
+  //   path: '/pedidos/auto-generar',
+  //   method: ResourceRequestMethod.Post
+  // })
+  // autoGenerar!: IResourceMethodObservable<void, IAutoGenerarResponse>
 }

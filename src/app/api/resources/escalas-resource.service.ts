@@ -34,11 +34,11 @@ export class EscalasResource extends Resource {
   })
   getUnmapped!: IResourceMethodObservable<{ proveedorId: number }, IEscala[]>
 
-  @ResourceAction({
-    path: '/escalas/proveedor/{!proveedorId}/status',
-    method: ResourceRequestMethod.Get
-  })
-  getStatus!: IResourceMethodObservable<{ proveedorId: number }, { proveedorId: number, totalScales: number, mappedScales: number, unmappedScales: number, allMapped: boolean }>
+  // @ResourceAction({
+  //   path: '/escalas/proveedor/{!proveedorId}/status',
+  //   method: ResourceRequestMethod.Get
+  // })
+  // getStatus!: IResourceMethodObservable<{ proveedorId: number }, { proveedorId: number, totalScales: number, mappedScales: number, unmappedScales: number, allMapped: boolean }>
 
   @ResourceAction({
     path: '/escalas',

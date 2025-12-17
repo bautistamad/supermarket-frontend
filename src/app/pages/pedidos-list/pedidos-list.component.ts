@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { IPedido } from '../../api/models/i-pedido';
-import { IAutoGenerarResponse } from '../../api/models/i-auto-generar-response';
+// import { IAutoGenerarResponse } from '../../api/models/i-auto-generar-response';
 import { IEscala } from '../../api/models/i-escala';
 import { PedidosResource } from '../../api/resources/pedidos-resource.service';
 import { EscalasResource } from '../../api/resources/escalas-resource.service';
@@ -196,66 +196,6 @@ export class PedidosListComponent implements OnInit {
     });
   }
 
-  puntuarPedido(pedido: IPedido): void {
-    if (pedido.id === undefined || pedido.id === null) return;
-
-    // Verificar nuevamente si puede ser puntuado
-    if (!this.puedeSerPuntuado(pedido)) {
-      this._messageService.showError('Este pedido ya fue puntuado o no está en estado Entregado.', 'No se puede puntuar');
-      return;
-    }
-
-    // Solicitar puntuación al usuario (1-5)
-    const ratingStr = prompt(`Puntuar pedido #${pedido.id}\n\nIngrese una puntuación del 1 al 5:`);
-
-    if (ratingStr === null) {
-      // Usuario canceló
-      return;
-    }
-
-    const rating = parseInt(ratingStr, 10);
-
-    // Validar que sea un número entre 1 y 5
-    if (isNaN(rating) || rating < 1 || rating > 5) {
-      this._messageService.showError('Por favor ingrese un número válido entre 1 y 5.', 'Valor inválido');
-      return;
-    }
-
-    // Enviar puntuación al backend
-    this._pedidosService.rate({ id: pedido.id, rating }).subscribe({
-      next: (pedidoActualizado: IPedido) => {
-        // Actualizar el pedido en la lista local
-        const index = this.pedidos.findIndex(p => p.id === pedido.id);
-        if (index !== -1) {
-          this.pedidos[index] = pedidoActualizado;
-        }
-
-        // Actualizar también en la lista filtrada
-        const indexFiltrado = this.pedidosFiltrados.findIndex(p => p.id === pedido.id);
-        if (indexFiltrado !== -1) {
-          this.pedidosFiltrados[indexFiltrado] = pedidoActualizado;
-        }
-
-        this._messageService.showSuccess(
-          `Pedido #${pedido.id} puntuado exitosamente con ${rating} estrellas.<br>Evaluación registrada (ID: ${pedidoActualizado.evaluacionEscala})`,
-          'Puntuación registrada'
-        );
-      },
-      error: (error: any) => {
-        console.error('Error al puntuar pedido:', error);
-        let errorMsg = 'Error al puntuar el pedido.';
-
-        if (error.status === 400) {
-          errorMsg = 'El pedido no puede ser puntuado. Verifique que esté en estado Entregado.';
-        } else if (error.status === 404) {
-          errorMsg = 'No se encontró el mapeo de escala para este proveedor.';
-        }
-
-        this._messageService.showError(errorMsg, 'Error al puntuar');
-      }
-    });
-  }
-
   getEstados(): { id: number, nombre: string }[] {
     // Retornar todos los estados posibles, no solo los que tienen pedidos
     return [
@@ -305,56 +245,56 @@ export class PedidosListComponent implements OnInit {
     return Array.from(proveedoresMap.entries()).map(([id, nombre]) => ({ id, nombre }));
   }
 
-  generarPedidoAutomatico(): void {
-    if (this.generandoPedido) return;
+  // generarPedidoAutomatico(): void {
+  //   if (this.generandoPedido) return;
 
-    if (confirm('¿Deseas generar automáticamente un pedido para productos con stock bajo?\n\nEl sistema seleccionará el proveedor más conveniente.')) {
-      this.generandoPedido = true;
+  //   if (confirm('¿Deseas generar automáticamente un pedido para productos con stock bajo?\n\nEl sistema seleccionará el proveedor más conveniente.')) {
+  //     this.generandoPedido = true;
 
-      this._pedidosService.autoGenerar().subscribe({
-        next: (resultado: IAutoGenerarResponse) => {
-          this.generandoPedido = false;
+  //     this._pedidosService.autoGenerar().subscribe({
+  //       next: (resultado: IAutoGenerarResponse) => {
+  //         this.generandoPedido = false;
 
-          // Si no hay pedido ID, mostrar mensaje de información (no error)
-          if (resultado.pedidoId == null) {
-            let mensaje = `<strong>${resultado.mensaje}</strong><br><br>`;
-            this._messageService.showInfo(mensaje, 'Información');
-            return;
-          }
+  //         // Si no hay pedido ID, mostrar mensaje de información (no error)
+  //         if (resultado.pedidoId == null) {
+  //           let mensaje = `<strong>${resultado.mensaje}</strong><br><br>`;
+  //           this._messageService.showInfo(mensaje, 'Información');
+  //           return;
+  //         }
 
-          // Si hay pedido ID y fue exitoso, mostrar éxito
-          if (resultado.exito && resultado.pedidoId != null) {
-            let mensaje = `<strong>¡Pedido generado exitosamente!</strong><br><br>`;
-            mensaje += `<strong>Pedido #${resultado.pedidoId}</strong><br>`;
-            mensaje += `Proveedor: ${resultado.proveedorSeleccionado}<br>`;
-            mensaje += `Productos ordenados: ${resultado.productosOrdenados}<br>`;
-            mensaje += `Costo total: $${resultado.costoTotal?.toFixed(2)}<br>`;
+  //         // Si hay pedido ID y fue exitoso, mostrar éxito
+  //         if (resultado.exito && resultado.pedidoId != null) {
+  //           let mensaje = `<strong>¡Pedido generado exitosamente!</strong><br><br>`;
+  //           mensaje += `<strong>Pedido #${resultado.pedidoId}</strong><br>`;
+  //           mensaje += `Proveedor: ${resultado.proveedorSeleccionado}<br>`;
+  //           mensaje += `Productos ordenados: ${resultado.productosOrdenados}<br>`;
+  //           mensaje += `Costo total: $${resultado.costoTotal?.toFixed(2)}<br>`;
 
-            if (resultado.ratingProveedor) {
-              mensaje += `Rating del proveedor: ${resultado.ratingProveedor.toFixed(2)}/5`;
-            }
+  //           if (resultado.ratingProveedor) {
+  //             mensaje += `Rating del proveedor: ${resultado.ratingProveedor.toFixed(2)}/5`;
+  //           }
 
-            this._messageService.showSuccess(mensaje, 'Pedido Automático Generado');
-            this.cargarPedidos();
-          }
-        },
-        error: (error: any) => {
-          this.generandoPedido = false;
-          console.error('Error al generar pedido automático:', error);
+  //           this._messageService.showSuccess(mensaje, 'Pedido Automático Generado');
+  //           this.cargarPedidos();
+  //         }
+  //       },
+  //       error: (error: any) => {
+  //         this.generandoPedido = false;
+  //         console.error('Error al generar pedido automático:', error);
 
-          let errorMsg = 'Error al generar el pedido automático.';
+  //         let errorMsg = 'Error al generar el pedido automático.';
 
-          if (error.status === 400) {
-            errorMsg = 'No hay productos con stock bajo o no hay proveedores disponibles.';
-          } else if (error.status === 404) {
-            errorMsg = 'No se encontraron proveedores configurados.';
-          } else if (error.status === 500) {
-            errorMsg = 'Error en el servidor. Por favor, intenta nuevamente.';
-          }
+  //         if (error.status === 400) {
+  //           errorMsg = 'No hay productos con stock bajo o no hay proveedores disponibles.';
+  //         } else if (error.status === 404) {
+  //           errorMsg = 'No se encontraron proveedores configurados.';
+  //         } else if (error.status === 500) {
+  //           errorMsg = 'Error en el servidor. Por favor, intenta nuevamente.';
+  //         }
 
-          this._messageService.showError(errorMsg, 'Error al generar pedido');
-        }
-      });
-    }
-  }
+  //         this._messageService.showError(errorMsg, 'Error al generar pedido');
+  //       }
+  //     });
+  //   }
+  // }
 }
